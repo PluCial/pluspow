@@ -99,21 +99,18 @@ Errors errors =(Errors) request.getAttribute("errors");
                 
 									<div class="box-body chat" id="chat-box">
 										<table class="table table-hover table-striped">
-											<%for(SupportLangInfo langInfo: supportLangInfoList) { %>
+											<%for(SupportLang langInfo: baseSpot.getSupportLangs()) { %>
 											<tr>
 												<td class="action">
-													<span style="background-image: url(/images/flag/<%=langInfo.getLang().getLangKey().toUpperCase() %>.png);background-repeat:no-repeat;background-position: center left;background-size: 34px;padding-left:50px;"></span>
+													<span style="background-image: url(/images/flag/<%=langInfo.getLangKey().toUpperCase() %>.png);background-repeat:no-repeat;background-position: center left;background-size: 34px;padding-left:50px;"></span>
 												</td>
-												<td><%=langInfo.getLang().getName() %></td>
-												<td class="action"><a href="/+<%=baseSpot.getSpotId() %>/l-<%=langInfo.getLang().toString() %>/" class="btn btn-box-tool"><i class="fa fa-external-link"></i></a></td>
-												<td class="action"><a class="btn btn-box-tool"><i class="fa fa-phone <%=langInfo.isPhoneDisplayFlg() ? "text-green" : "" %>"></i></a></td>
-												<td class="action"><a class="btn btn-box-tool"><i class="fa fa-envelope <%=langInfo.isContactDisplayFlg() ? "text-aqua" : "" %>"></i></a></td>
+												<td><%=langInfo.getName() %></td>
+												<td class="action"><a href="/+<%=baseSpot.getSpotId() %>/l-<%=langInfo.toString() %>/" class="btn btn-box-tool"><i class="fa fa-external-link"></i></a></td>
 												<td class="action">
-													<%if(baseSpot.getBaseLang() != langInfo.getLang()) { %>
+													<%if(baseSpot.getBaseLang() != langInfo) { %>
 													<a class="btn btn-box-tool" data-widget="remove"><i class="fa fa-trash-o"></i></a>
 													<%} %>
 												</td>
-												
 											</tr>
 											<%} %>
 										</table>

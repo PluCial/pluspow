@@ -8,6 +8,7 @@ import com.google.appengine.api.datastore.Email;
 import com.google.appengine.api.datastore.Key;
 import com.pluspow.dao.SignupEntryDao;
 import com.pluspow.meta.SignupEntryMeta;
+import com.pluspow.model.Entry;
 import com.pluspow.model.SignupEntry;
 
 
@@ -59,6 +60,14 @@ public class SignupEntryService {
      */
     public static SignupEntry getByKey(String keyString) throws Exception {
         return dao.get(createKey(keyString));
+    }
+    
+    /**
+     * エントリー情報の削除
+     * @param keyString
+     */
+    public static void delete(Entry entry) {
+        dao.delete(createKey(entry.getKey().getName()));
     }
     
     // ----------------------------------------------------------------------

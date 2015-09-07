@@ -9,6 +9,7 @@ import com.pluspow.model.Client;
 import com.pluspow.model.ResetPasswordEntry;
 import com.pluspow.service.ClientService;
 import com.pluspow.service.ResetPasswordEntryService;
+import com.pluspow.service.SignupEntryService;
 import com.pluspow.validator.PasswordConfirmationValidator;
 
 public class SettingPasswordEntryController extends BaseController {
@@ -46,6 +47,9 @@ public class SettingPasswordEntryController extends BaseController {
         
         // ログイン処理
         sessionScope("client", client);
+        
+        // エントリー情報の削除
+        SignupEntryService.delete(entry);
         
         return redirect("/client/account/selectSpot");
     }

@@ -9,7 +9,7 @@ import com.pluspow.model.Entry;
 import com.pluspow.service.ResetPasswordEntryService;
 import com.pluspow.service.SignupEntryService;
 
-public class ConfirmationEmailEntryController extends BaseController {
+public class EntryCompleteController extends BaseController {
 
     @Override
     protected Navigation execute() throws Exception {

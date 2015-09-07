@@ -26,9 +26,7 @@ public class AddAccountController extends BaseController {
             return redirect("/client/account/register");
         }
         
-        // エントリー情報を更新
-        SignupEntryService.entryBeEnd(signupEntry);
-        
+        // クライアントの追加
         Client client = ClientService.add(
             signupEntry.getName(), 
             signupEntry.getEmail().getEmail(), 
@@ -37,6 +35,9 @@ public class AddAccountController extends BaseController {
         
         // セッションの設定
         sessionScope("client", client);
+        
+        // エントリー情報の削除
+        SignupEntryService.delete(signupEntry);
         
         // ログイン後画面に遷移
         return redirect("/client/account/selectSpot");

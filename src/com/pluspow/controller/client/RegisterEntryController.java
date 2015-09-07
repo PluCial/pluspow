@@ -33,7 +33,7 @@ public class RegisterEntryController extends BaseController {
         // エントリーを保存
         SignupEntry entry = SignupEntryService.add(name, email, password);
         
-        String registerUrl = super.getAccessDomeinUrl() + "/client/confirmationEmailEntry?type=" + EntryType.REGISTER.toString() + "&entryId=" + entry.getKey().getName();
+        String registerUrl = super.getAccessDomeinUrl() + "/client/EntryComplete?type=" + EntryType.REGISTER.toString() + "&entryId=" + entry.getKey().getName();
         
         // メール確認フロー
         EMailService.register(email, name, registerUrl, isLocal());

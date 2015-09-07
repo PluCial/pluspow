@@ -1,8 +1,13 @@
 package com.pluspow.service;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import org.slim3.datastore.Datastore;
 import org.slim3.util.StringUtil;
 
 import com.google.appengine.api.datastore.Email;
+import com.google.appengine.api.datastore.Key;
 import com.pluspow.dao.ClientDao;
 import com.pluspow.enums.SupportLang;
 import com.pluspow.exception.UnsuitableException;
@@ -46,7 +51,7 @@ public class ClientService {
         Client client = get(email);
         
         // メールもしくはパスワードが違っている場合
-        if(client == null || !client.getPassword().equals(password)) {
+        if(client == null || !client.getPassword().equals(getCipherPassword(client.getKey().getId(), password))) {
             return null;
         }
         
@@ -60,8 +65,9 @@ public class ClientService {
      * @param name
      * @return
      * @throws UnsuitableException
+     * @throws NoSuchAlgorithmException 
      */
-    public static Client add(String name, String email, String password, SupportLang lang) throws UnsuitableException {
+    public static Client add(String name, String email, String password, SupportLang lang) throws UnsuitableException, NoSuchAlgorithmException {
         
         if(StringUtil.isEmpty(email)
                 || StringUtil.isEmpty(password)
@@ -74,10 +80,14 @@ public class ClientService {
             throw new UnsuitableException("このメールアドレスは既に登録されています。");
         }
         
+        Key key = createKey();
+        
+        
         Client model = new Client();
+        model.setKey(key);
         model.setName(name);
         model.setEmail(new Email(email));
-        model.setPassword(password);
+        model.setPassword(getCipherPassword(key.getId(), password));
         model.setLang(lang);
         
         return put(model);
@@ -88,11 +98,40 @@ public class ClientService {
      * @param model
      * @param password
      * @return
+     * @throws NoSuchAlgorithmException 
      */
-    public static void updatePassword(Client model, String password) {
-        model.setPassword(password);
+    public static void updatePassword(Client model, String password) throws NoSuchAlgorithmException {
+        model.setPassword(getCipherPassword(model.getKey().getId(), password));
         
         dao.put(model);
+    }
+    
+    /**
+     * パスワード暗号化
+     * @return
+     * @throws NoSuchAlgorithmException 
+     */
+    private static String getCipherPassword(long userId, String password) throws NoSuchAlgorithmException {
+        StringBuilder buff = new StringBuilder();
+        if (password != null && !password.isEmpty()) {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            md.update(String.valueOf(userId).getBytes());
+            md.update(password.getBytes());
+            byte[] digest = md.digest();
+            for (byte d : digest) {
+                buff.append((int)d&0xFF);
+            }
+        }
+        return buff.toString();
+    }
+    
+    /**
+     * キーの作成
+     * @param keyString
+     * @return
+     */
+    private static Key createKey() {
+        return Datastore.allocateId(Client.class);
     }
 
 }

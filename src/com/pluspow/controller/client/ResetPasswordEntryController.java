@@ -31,7 +31,7 @@ public class ResetPasswordEntryController extends BaseController {
         // エントリーを保存
         ResetPasswordEntry entry = ResetPasswordEntryService.put(client);
         
-        String entryUrl = super.getAccessDomeinUrl() + "/client/confirmationEmailEntry?type=" + EntryType.RESET_PASSWORD.toString() + "&entryId=" + entry.getKey().getName();
+        String entryUrl = super.getAccessDomeinUrl() + "/client/EntryComplete?type=" + EntryType.RESET_PASSWORD.toString() + "&entryId=" + entry.getKey().getName();
         
         // メール確認フロー
         EMailService.resetPassword(email, client.getName(), entryUrl, isLocal());
