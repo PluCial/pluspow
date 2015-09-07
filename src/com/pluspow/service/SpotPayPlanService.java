@@ -3,54 +3,44 @@ package com.pluspow.service;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.slim3.datastore.Datastore;
-
-import com.google.appengine.api.datastore.Transaction;
-import com.pluspow.dao.SpotPlanDao;
+import com.pluspow.dao.SpotPayPlanDao;
 import com.pluspow.enums.ServicePlan;
+import com.pluspow.exception.ChangePlanException;
 import com.pluspow.model.Spot;
-import com.pluspow.model.SpotPlan;
+import com.pluspow.model.SpotPayPlan;
 
 
-public class SpotPlanService {
+public class SpotPayPlanService {
     
     /** DAO */
-    private static final SpotPlanDao dao = new SpotPlanDao();
+    private static final SpotPayPlanDao dao = new SpotPayPlanDao();
     
     /**
-     * フリープランスタート(用コミット)
-     * @param client
+     * スポットの現在の有料プランを取得
      * @param spot
+     * @param plan
      * @return
      */
-    public static SpotPlan startFreePlan(Transaction tx, Spot spot) {
-        
-        SpotPlan plan = new SpotPlan();
-        
-        plan.setPlan(ServicePlan.FREE);
-        plan.setMonthlyAmount(ServicePlan.FREE.getMonthlyAmount());
-        plan.setStartDate(new Date());
-        plan.setEndDate(new Date());
-        plan.getSpotRef().setModel(spot);
-        // 保存
-        Datastore.put(tx, plan);
-        
-        return plan;
+    public static SpotPayPlan getPlan(Spot spot) {
+        return dao.getPlan(spot);
     }
     
     /**
      * スタンダードプランスタート
-     * @param client
      * @param spot
      * @return
+     * @throws ChangePlanException
      */
-    public static SpotPlan startStandardPlan(Spot spot) {
-        // 存在しない場合エラー
-        SpotPlan plan = spot.getSpotPlanRef().getModel();
+    public static SpotPayPlan startStandardPlan(Spot spot) throws ChangePlanException {
+
+        SpotPayPlan plan = dao.getPlan(spot);
         
+        // 有効なものが既に存在している場合はエラー
+        if(plan != null) throw new ChangePlanException();
+        
+        plan = new SpotPayPlan();
         plan.setPlan(ServicePlan.STANDARD);
         plan.setMonthlyAmount(ServicePlan.STANDARD.getMonthlyAmount());
-        plan.setBillingTarget(true);
         plan.setStartDate(new Date());
         plan.setEndDate(getEndDate());
         
@@ -61,18 +51,20 @@ public class SpotPlanService {
     
     /**
      * プレミアムスタート
-     * @param client
      * @param spot
      * @return
+     * @throws ChangePlanException
      */
-    public static SpotPlan startPremiumPlan(Spot spot) {
+    public static SpotPayPlan startPremiumPlan(Spot spot) throws ChangePlanException {
         
-        // 存在しない場合エラー
-        SpotPlan plan = spot.getSpotPlanRef().getModel();
+        SpotPayPlan plan = dao.getPlan(spot);
         
+        // 有効なものが既に存在している場合はエラー
+        if(plan != null) throw new ChangePlanException();
+        
+        plan = new SpotPayPlan();
         plan.setPlan(ServicePlan.PREMIUM);
         plan.setMonthlyAmount(ServicePlan.PREMIUM.getMonthlyAmount());
-        plan.setBillingTarget(true);
         plan.setStartDate(new Date());
         plan.setEndDate(getEndDate());
         

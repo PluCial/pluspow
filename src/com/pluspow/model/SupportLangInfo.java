@@ -12,6 +12,7 @@ import org.slim3.datastore.ModelRef;
 import org.slim3.datastore.ModificationDate;
 
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.datastore.PostalAddress;
 import com.pluspow.enums.SpotActivity;
 import com.pluspow.enums.SupportLang;
@@ -33,8 +34,15 @@ public class SupportLangInfo implements Serializable {
     private SupportLang lang;
     
     /**
+     * 電話番号
+     */
+    @Attribute(unindexed = true)
+    private PhoneNumber phoneNumber;
+    
+    /**
      * アクティビティ
      */
+    @Attribute(unindexed = true)
     private List<SpotActivity> activitys = new ArrayList<SpotActivity>();
     
     /**
@@ -76,51 +84,61 @@ public class SupportLangInfo implements Serializable {
     /**
      * GEO formatted_address
      */
+    @Attribute(unindexed = true)
     private String geoFormattedAddress;
     
     /**
      * GEO lat
      */
+    @Attribute(unindexed = true)
     private float geoLat;
     
     /**
      * GEO lng
      */
+    @Attribute(unindexed = true)
     private float geoLng;
     
     /**
      * country
      */
+    @Attribute(unindexed = true)
     private String geoCountry;
     
     /**
      * administrative_area_level_1
      */
+    @Attribute(unindexed = true)
     private String geoAreaLevel1;
     
     /**
      * administrative_area_level_2
      */
+    @Attribute(unindexed = true)
     private String geoAreaLevel2;
     
     /**
      * administrative_area_level_3
      */
+    @Attribute(unindexed = true)
     private String geoAreaLevel3;
     
     /**
      * locality
      */
+    @Attribute(unindexed = true)
     private String geoLocality;
     
     /**
      * ward locality
      */
+    @Attribute(unindexed = true)
     private String geoWardLocality;
     
     /**
      * sub locality
      */
+    @Attribute(unindexed = true)
     private String geoSublocality;
 
     /**
@@ -329,5 +347,13 @@ public class SupportLangInfo implements Serializable {
 
     public void setActivitys(List<SpotActivity> activitys) {
         this.activitys = activitys;
+    }
+
+    public PhoneNumber getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(PhoneNumber phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

@@ -14,8 +14,8 @@ import org.slim3.datastore.ModificationDate;
 
 import com.google.appengine.api.datastore.Email;
 import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.datastore.PostalAddress;
+import com.pluspow.enums.ServicePlan;
 import com.pluspow.enums.SpotActivity;
 import com.pluspow.enums.SpotGcsResRole;
 import com.pluspow.enums.SupportLang;
@@ -48,12 +48,6 @@ public class Spot implements Serializable {
     private String spotId;
     
     /**
-     * 電話番号
-     */
-    @Attribute(unindexed = true)
-    private PhoneNumber phoneNumber;
-    
-    /**
      * メールアドレス(ログインとは別に連絡用としてのメールアドレス)
      */
     @Attribute(unindexed = true)
@@ -82,9 +76,6 @@ public class Spot implements Serializable {
     
     /** Clientとの関連 */
     private ModelRef<Client> clientRef = new ModelRef<Client>(Client.class);
-    
-    /** SpotPlanとの関連 */
-    private ModelRef<SpotPlan> spotPlanRef = new ModelRef<SpotPlan>(SpotPlan.class);
     
     /** TransCreditとの関連 */
     private ModelRef<TransCredit> transCreditRef = new ModelRef<TransCredit>(TransCredit.class);
@@ -117,6 +108,21 @@ public class Spot implements Serializable {
      */
     @Attribute(persistent = false)
     private SupportLangInfo supportLangInfo;
+    
+    public String getPhoneNumber() {
+        if(supportLangInfo.getPhoneNumber() == null) return null;
+        
+        if(baseLang == supportLangInfo.getLang()) {
+            return supportLangInfo.getPhoneNumber().getNumber();
+        }
+        
+        StringBuilder sb1 = new StringBuilder(supportLangInfo.getPhoneNumber().getNumber());
+        if(sb1.length() > 1 && sb1.charAt(0) == '0') {
+            sb1.delete(0,1);
+        }
+        
+        return "+81 " + sb1.toString();
+    }
     
     public boolean isPhoneDisplayFlg() {
         return supportLangInfo.isPhoneDisplayFlg();
@@ -316,13 +322,13 @@ public class Spot implements Serializable {
      * プラン
      */
     @Attribute(persistent = false)
-    private SpotPlan plan;
+    private ServicePlan plan;
     
-    public SpotPlan getPlan() {
+    public ServicePlan getPlan() {
         return plan;
     }
 
-    public void setPlan(SpotPlan plan) {
+    public void setPlan(ServicePlan plan) {
         this.plan = plan;
     }
     
@@ -330,7 +336,7 @@ public class Spot implements Serializable {
     // ----------------------------------------------------------------------
     // ゲッター＆セッター
     // ----------------------------------------------------------------------
-    
+
     public String getSpotId() {
         return spotId;
     }
@@ -420,30 +426,6 @@ public class Spot implements Serializable {
         this.updateDate = updateDate;
     }
 
-    public PhoneNumber getPhoneNumber() {
-        return phoneNumber;
-    }
-    
-    public String getPhoneNumberString() {
-        if(phoneNumber == null) return null;
-        if(supportLangInfo == null) return phoneNumber.getNumber();
-        
-        if(baseLang == supportLangInfo.getLang()) {
-            return phoneNumber.getNumber();
-        }
-        
-        StringBuilder sb1 = new StringBuilder(phoneNumber.getNumber());
-        if(sb1.length() > 1 && sb1.charAt(0) == '0') {
-            sb1.delete(0,1);
-        }
-        
-        return "+81 " + sb1.toString();
-    }
-
-    public void setPhoneNumber(PhoneNumber phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public Email getEmail() {
         return email;
     }
@@ -515,10 +497,6 @@ public class Spot implements Serializable {
 
     public void setItemCounts(ItemCounts itemCounts) {
         this.itemCounts = itemCounts;
-    }
-
-    public ModelRef<SpotPlan> getSpotPlanRef() {
-        return spotPlanRef;
     }
 
     public ModelRef<TransCredit> getTransCreditRef() {

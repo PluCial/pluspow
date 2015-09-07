@@ -5,12 +5,12 @@ import java.util.List;
 import org.slim3.datastore.Datastore;
 
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.datastore.PostalAddress;
 import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.dao.SupportLangInfoDao;
 import com.pluspow.enums.SupportLang;
 import com.pluspow.exception.TooManyException;
-import com.pluspow.meta.SupportLangInfoMeta;
 import com.pluspow.model.GeoModel;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SupportLangInfo;
@@ -47,7 +47,7 @@ public class SupportLangInfoService {
      * @param geoModel
      * @return
      */
-    public static SupportLangInfo getNewModel(Spot spot, SupportLang lang, GeoModel geoModel) {
+    public static SupportLangInfo getNewModel(Spot spot, SupportLang lang, String phoneNumber, GeoModel geoModel) {
         
         SupportLangInfo info = new SupportLangInfo();
         
@@ -62,6 +62,9 @@ public class SupportLangInfoService {
         
         // Spotキーの設定
         info.getSpotRef().setModel(spot);
+        
+        // 電話番号の設定
+        info.setPhoneNumber(new PhoneNumber(phoneNumber));
         
         // GEO 情報の設定
         setSpotGeo(info, geoModel);
@@ -107,7 +110,7 @@ public class SupportLangInfoService {
         
         if(get(spot, lang) != null) throw new TooManyException();
         
-        SupportLangInfo info =  getNewModel(spot, lang, geoModel);
+        SupportLangInfo info =  getNewModel(spot, lang, spot.getPhoneNumber(), geoModel);
         
         // キーの設定
         info.setKey(createKey(spot, lang));
@@ -171,7 +174,7 @@ public class SupportLangInfoService {
      * @return
      */
     private static Key createKey(Spot spot, SupportLang lang) {
-        return Datastore.createKey(SupportLangInfoMeta.get(), spot.getKey().getId() + "_" + lang.toString());
+        return Datastore.createKey(SupportLangInfo.class, spot.getKey().getId() + "_" + lang.toString());
     }
 
 }

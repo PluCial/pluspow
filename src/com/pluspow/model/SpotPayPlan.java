@@ -13,7 +13,7 @@ import com.google.appengine.api.datastore.Key;
 import com.pluspow.enums.ServicePlan;
 
 @Model(schemaVersion = 1)
-public class SpotPlan implements Serializable {
+public class SpotPayPlan implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,11 +38,6 @@ public class SpotPlan implements Serializable {
      * プラン終了日
      */
     private Date endDate;
-    
-    /**
-     * 請求決済対象
-     */
-    private boolean billingTarget = false;
     
     /**
      * 作成日時
@@ -120,7 +115,7 @@ public class SpotPlan implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        SpotPlan other = (SpotPlan) obj;
+        SpotPayPlan other = (SpotPayPlan) obj;
         if (key == null) {
             if (other.key != null) {
                 return false;
@@ -165,14 +160,6 @@ public class SpotPlan implements Serializable {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
-    }
-
-    public boolean isBillingTarget() {
-        return billingTarget;
-    }
-
-    public void setBillingTarget(boolean billingTarget) {
-        this.billingTarget = billingTarget;
     }
 
     public double getMonthlyAmount() {

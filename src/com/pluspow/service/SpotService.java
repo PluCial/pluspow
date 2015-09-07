@@ -10,10 +10,10 @@ import org.slim3.memcache.Memcache;
 
 import com.google.appengine.api.datastore.Email;
 import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.constants.MemcacheKey;
 import com.pluspow.dao.SpotDao;
+import com.pluspow.enums.ServicePlan;
 import com.pluspow.enums.SupportLang;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.enums.TransStatus;
@@ -25,7 +25,7 @@ import com.pluspow.meta.SpotMeta;
 import com.pluspow.model.Client;
 import com.pluspow.model.GeoModel;
 import com.pluspow.model.Spot;
-import com.pluspow.model.SpotPlan;
+import com.pluspow.model.SpotPayPlan;
 import com.pluspow.model.SpotTextRes;
 import com.pluspow.model.TextResources;
 import com.pluspow.model.TransCredit;
@@ -59,7 +59,6 @@ public class SpotService {
         Spot model = new Spot();
         model.setSpotId(spotId);
         model.setBaseLang(lang);
-        model.setPhoneNumber(new PhoneNumber(phoneNumber));
         model.setEmail(new Email(email));
         
         // 言語リストに母国語を追加
@@ -69,7 +68,7 @@ public class SpotService {
         model.getClientRef().setModel(client);
         
         // 言語情報の設定
-        model.setSpotLangInfo(SupportLangInfoService.getNewModel(model, lang, geoModel));
+        model.setSpotLangInfo(SupportLangInfoService.getNewModel(model, lang, phoneNumber, geoModel));
         
         // テキストリソースの設定
         SpotTextRes addressRes = new SpotTextRes();
@@ -135,15 +134,10 @@ public class SpotService {
             Key spotKey = createKey();
             spot.setKey(spotKey);
             
-            
-            // フリープランを登録
-            SpotPlan plan = SpotPlanService.startFreePlan(tx, spot);
-            
             // 翻訳貯蓄の追加
             TransCredit credit = TransCreditService.add(tx, spot);
             
             // スポットの保存
-            spot.getSpotPlanRef().setModel(plan);
             spot.getTransCreditRef().setModel(credit);
             Datastore.put(tx, spot);
             
@@ -202,7 +196,8 @@ public class SpotService {
         // 翻訳コンテンツの設定
         spot.setTextResources(SpotTextResService.getResourcesMap(spot, lang));
         // プラン
-        spot.setPlan(spot.getSpotPlanRef().getModel());
+        SpotPayPlan payPlan = SpotPayPlanService.getPlan(spot);
+        spot.setPlan(payPlan == null ? ServicePlan.FREE : payPlan.getPlan());
         // GCS
         spot.setGcsResources(SpotGcsResService.getResourcesMap(spot));
     }

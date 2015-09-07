@@ -19,7 +19,7 @@ public class AddSpotStep1Controller extends BaseController {
         
         requestScope("spotId", spot.getSpotId());
         requestScope("address", spot.getAddress());
-        requestScope("phoneNumber", spot.getPhoneNumberString());
+        requestScope("phoneNumber", spot.getPhoneNumber());
         requestScope("email", spot.getEmail().getEmail());
         requestScope("owner", true);
         

@@ -7,7 +7,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 public class PlanServiceTest extends AppEngineTestCase {
 
-    private SpotPlanService service = new SpotPlanService();
+    private SpotPayPlanService service = new SpotPayPlanService();
 
     @Test
     public void test() throws Exception {
