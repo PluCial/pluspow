@@ -8,20 +8,20 @@ import org.slim3.datastore.Sort;
 
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.pluspow.enums.SupportLang;
-import com.pluspow.meta.SupportLangInfoMeta;
+import com.pluspow.meta.SpotLangUnitMeta;
 import com.pluspow.model.Spot;
-import com.pluspow.model.SupportLangInfo;
+import com.pluspow.model.SpotLangUnit;
 
-public class SupportLangInfoDao extends DaoBase<SupportLangInfo>{
+public class SpotLangUnitDao extends DaoBase<SpotLangUnit>{
     
     /** META */
-    private static final SupportLangInfoMeta meta = SupportLangInfoMeta.get();
+    private static final SpotLangUnitMeta meta = SpotLangUnitMeta.get();
     
     /**
      * スポットIDからスポットを取得(有効なもののみ)
      * @return
      */
-    public SupportLangInfo getLangInfo(Spot spot, SupportLang lang) {
+    public SpotLangUnit getLangInfo(Spot spot, SupportLang lang) {
         return  Datastore.query(meta)
                 .filter(
                     meta.spotRef.equal(spot.getKey()),
@@ -33,7 +33,7 @@ public class SupportLangInfoDao extends DaoBase<SupportLangInfo>{
      * クライアントが作成したスポットリストを取得
      * @return
      */
-    public List<SupportLangInfo> getList(Spot spot) {
+    public List<SpotLangUnit> getList(Spot spot) {
         return  Datastore.query(meta)
                 .filter(
                     meta.spotRef.equal(spot.getKey())

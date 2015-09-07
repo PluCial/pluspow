@@ -9,9 +9,9 @@
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="org.slim3.controller.validator.Errors" %>
 <%
-Client client =(Client) request.getAttribute("client");
+	Client client =(Client) request.getAttribute("client");
 Spot baseSpot =(Spot) request.getAttribute("spot");
-List<SupportLangInfo> supportLangInfoList =(List<SupportLangInfo>) request.getAttribute("supportLangInfoList");
+List<SpotLangUnit> supportLangInfoList =(List<SpotLangUnit>) request.getAttribute("supportLangInfoList");
 List<TransHistory> transHistoryList =(List<TransHistory>) request.getAttribute("transHistoryList");
 NumberFormat fPrice = NumberFormat.getNumberInstance();
 /* ServicePlan planEnum = baseSpot.getPlan().getPlan(); */
@@ -150,11 +150,11 @@ Errors errors =(Errors) request.getAttribute("errors");
 							
 							<div id="" class="col-md-4 col-xs-12">
 							
-								<%if(baseSpot.getPlan().getPlan() == ServicePlan.FREE) { %>
+								<%if(baseSpot.getPlan() == ServicePlan.FREE) { %>
 								<section class="small-box bg-yellow">
 									<div class="inner">
-										<h3><%=baseSpot.getPlan().getPlan().getPlanName() %></h3>
-										<p><%=fPrice.format((int)baseSpot.getPlan().getPlan().getMonthlyAmount()) %> / 月</p>
+										<h3><%=baseSpot.getPlan().getPlanName() %></h3>
+										<p><%=fPrice.format((int)baseSpot.getPlan().getMonthlyAmount()) %> / 月</p>
 									</div>
 									<div class="icon">
 										<i class="fa fa-paper-plane"></i>
@@ -171,9 +171,9 @@ Errors errors =(Errors) request.getAttribute("errors");
 										<span class="info-box-text">翻訳した文字数</span>
 										<span class="info-box-number"><%=baseSpot.getTransAcc().getTransCharCount() %> 文字</span>
 										<div class="progress">
-											<div class="progress-bar" style="width: <%=((float)baseSpot.getTransAcc().getTransCharCount() / (float)baseSpot.getPlan().getPlan().getTransCharMaxCount()) * 100 %>%"></div>
+											<div class="progress-bar" style="width: <%=((float)baseSpot.getTransAcc().getTransCharCount() / (float)baseSpot.getPlan().getTransCharMaxCount()) * 100 %>%"></div>
 										</div>
-										<span class="progress-description">フリープランでは<%=baseSpot.getPlan().getPlan().getTransCharMaxCount() %>文字まで翻訳できます。</span>
+										<span class="progress-description">フリープランでは<%=baseSpot.getPlan().getTransCharMaxCount() %>文字まで翻訳できます。</span>
 									</div><!-- /.info-box-content -->
 								</section><!-- /.info-box -->
               
@@ -183,9 +183,9 @@ Errors errors =(Errors) request.getAttribute("errors");
 										<span class="info-box-text">登録したアイテム数</span>
 										<span class="info-box-number"><%=baseSpot.getItemCounts().getItem() %> 個</span>
 										<div class="progress">
-											<div class="progress-bar" style="width: <%=((float)baseSpot.getItemCounts().getItem() / (float)baseSpot.getPlan().getPlan().getCreateItemMaxCount()) * 100 %>%"></div>
+											<div class="progress-bar" style="width: <%=((float)baseSpot.getItemCounts().getItem() / (float)baseSpot.getPlan().getCreateItemMaxCount()) * 100 %>%"></div>
 										</div>
-										<span class="progress-description">フリープランでは<%=baseSpot.getPlan().getPlan().getCreateItemMaxCount() %>アイテムまで登録できます。</span>
+										<span class="progress-description">フリープランでは<%=baseSpot.getPlan().getCreateItemMaxCount() %>アイテムまで登録できます。</span>
 									</div><!-- /.info-box-content -->
 								</section><!-- /.info-box -->
 							
@@ -208,7 +208,7 @@ Errors errors =(Errors) request.getAttribute("errors");
 												<th>翻訳言語</th>
 												<th>翻訳プラン</th>
 												<th>翻訳文字数</th>
-												<%if(baseSpot.getPlan().getPlan() != ServicePlan.FREE) { %>
+												<%if(baseSpot.getPlan() != ServicePlan.FREE) { %>
 												<th>コスト</th>
 												<%} %>
 												<th>ステータス</th>
@@ -223,7 +223,7 @@ Errors errors =(Errors) request.getAttribute("errors");
 												<td><%=history.getBaseLang().getName() %> → <%=history.getTransLang().getName() %></td>
 												<td><%=history.getTransType().getName() %>(¥ <%=history.getCharUnitPrice() %>/1文字)</td>
 												<td><%=history.getTransCharCount() %></td>
-												<%if(baseSpot.getPlan().getPlan() != ServicePlan.FREE) { %>
+												<%if(baseSpot.getPlan() != ServicePlan.FREE) { %>
 												<td>¥<%=(int)history.getTransCost() %></td>
 												<%} %>
 												<td><span class="label label-success"><%=history.getTransStatus().getName() %></span></td>

@@ -8,18 +8,18 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.datastore.PostalAddress;
 import com.google.appengine.api.datastore.Transaction;
-import com.pluspow.dao.SupportLangInfoDao;
+import com.pluspow.dao.SpotLangUnitDao;
 import com.pluspow.enums.SupportLang;
 import com.pluspow.exception.TooManyException;
 import com.pluspow.model.GeoModel;
 import com.pluspow.model.Spot;
-import com.pluspow.model.SupportLangInfo;
+import com.pluspow.model.SpotLangUnit;
 
 
-public class SupportLangInfoService {
+public class SpotLangUnitService {
     
     /** DAO */
-    private static final SupportLangInfoDao dao = new SupportLangInfoDao();
+    private static final SpotLangUnitDao dao = new SpotLangUnitDao();
     
     /**
      * 取得
@@ -27,7 +27,7 @@ public class SupportLangInfoService {
      * @param lang
      * @return
      */
-    public static SupportLangInfo get(Spot spot, SupportLang lang) {
+    public static SpotLangUnit get(Spot spot, SupportLang lang) {
         return dao.getLangInfo(spot, lang);
     }
     
@@ -36,7 +36,7 @@ public class SupportLangInfoService {
      * @param spot
      * @return
      */
-    public static List<SupportLangInfo> getList(Spot spot) {
+    public static List<SpotLangUnit> getList(Spot spot) {
         return dao.getList(spot);
     }
     
@@ -47,9 +47,9 @@ public class SupportLangInfoService {
      * @param geoModel
      * @return
      */
-    public static SupportLangInfo getNewModel(Spot spot, SupportLang lang, String phoneNumber, GeoModel geoModel) {
+    public static SpotLangUnit getNewModel(Spot spot, SupportLang lang, String phoneNumber, GeoModel geoModel) {
         
-        SupportLangInfo info = new SupportLangInfo();
+        SpotLangUnit info = new SpotLangUnit();
         
         // 言語の設定
         info.setLang(lang);
@@ -81,7 +81,7 @@ public class SupportLangInfoService {
      * @return
      * @throws TooManyException 
      */
-    public static SupportLangInfo addBaseLang(Transaction tx, Spot spot, SupportLangInfo info) throws TooManyException {
+    public static SpotLangUnit addBaseLang(Transaction tx, Spot spot, SpotLangUnit info) throws TooManyException {
         
         if(get(spot, info.getLang()) != null) throw new TooManyException();
         
@@ -106,11 +106,11 @@ public class SupportLangInfoService {
      * @return
      * @throws TooManyException 
      */
-    public static SupportLangInfo add(Transaction tx, Spot spot, SupportLang lang, GeoModel geoModel) throws TooManyException {
+    public static SpotLangUnit add(Transaction tx, Spot spot, SupportLang lang, GeoModel geoModel) throws TooManyException {
         
         if(get(spot, lang) != null) throw new TooManyException();
         
-        SupportLangInfo info =  getNewModel(spot, lang, spot.getPhoneNumber(), geoModel);
+        SpotLangUnit info =  getNewModel(spot, lang, spot.getPhoneNumber(), geoModel);
         
         // キーの設定
         info.setKey(createKey(spot, lang));
@@ -129,7 +129,7 @@ public class SupportLangInfoService {
      */
     public static void changePhoneDisplayFlg(Spot spot, SupportLang lang, boolean displayFlg) {
         // 取得
-        SupportLangInfo info = get(spot, lang);
+        SpotLangUnit info = get(spot, lang);
         
         info.setPhoneDisplayFlg(displayFlg);
         dao.put(info);
@@ -143,7 +143,7 @@ public class SupportLangInfoService {
      */
     public static void changeContactDisplayFlg(Spot spot, SupportLang lang, boolean displayFlg) {
         // 取得
-        SupportLangInfo info = get(spot, lang);
+        SpotLangUnit info = get(spot, lang);
         
         info.setContactDisplayFlg(displayFlg);
         dao.put(info);
@@ -154,7 +154,7 @@ public class SupportLangInfoService {
      * @param spot
      * @param geoModel
      */
-    private static void setSpotGeo(SupportLangInfo info, GeoModel geoModel) {
+    private static void setSpotGeo(SpotLangUnit info, GeoModel geoModel) {
         info.setGeoPostalAddress(new PostalAddress(geoModel.getPostalCodeLongName()));
         info.setGeoCountry(geoModel.getCountryLongName());
         info.setGeoFormattedAddress(geoModel.getFormattedAddress());
@@ -174,7 +174,7 @@ public class SupportLangInfoService {
      * @return
      */
     private static Key createKey(Spot spot, SupportLang lang) {
-        return Datastore.createKey(SupportLangInfo.class, spot.getKey().getId() + "_" + lang.toString());
+        return Datastore.createKey(SpotLangUnit.class, spot.getKey().getId() + "_" + lang.toString());
     }
 
 }

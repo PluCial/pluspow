@@ -7,7 +7,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 public class SpotLangInfoServiceTest extends AppEngineTestCase {
 
-    private SupportLangInfoService service = new SupportLangInfoService();
+    private SpotLangUnitService service = new SpotLangUnitService();
 
     @Test
     public void test() throws Exception {

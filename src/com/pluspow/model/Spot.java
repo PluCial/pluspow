@@ -107,16 +107,16 @@ public class Spot implements Serializable {
      * 言語情報
      */
     @Attribute(persistent = false)
-    private SupportLangInfo supportLangInfo;
+    private SpotLangUnit spotLangUnit;
     
     public String getPhoneNumber() {
-        if(supportLangInfo.getPhoneNumber() == null) return null;
+        if(spotLangUnit.getPhoneNumber() == null) return null;
         
-        if(baseLang == supportLangInfo.getLang()) {
-            return supportLangInfo.getPhoneNumber().getNumber();
+        if(baseLang == spotLangUnit.getLang()) {
+            return spotLangUnit.getPhoneNumber().getNumber();
         }
         
-        StringBuilder sb1 = new StringBuilder(supportLangInfo.getPhoneNumber().getNumber());
+        StringBuilder sb1 = new StringBuilder(spotLangUnit.getPhoneNumber().getNumber());
         if(sb1.length() > 1 && sb1.charAt(0) == '0') {
             sb1.delete(0,1);
         }
@@ -125,55 +125,55 @@ public class Spot implements Serializable {
     }
     
     public boolean isPhoneDisplayFlg() {
-        return supportLangInfo.isPhoneDisplayFlg();
+        return spotLangUnit.isPhoneDisplayFlg();
     }
 
     public boolean isContactDisplayFlg() {
-        return supportLangInfo.isContactDisplayFlg();
+        return spotLangUnit.isContactDisplayFlg();
     }
     
     public String getGeoFormattedAddress() {
-        return supportLangInfo.getGeoFormattedAddress();
+        return spotLangUnit.getGeoFormattedAddress();
     }
 
     public float getGeoLat() {
-        return supportLangInfo.getGeoLat();
+        return spotLangUnit.getGeoLat();
     }
 
     public float getGeoLng() {
-        return supportLangInfo.getGeoLng();
+        return spotLangUnit.getGeoLng();
     }
     
     public String getGeoCountry() {
-        return supportLangInfo.getGeoCountry();
+        return spotLangUnit.getGeoCountry();
     }
 
     public String getGeoAreaLevel1() {
-        return supportLangInfo.getGeoAreaLevel1();
+        return spotLangUnit.getGeoAreaLevel1();
     }
 
     public String getGeoAreaLevel2() {
-        return supportLangInfo.getGeoAreaLevel2();
+        return spotLangUnit.getGeoAreaLevel2();
     }
 
     public String getGeoAreaLevel3() {
-        return supportLangInfo.getGeoAreaLevel3();
+        return spotLangUnit.getGeoAreaLevel3();
     }
 
     public String getGeoWardLocality() {
-        return supportLangInfo.getGeoWardLocality();
+        return spotLangUnit.getGeoWardLocality();
     }
 
     public String getGeoSublocality() {
-        return supportLangInfo.getGeoSublocality();
+        return spotLangUnit.getGeoSublocality();
     }
 
     public PostalAddress getGeoPostalAddress() {
-        return supportLangInfo.getGeoPostalAddress();
+        return spotLangUnit.getGeoPostalAddress();
     }
 
     public String getGeoLocality() {
-        return supportLangInfo.getGeoLocality();
+        return spotLangUnit.getGeoLocality();
     }
     
     // ----------------------------------------------------------------------
@@ -439,7 +439,7 @@ public class Spot implements Serializable {
     }
 
     public List<SpotActivity> getActivitys() {
-        return supportLangInfo.getActivitys();
+        return spotLangUnit.getActivitys();
     }
 
     public ModelRef<Client> getClientRef() {
@@ -455,12 +455,12 @@ public class Spot implements Serializable {
     }
 
 
-    public SupportLangInfo getSpotLangInfo() {
-        return supportLangInfo;
+    public SpotLangUnit getSpotLangInfo() {
+        return spotLangUnit;
     }
 
-    public void setSpotLangInfo(SupportLangInfo supportLangInfo) {
-        this.supportLangInfo = supportLangInfo;
+    public void setSpotLangInfo(SpotLangUnit spotLangUnit) {
+        this.spotLangUnit = spotLangUnit;
     }
 
     public SupportLang getBaseLang() {

@@ -24,7 +24,7 @@ import com.pluspow.meta.ItemMeta;
 import com.pluspow.model.Item;
 import com.pluspow.model.ItemTextRes;
 import com.pluspow.model.Spot;
-import com.pluspow.model.SupportLangInfo;
+import com.pluspow.model.SpotLangUnit;
 import com.pluspow.model.TextResources;
 import com.pluspow.utils.Utils;
 
@@ -79,7 +79,7 @@ public class ItemService {
             Datastore.put(tx, spot, model);
             
             // スポット言語情報の設定(アクティビティの追加)
-            SupportLangInfo langInfo = SupportLangInfoService.get(spot, spot.getBaseLang());
+            SpotLangUnit langInfo = SpotLangUnitService.get(spot, spot.getBaseLang());
             if(langInfo.getActivitys().indexOf(itemType.getActivity()) < 0) {
                 langInfo.getActivitys().add(itemType.getActivity());
                 Datastore.put(tx, langInfo);
@@ -168,7 +168,7 @@ public class ItemService {
                 Datastore.put(tx, item);
                 
                 // スポットの言語情報内のアクティビティを更新
-                SupportLangInfo langInfo = SupportLangInfoService.get(spot, transLang);
+                SpotLangUnit langInfo = SpotLangUnitService.get(spot, transLang);
                 if(langInfo.getActivitys().indexOf(item.getItemType().getActivity()) < 0) {
                     langInfo.getActivitys().add(item.getItemType().getActivity());
                     Datastore.put(tx, langInfo);

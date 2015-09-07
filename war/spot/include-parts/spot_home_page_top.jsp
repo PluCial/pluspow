@@ -113,7 +113,7 @@ List<SupportLang> suppertLangList = (List<SupportLang>) request.getAttribute("su
 							</h1>
 					
 							<p><%=spot.getGeoFormattedAddress() %></p>
-							<p class="phone"><i class="fa fa-phone"></i> <%=spot.getPhoneNumberString() %></p>
+							<p class="phone"><i class="fa fa-phone"></i> <%=spot.getPhoneNumber() %></p>
 						</div>
 
 						<div class="map" id="map"></div>

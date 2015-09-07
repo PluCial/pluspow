@@ -68,7 +68,7 @@ public class SpotService {
         model.getClientRef().setModel(client);
         
         // 言語情報の設定
-        model.setSpotLangInfo(SupportLangInfoService.getNewModel(model, lang, phoneNumber, geoModel));
+        model.setSpotLangInfo(SpotLangUnitService.getNewModel(model, lang, phoneNumber, geoModel));
         
         // テキストリソースの設定
         SpotTextRes addressRes = new SpotTextRes();
@@ -142,7 +142,7 @@ public class SpotService {
             Datastore.put(tx, spot);
             
             // 言語情報の追加
-            SupportLangInfoService.addBaseLang(tx, spot, spot.getSpotLangInfo());
+            SpotLangUnitService.addBaseLang(tx, spot, spot.getSpotLangInfo());
     
             // 名前の追加
             SpotTextRes nameRes = spot.getNameRes();
@@ -192,7 +192,7 @@ public class SpotService {
         // 貯蓄の設定
         spot.setTransAcc(TransCreditService.get(spot));
         // 言語情報の設定
-        spot.setSpotLangInfo(SupportLangInfoService.get(spot, lang));
+        spot.setSpotLangInfo(SpotLangUnitService.get(spot, lang));
         // 翻訳コンテンツの設定
         spot.setTextResources(SpotTextResService.getResourcesMap(spot, lang));
         // プラン
@@ -326,7 +326,7 @@ public class SpotService {
                 }
                 
                 // 言語情報の追加
-                SupportLangInfoService.add(tx, spot, transLang, geoModel);
+                SpotLangUnitService.add(tx, spot, transLang, geoModel);
             
                 // 翻訳クレジットの更新
                 TransCreditService.update(

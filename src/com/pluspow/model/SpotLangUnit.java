@@ -18,7 +18,7 @@ import com.pluspow.enums.SpotActivity;
 import com.pluspow.enums.SupportLang;
 
 @Model(schemaVersion = 1)
-public class SupportLangInfo implements Serializable {
+public class SpotLangUnit implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -198,7 +198,7 @@ public class SupportLangInfo implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        SupportLangInfo other = (SupportLangInfo) obj;
+        SpotLangUnit other = (SpotLangUnit) obj;
         if (key == null) {
             if (other.key != null) {
                 return false;

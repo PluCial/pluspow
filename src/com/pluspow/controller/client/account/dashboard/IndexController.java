@@ -7,9 +7,9 @@ import org.slim3.controller.Navigation;
 
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
-import com.pluspow.model.SupportLangInfo;
+import com.pluspow.model.SpotLangUnit;
 import com.pluspow.model.TransHistory;
-import com.pluspow.service.SupportLangInfoService;
+import com.pluspow.service.SpotLangUnitService;
 import com.pluspow.service.TransHistoryService;
 
 public class IndexController extends BaseController {
@@ -18,8 +18,8 @@ public class IndexController extends BaseController {
     protected Navigation execute(Client client, Spot baseSpot) throws Exception {
         
         // サポートしている言語リスト
-        List<SupportLangInfo> supportLangInfoList = SupportLangInfoService.getList(baseSpot);
-        requestScope("supportLangInfoList", supportLangInfoList == null ? new ArrayList<SupportLangInfo>() : supportLangInfoList);
+        List<SpotLangUnit> supportLangInfoList = SpotLangUnitService.getList(baseSpot);
+        requestScope("supportLangInfoList", supportLangInfoList == null ? new ArrayList<SpotLangUnit>() : supportLangInfoList);
         
         // 翻訳履歴
         List<TransHistory> transHistoryList = TransHistoryService.getHistoryList(baseSpot);

@@ -14,7 +14,7 @@ Spot spot =(Spot) request.getAttribute("spot");
 	    			<p><%=spot.getAddress() %></p>
 	    		</div>
 	    		<div><i class="fa fa-phone pull-left"></i>  
-	    			<p><%=spot.getPhoneNumberString() %></p>
+	    			<p><%=spot.getPhoneNumber() %></p>
 	    		</div>
 
 			</div>
