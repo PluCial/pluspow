@@ -307,6 +307,13 @@ public class Spot implements Serializable {
     }
     
     // ----------------------------------------------------------------------
+    // 営業時間(永久かしない)
+    // ----------------------------------------------------------------------
+    @Attribute(persistent = false)
+    private List<OfficeHours> officeHourList;
+    
+    
+    // ----------------------------------------------------------------------
     // TransCredit(永久かしない)
     // ----------------------------------------------------------------------
     /**
@@ -545,5 +552,13 @@ public class Spot implements Serializable {
     
     public void setBackgroundImageRes(SpotGcsRes backgroundImageRes) {
         this.backgroundImageRes = backgroundImageRes;
+    }
+
+    public List<OfficeHours> getOfficeHourList() {
+        return officeHourList;
+    }
+
+    public void setOfficeHourList(List<OfficeHours> officeHourList) {
+        this.officeHourList = officeHourList;
     }
 }

@@ -128,12 +128,14 @@ body.home .spot-detail-inner {
 }
 
 #spot-nav-tabs {
-	position: absolute;
+/* 	position: absolute;
     top: 20px;
-    left: 0;
+    left: 0; */
+    padding-top: 20px;
     display: block;
     width: 100%;
     z-index: 99;
+    background-color: #fff;
 }
 
 #spot-nav-tabs ul {
@@ -203,7 +205,7 @@ background: none !important;
 }
 
 #area-nav {
-	padding-top: 100px;
+	    padding-top: 20px;
 }
 
 #spot-logo i {

@@ -12,6 +12,7 @@ import com.pluspow.model.Client;
 import com.pluspow.model.Item;
 import com.pluspow.model.Spot;
 import com.pluspow.service.ItemService;
+import com.pluspow.service.OfficeHoursService;
 
 public class IndexController extends BaseController {
 
@@ -23,8 +24,12 @@ public class IndexController extends BaseController {
             boolean isClientLogged,
             boolean isOwner) throws Exception {
         
+        // 営業時間マップ
+        requestScope("officeHoursMap", OfficeHoursService.getOfficeHoursMap(spot.getOfficeHourList()));
+        
         List<SupportLang> suppertLangList = spot.getSupportLangs();
         requestScope("suppertLangList", suppertLangList != null ? suppertLangList : new ArrayList<SupportLang>());
+        
         
         // 編集可能で、ベース言語ではない場合は翻訳用のベースアイテムを取得
         if(isOwner && !spot.getBaseLang().equals(lang)) {

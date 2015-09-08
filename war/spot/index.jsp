@@ -17,6 +17,8 @@ List<Item> itemList =(List<Item>) request.getAttribute("itemList");
 <html lang="<%=spot.getLangUnit().getLang() %>">
 <head>
 	<jsp:include page="/spot/include-parts/html_head.jsp" />
+	<!-- Bootstrap time Picker -->
+    <link href="/war/plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet"/>
 </head>
 	
 <body class="home">
@@ -78,7 +80,11 @@ List<Item> itemList =(List<Item>) request.getAttribute("itemList");
 	<jsp:include page="/spot/include-parts/dialog_modal.jsp">
 		<jsp:param name="modelId" value="textResModal" />
 	</jsp:include>
+	<jsp:include page="/spot/include-parts/dialog_modal.jsp">
+		<jsp:param name="modelId" value="editOfficeHoursModal" />
+	</jsp:include>
 	<script type="text/javascript" src="/plugins/waiting-dialog/waiting-dialog.js"></script>
+	<script type="text/javascript" src="/plugins/timepicker/bootstrap-timepicker.min.js"></script>
 	<!-- secure JS end -->
 	<%} %>
 	

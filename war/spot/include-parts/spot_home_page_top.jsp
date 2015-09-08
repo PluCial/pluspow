@@ -5,12 +5,16 @@
 <%@ page import="org.slim3.util.StringUtil" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.pluspow.utils.*" %>
+<%@ page import="java.text.DecimalFormat" %>
+<%@ page import="java.util.Map" %>
 <%
 Spot spot =(Spot) request.getAttribute("spot");
 SupportLang lang =(SupportLang) request.getAttribute("lang");
 boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 boolean isEditPage = Boolean.valueOf((String) request.getParameter("isEditPage"));
 List<SupportLang> suppertLangList = (List<SupportLang>) request.getAttribute("suppertLangList");
+Map<String, OfficeHours> officeHoursMap = (Map<String, OfficeHours>) request.getAttribute("officeHoursMap");
+DecimalFormat officeTimeformat = new DecimalFormat("00");
 %>
 	<section id="spot-home" class="no-padding" style="background-image:
                   url(<%=spot.getBackgroundImageUrl() %>)">
@@ -149,40 +153,33 @@ List<SupportLang> suppertLangList = (List<SupportLang>) request.getAttribute("su
 					</div>
 					
 					<div id="spot-office-hours" class="spot-detail-inner tab-pane">
-							<div class="plan text-center row">
-								<div class="plan-name col-md-4">月曜日</div>
-								<div class="plan-price col-md-8"><sup class="currency"><i class="fa fa-sun-o"></i></sup><strong>10:00</strong> <sub><i class="fa fa-moon-o"></i>21:30</sub></div>
+						<%for(DayOfWeek dayOfWeek: DayOfWeek.values()) {
+							OfficeHours officeHours = officeHoursMap.get(dayOfWeek.toString());
+							if(isOwner || officeHours.isOpen()) {
+						%>
+						<div id="<%=officeHours.getKey().getName() %>" class="plan text-center row">
+							<div class="plan-name col-md-4">
+								<%=officeHours.getDayOfWeek().getName() %>
+								<%if(isOwner && isEditPage) { %>
+								<a data-toggle="modal" 
+									data-backdrop="static"
+									data-target="#editOfficeHoursModal" 
+									style="color:#333"
+									href="/spot/secure/editOfficeHours?spotId=<%=spot.getSpotId() %>&dayOfWeek=<%=officeHours.getDayOfWeek() %>">
+									<i class="fa fa-pencil-square-o edit-mode"></i>
+								</a>
+								<%} %>
 							</div>
-
-							<div class="plan text-center row">
-								<div class="plan-name col-md-4">火曜日</div>
-								<div class="plan-price col-md-8"><sup class="currency"><i class="fa fa-sun-o"></i></sup><strong>10:00</strong> <sub><i class="fa fa-moon-o"></i>21:30</sub></div>
+							<div class="plan-price col-md-8 spot-office-hours-area" style="<%=officeHours.isOpen() ? "" : "    display: none;" %>">
+								<sup class="currency">
+									<i class="fa fa-sun-o"></i>
+								</sup>
+								<strong><span class="office-open-hour"><%=officeTimeformat.format(officeHours.getOpenHour()) %></span>:<span class="office-open-minute"><%=officeTimeformat.format(officeHours.getOpenMinute()) %></span></strong> 
+								<sub><i class="fa fa-moon-o"></i><span class="office-close-hour"><%=officeTimeformat.format(officeHours.getCloseHour()) %></span>:<span class="office-close-minute"><%=officeTimeformat.format(officeHours.getCloseMinute()) %></span></sub>
 							</div>
-
-							<div class="plan text-center row">
-								<div class="plan-name col-md-4">水曜日</div>
-								<div class="plan-price col-md-8"><sup class="currency"><i class="fa fa-sun-o"></i></sup><strong>10:00</strong> <sub><i class="fa fa-moon-o"></i>21:30</sub></div>
-							</div>
-
-							<div class="plan text-center row">
-								<div class="plan-name col-md-4">木曜日</div>
-								<div class="plan-price col-md-8"><sup class="currency"><i class="fa fa-sun-o"></i></sup><strong>10:00</strong> <sub><i class="fa fa-moon-o"></i>21:30</sub></div>
-							</div>
-
-							<div class="plan text-center row">
-								<div class="plan-name col-md-4">金曜日</div>
-								<div class="plan-price col-md-8"><sup class="currency"><i class="fa fa-sun-o"></i></sup><strong>10:00</strong> <sub><i class="fa fa-moon-o"></i>21:30</sub></div>
-							</div>
-
-							<div class="plan text-center row">
-								<div class="plan-name col-md-4">土曜日</div>
-								<div class="plan-price col-md-8"><sup class="currency"><i class="fa fa-sun-o"></i></sup><strong>10:00</strong> <sub><i class="fa fa-moon-o"></i>21:30</sub></div>
-							</div>
-
-							<div class="plan text-center row">
-								<div class="plan-name col-md-4">日曜日</div>
-								<div class="plan-price col-md-8"><sup class="currency"><i class="fa fa-sun-o"></i></sup><strong>10:00</strong> <sub><i class="fa fa-moon-o"></i>21:30</sub></div>
-							</div>
+						</div>
+						<%	} %>
+						<%} %>
 					</div>
 			
 				</div>

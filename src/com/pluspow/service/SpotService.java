@@ -13,6 +13,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.constants.MemcacheKey;
 import com.pluspow.dao.SpotDao;
+import com.pluspow.enums.DayOfWeek;
 import com.pluspow.enums.ServicePlan;
 import com.pluspow.enums.SupportLang;
 import com.pluspow.enums.TextResRole;
@@ -144,7 +145,7 @@ public class SpotService {
             // 言語情報の追加
             SpotLangUnitService.addBaseLang(tx, spot, spot.getLangUnit());
     
-            // 名前の追加
+            // テキストリソースの追加
             SpotTextRes nameRes = spot.getNameRes();
             SpotTextResService.add(tx, spot, spot.getBaseLang(), TextResRole.SPOT_NAME, nameRes.getContentString());
             
@@ -156,6 +157,15 @@ public class SpotService {
             
             SpotTextRes addressRes = spot.getAddressRes();
             SpotTextResService.add(tx, spot, spot.getBaseLang(), TextResRole.SPOT_ADDRESS, addressRes.getContentString());
+            
+            // 営業時間の追加
+            OfficeHoursService.addDefault(tx, spot, DayOfWeek.MON);
+            OfficeHoursService.addDefault(tx, spot, DayOfWeek.TUE);
+            OfficeHoursService.addDefault(tx, spot, DayOfWeek.WED);
+            OfficeHoursService.addDefault(tx, spot, DayOfWeek.THU);
+            OfficeHoursService.addDefault(tx, spot, DayOfWeek.FRI);
+            OfficeHoursService.addDefault(tx, spot, DayOfWeek.SAT);
+            OfficeHoursService.addDefault(tx, spot, DayOfWeek.SUN);
             
             tx.commit();
             
@@ -200,6 +210,8 @@ public class SpotService {
         spot.setPlan(payPlan == null ? ServicePlan.FREE : payPlan.getPlan());
         // GCS
         spot.setGcsResources(SpotGcsResService.getResourcesMap(spot));
+        // 営業時間
+        spot.setOfficeHourList(OfficeHoursService.getOfficeHourList(spot));
     }
     
     /**
