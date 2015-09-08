@@ -76,6 +76,10 @@ ul.navbar-nav > li > a {
 	margin-top: 6em;
 }
 
+#spot-catch .cd-slider-nav nav ul {
+	padding: 0 10px;
+}
+
 #background-image-btn {
 	display: block;
     position: absolute;
@@ -171,6 +175,31 @@ background: none !important;
     -webkit-justify-content: center;
     -ms-justify-content: center;
      justify-content: center;
+}
+
+#spot-office-hours {
+	background-color: #fff;
+	-moz-justify-content: center;
+    -webkit-justify-content: center;
+    -ms-justify-content: center;
+     justify-content: center;
+     padding-top: 100px;
+}
+
+#spot-office-hours .plan:last-child {
+	border-bottom: 0;
+}
+
+#spot-office-hours .plan-price {
+	background-color: #fff;
+}
+
+#spot-office-hours .plan {
+    border-top: 0;
+	padding: 0 30px;
+}
+#spot-office-hours .plan sub {
+    padding-left: 20px;
 }
 
 #area-nav {

@@ -5,7 +5,7 @@
 <% 
 Spot spot =(Spot) request.getAttribute("spot");
 boolean isClientLogged = Boolean.valueOf((String) request.getAttribute("isClientLogged"));
-boolean adFlg = (spot.getSpotLangInfo().getLang() == SupportLang.ja);
+boolean adFlg = (spot.getLangUnit().getLang() == SupportLang.ja);
 %>
 	<section id="footer" class="footer service-footer">
 		<div class="container">

@@ -43,10 +43,14 @@ public class TransService {
         String transSrc = "";
         
         for(TextResources tc: transContentsList) {
-            String content = tc.getContent().getValue();
-            content = Utils.changeIndentionToHtml(content); // 改行コードを<br /> に変換して翻訳する
             
-            transSrc = transSrc + "<div id=\"" + tc.getKey().getName() + "\">" + content +  "</div>";
+            // 翻訳対象の場合
+            if(tc.getRole().isTransTarget()) {
+                String content = tc.getContent().getValue();
+                content = Utils.changeIndentionToHtml(content); // 改行コードを<br /> に変換して翻訳する
+
+                transSrc = transSrc + "<div id=\"" + tc.getKey().getName() + "\">" + content +  "</div>";
+            }
         }
         
         // 翻訳処理

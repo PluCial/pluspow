@@ -38,7 +38,7 @@ List<SupportLang> suppertLangList = (List<SupportLang>) request.getAttribute("su
 					<%if(suppertLangList != null && suppertLangList.size() > 0) { %>
 						<select id="langs-select" class="" name="lang">
 							<%for(SupportLang suppertLang: suppertLangList) {%>
-								<option value="<%=suppertLang.toString() %>" <%=spot.getSpotLangInfo().getLang() == suppertLang ? "selected" : "" %>><%=suppertLang.getName() %></option>
+								<option value="<%=suppertLang.toString() %>" <%=spot.getLangUnit().getLang() == suppertLang ? "selected" : "" %>><%=suppertLang.getName() %></option>
 							<%} %>
 							<%if(isOwner && isEditPage) { %>
 								<option value="add">&lt; 追加... &gt;</option>
@@ -67,7 +67,7 @@ List<SupportLang> suppertLangList = (List<SupportLang>) request.getAttribute("su
 					<ul class="nav nav-tabs">
 						<li class="active"><a href="#spot-info" data-toggle="tab"><i class="fa fa-map-marker"></i></a></li>
 						<li><a href="#spot-detail" data-toggle="tab"><i class="fa fa-meh-o"></i></a></li>
-						<li><a href="#spot-detail" data-toggle="tab"><i class="fa fa-calendar"></i></a></li>
+						<li><a href="#spot-office-hours" data-toggle="tab"><i class="fa fa-calendar"></i></a></li>
 					</ul>
 				</div>
 				<div class="tab-content">
@@ -112,7 +112,19 @@ List<SupportLang> suppertLangList = (List<SupportLang>) request.getAttribute("su
 								<%} %>
 							</h1>
 					
-							<p><%=spot.getGeoFormattedAddress() %></p>
+							<p>
+								<span id="<%=spot.getAddressResKey() %>"><%=spot.getAddress() %></span>
+								<%if(isOwner && isEditPage) { %>
+								<!-- 修正モード -->
+								<a data-toggle="modal" 
+									data-backdrop="static"
+									data-target="#textResModal" 
+									style="color:#333"
+									href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resRole=<%=TextResRole.SPOT_ADDRESS %>&resourcesKey=<%=spot.getAddressResKey() %>">
+									<i class="fa fa-pencil-square-o edit-mode"></i>
+								</a>
+								<%} %>
+							</p>
 							<p class="phone"><i class="fa fa-phone"></i> <%=spot.getPhoneNumber() %></p>
 						</div>
 
@@ -120,7 +132,6 @@ List<SupportLang> suppertLangList = (List<SupportLang>) request.getAttribute("su
 					</div>
 			
 					<div id="spot-detail" class="spot-detail-inner tab-pane">
-<%-- 						<jsp:include page="/spot/include-parts/spot_office_hours.jsp" /> --%>
 						<h1><%=spot.getName() %></h1>
 						<p>
 							<span id="<%=spot.getDetailResKey() %>"><%=Utils.getJspDisplayString(spot.getDetail()) %></span>
@@ -135,6 +146,43 @@ List<SupportLang> suppertLangList = (List<SupportLang>) request.getAttribute("su
 							</a>
 							<%} %>
 						</p>
+					</div>
+					
+					<div id="spot-office-hours" class="spot-detail-inner tab-pane">
+							<div class="plan text-center row">
+								<div class="plan-name col-md-4">月曜日</div>
+								<div class="plan-price col-md-8"><sup class="currency"><i class="fa fa-sun-o"></i></sup><strong>10:00</strong> <sub><i class="fa fa-moon-o"></i>21:30</sub></div>
+							</div>
+
+							<div class="plan text-center row">
+								<div class="plan-name col-md-4">火曜日</div>
+								<div class="plan-price col-md-8"><sup class="currency"><i class="fa fa-sun-o"></i></sup><strong>10:00</strong> <sub><i class="fa fa-moon-o"></i>21:30</sub></div>
+							</div>
+
+							<div class="plan text-center row">
+								<div class="plan-name col-md-4">水曜日</div>
+								<div class="plan-price col-md-8"><sup class="currency"><i class="fa fa-sun-o"></i></sup><strong>10:00</strong> <sub><i class="fa fa-moon-o"></i>21:30</sub></div>
+							</div>
+
+							<div class="plan text-center row">
+								<div class="plan-name col-md-4">木曜日</div>
+								<div class="plan-price col-md-8"><sup class="currency"><i class="fa fa-sun-o"></i></sup><strong>10:00</strong> <sub><i class="fa fa-moon-o"></i>21:30</sub></div>
+							</div>
+
+							<div class="plan text-center row">
+								<div class="plan-name col-md-4">金曜日</div>
+								<div class="plan-price col-md-8"><sup class="currency"><i class="fa fa-sun-o"></i></sup><strong>10:00</strong> <sub><i class="fa fa-moon-o"></i>21:30</sub></div>
+							</div>
+
+							<div class="plan text-center row">
+								<div class="plan-name col-md-4">土曜日</div>
+								<div class="plan-price col-md-8"><sup class="currency"><i class="fa fa-sun-o"></i></sup><strong>10:00</strong> <sub><i class="fa fa-moon-o"></i>21:30</sub></div>
+							</div>
+
+							<div class="plan text-center row">
+								<div class="plan-name col-md-4">日曜日</div>
+								<div class="plan-price col-md-8"><sup class="currency"><i class="fa fa-sun-o"></i></sup><strong>10:00</strong> <sub><i class="fa fa-moon-o"></i>21:30</sub></div>
+							</div>
 					</div>
 			
 				</div>

@@ -14,16 +14,12 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 List<Item> itemList =(List<Item>) request.getAttribute("itemList");
 %>
 <!DOCTYPE html>
-<html lang="<%=spot.getSpotLangInfo().getLang() %>">
+<html lang="<%=spot.getLangUnit().getLang() %>">
 <head>
 	<jsp:include page="/spot/include-parts/html_head.jsp" />
 </head>
 	
 <body class="home">
-
-	<!-- Style switcher start -->
-<%-- 	<jsp:include page="/spot/include-parts/style_switch.jsp" /> --%>
-	<!-- Style switcher end -->
 
 	<div class="body-inner">
 		<!-- Header start -->
@@ -51,7 +47,7 @@ List<Item> itemList =(List<Item>) request.getAttribute("itemList");
 					<div class="col-md-12 heading">
 						<span class="title-icon classic pull-left"><i class="fa fa-suitcase"></i></span>
 						<h2 class="title classic">Service</h2>
-						<%if(isOwner && spot.getSpotLangInfo().getLang() == spot.getBaseLang()) { %>
+						<%if(isOwner && spot.getLangUnit().getLang() == spot.getBaseLang()) { %>
 						<a class="pull-right btn btn-primary" href="/spot/secure/itemAdd?spotId=<%=spot.getSpotId() %>">
 							<i class="fa fa-plus"></i> アイテムを追加
 						</a>
@@ -88,7 +84,7 @@ List<Item> itemList =(List<Item>) request.getAttribute("itemList");
 	
 	
 	<!-- javaScript Map start -->
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?language=<%=spot.getSpotLangInfo().getLang() %>"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?language=<%=spot.getLangUnit().getLang() %>"></script>
 	<script>
 	jQuery(function($) {
 		  "use strict";

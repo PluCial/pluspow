@@ -68,7 +68,7 @@ public class SpotService {
         model.getClientRef().setModel(client);
         
         // 言語情報の設定
-        model.setSpotLangInfo(SpotLangUnitService.getNewModel(model, lang, phoneNumber, geoModel));
+        model.setLangUnit(SpotLangUnitService.getNewModel(model, lang, phoneNumber, geoModel));
         
         // テキストリソースの設定
         SpotTextRes addressRes = new SpotTextRes();
@@ -142,7 +142,7 @@ public class SpotService {
             Datastore.put(tx, spot);
             
             // 言語情報の追加
-            SpotLangUnitService.addBaseLang(tx, spot, spot.getSpotLangInfo());
+            SpotLangUnitService.addBaseLang(tx, spot, spot.getLangUnit());
     
             // 名前の追加
             SpotTextRes nameRes = spot.getNameRes();
@@ -192,7 +192,7 @@ public class SpotService {
         // 貯蓄の設定
         spot.setTransAcc(TransCreditService.get(spot));
         // 言語情報の設定
-        spot.setSpotLangInfo(SpotLangUnitService.get(spot, lang));
+        spot.setLangUnit(SpotLangUnitService.get(spot, lang));
         // 翻訳コンテンツの設定
         spot.setTextResources(SpotTextResService.getResourcesMap(spot, lang));
         // プラン
@@ -315,15 +315,22 @@ public class SpotService {
 
                 // 翻訳したコンテンツを追加
                 for(SpotTextRes textRes: transContentsList) {
-                    // 改行が含まれるため、text()ではなくhtml()で取得する
-                    String tcText = document.getElementById(textRes.getKey().getName()).html();
                     
-                    // getElementById から取得した値に余計な改行が含まれるため、一度手動で除去してからhtml改行をtext改行に置き換える
-                    String strTmp = Utils.clearTextIndention(tcText);
-                    String content = Utils.changeBrToTextIndention(strTmp);
-                    
-                    SpotTextResService.add(tx, spot, transLang, textRes.getRole(), content);
+                    // 翻訳対象の場合
+                    if(textRes.getRole().isTransTarget()) {
+                        // 改行が含まれるため、text()ではなくhtml()で取得する
+                        String tcText = document.getElementById(textRes.getKey().getName()).html();
+
+                        // getElementById から取得した値に余計な改行が含まれるため、一度手動で除去してからhtml改行をtext改行に置き換える
+                        String strTmp = Utils.clearTextIndention(tcText);
+                        String content = Utils.changeBrToTextIndention(strTmp);
+
+                        SpotTextResService.add(tx, spot, transLang, textRes.getRole(), content);
+                    }
                 }
+                
+                // 住所のテキストリソースはGMOのフォーマットアドレスを使用
+                SpotTextResService.add(tx, spot, transLang, TextResRole.SPOT_ADDRESS, geoModel.getFormattedAddress());
                 
                 // 言語情報の追加
                 SpotLangUnitService.add(tx, spot, transLang, geoModel);
