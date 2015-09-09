@@ -98,7 +98,7 @@ ul.navbar-nav > li > a {
 }
 
 body.home .spot-detail-inner {
-    min-height: 96vh;
+    min-height: 80vh;
 }
 
 #spot-catch.spot-detail-inner,
@@ -169,23 +169,27 @@ background: none !important;
 	-webkit-justify-content: space-between;
 	-ms-justify-content: space-between;
 	justify-content: space-between;
+	padding: 50px 0 0 0;
 }
 
 #spot-detail {
 	background-color: #fff;
-	-moz-justify-content: center;
-    -webkit-justify-content: center;
-    -ms-justify-content: center;
-     justify-content: center;
+	-moz-justify-content: space-between;
+	-webkit-justify-content: space-between;
+	-ms-justify-content: space-between;
+	justify-content: space-between;
+	border-bottom: 1px solid #e7e7e7;
+	padding: 50px 30px;
 }
 
 #spot-office-hours {
 	background-color: #fff;
-	-moz-justify-content: center;
-    -webkit-justify-content: center;
-    -ms-justify-content: center;
-     justify-content: center;
-     padding-top: 100px;
+	-moz-justify-content: space-between;
+	-webkit-justify-content: space-between;
+	-ms-justify-content: space-between;
+	justify-content: space-between;
+	padding:15px 0;
+	border-bottom: 1px solid #e7e7e7;
 }
 
 #spot-office-hours .plan:last-child {
@@ -221,19 +225,13 @@ background: none !important;
 	height: 300px;
 }
 
-#spot-info .detail,
-#spot-detail {
+#spot-info .detail{
 	padding: 0 30px;
 }
 
 #spot-info .detail p,
 #spot-detail p {
 	margin-top: 1.5em;
-}
-
-#spot-detail {
-	border-bottom: 1px solid #e7e7e7;
-	padding-top: 120px;
 }
 
 #spot-detail p {

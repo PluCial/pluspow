@@ -77,7 +77,7 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 				<div class="tab-content">
 					<div id="spot-info" class="spot-detail-inner tab-pane active">
 				
-						<div id="area-nav">
+						<%-- <div id="area-nav">
 							<!-- area-nav start -->
 							<ol class="breadcrumb">
 								<%if(!StringUtil.isEmpty(spot.getGeoAreaLevel1())) { %>
@@ -97,7 +97,7 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 								<%} %>
 							</ol>
 							<!-- area-nav end -->
-						</div>
+						</div> --%>
 				
 						<div class="detail">
 							<div id="spot-logo"><i class="fa fa-map-marker"></i></div>
@@ -136,20 +136,22 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 					</div>
 			
 					<div id="spot-detail" class="spot-detail-inner tab-pane">
-						<h1><%=spot.getName() %></h1>
-						<p>
-							<span id="<%=spot.getDetailResKey() %>"><%=Utils.getJspDisplayString(spot.getDetail()) %></span>
-							<%if(isOwner && isEditPage) { %>
-							<a data-toggle="modal" 
-								data-backdrop="static"
-								data-target="#textResModal" 
-								class="" 
-								style="color:#333"
-								href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resRole=<%=TextResRole.SPOT_DETAIL %>&resourcesKey=<%=spot.getDetailResKey() %>">
-								<i class="fa fa-pencil-square-o edit-mode"></i>
-							</a>
-							<%} %>
-						</p>
+						<div>
+							<h1><%=spot.getName() %></h1>
+							<p>
+								<span id="<%=spot.getDetailResKey() %>"><%=Utils.getJspDisplayString(spot.getDetail()) %></span>
+								<%if(isOwner && isEditPage) { %>
+								<a data-toggle="modal" 
+									data-backdrop="static"
+									data-target="#textResModal" 
+									class="" 
+									style="color:#333"
+									href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resRole=<%=TextResRole.SPOT_DETAIL %>&resourcesKey=<%=spot.getDetailResKey() %>">
+									<i class="fa fa-pencil-square-o edit-mode"></i>
+								</a>
+								<%} %>
+							</p>
+						</div>
 					</div>
 					
 					<div id="spot-office-hours" class="spot-detail-inner tab-pane">
