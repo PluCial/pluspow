@@ -1,18 +1,24 @@
-<!-- Indices written at Thu, 10 Sep 2015 17:59:27 JST -->
+<!-- Indices written at Fri, 11 Sep 2015 20:11:28 JST -->
 
 <datastore-indexes>
 
-    <!-- Used 189 times in query history -->
+    <!-- Used 319 times in query history -->
     <datastore-index kind="SpotPayPlan" ancestor="false" source="auto">
         <property name="spotRef" direction="asc"/>
         <property name="endDate" direction="desc"/>
     </datastore-index>
 
-    <!-- Used 103 times in query history -->
+    <!-- Used 219 times in query history -->
     <datastore-index kind="Item" ancestor="false" source="auto">
         <property name="spotRef" direction="asc"/>
         <property name="supportLangs" direction="asc"/>
         <property name="sortOrder" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 123 times in query history -->
+    <datastore-index kind="SpotLangUnit" ancestor="false" source="auto">
+        <property name="spotRef" direction="asc"/>
+        <property name="createDate" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>

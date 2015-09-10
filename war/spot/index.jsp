@@ -74,6 +74,10 @@ List<Item> itemList =(List<Item>) request.getAttribute("itemList");
 	<!-- javaScript start -->
 	<jsp:include page="/spot/include-parts/html_script.jsp" />
 	<!-- javaScript end -->
+	
+	<jsp:include page="/spot/include-parts/dialog_modal.jsp">
+		<jsp:param name="modelId" value="selectLangModel" />
+	</jsp:include>
 
 	<%if(isOwner) { %>
 	<!-- secure JS start -->

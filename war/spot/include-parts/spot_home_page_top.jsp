@@ -36,22 +36,18 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 						<%} %>
 					</h2>
 				</div>
-				<div class="lang-box">
-                        
-					<!-- langs-select start -->
-					<%if(suppertLangList != null && suppertLangList.size() > 0) { %>
-						<select id="langs-select" class="" name="lang">
-							<%for(SupportLang suppertLang: suppertLangList) {%>
-								<option value="<%=suppertLang.toString() %>" <%=spot.getLangUnit().getLang() == suppertLang ? "selected" : "" %>><%=suppertLang.getName() %></option>
-							<%} %>
-							<%if(isOwner && isEditPage) { %>
-								<option value="add">&lt; 追加... &gt;</option>
-							<%} %>
-						</select>
-					<%} %>
-				</div>
 				
-				<div class="cd-slider-nav">
+				<a id="langs-select-btn"
+					data-toggle="modal" 
+					data-backdrop="static"
+					data-target="#selectLangModel" 
+					style="color:#fff"
+					href="/spot/selectLang?spotId=<%=spot.getSpotId() %>&lang=<%=lang.toString() %>">
+					<img style="width:25px;vertical-align: middle;" class="flag-image" src="/images/flag/<%=lang.toString().toUpperCase() %>.png" />
+					<%=spot.getLangUnit().getLang().getName() %> <i class="fa fa-chevron-down"></i>
+				</a>
+				
+				<!-- <div class="cd-slider-nav">
 					<nav>
 						<ul>
 							<li class="selected"><a href="#0"><i class="fa fa-cutlery"></i> 飲食</a></li>
@@ -62,7 +58,7 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 							<li class="selected"><a href="#0"><i class="fa fa-ellipsis-h"></i> その他</a></li>
 						</ul>
 					</nav> 
-				</div>
+				</div> -->
 
 			</div><!-- spot-catch end-->
 			

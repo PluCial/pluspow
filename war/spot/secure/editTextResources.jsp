@@ -23,6 +23,9 @@ TextResources textResources = (TextResources) request.getAttribute("textResource
 </head>
 <body>
 	<div class="modal-header">
+		<div class="pull-right">
+			<button class="btn btn-box-tool btn-sm" data-dismiss="modal"><i class="fa fa-times"></i></button>
+		</div>
 		<h4 class="modal-title"><i class="fa fa-pencil-square-o"></i> <%=textResources != null ? textResources.getRole().getName() : "" %></h4>
 	</div><!-- /modal-header -->
     <form id="resources-form">
@@ -37,8 +40,7 @@ TextResources textResources = (TextResources) request.getAttribute("textResource
 			<%} %>
 		</div><!-- /modal-body -->
 		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
-			<button id="text-resources-submit-button" type="button" class="btn btn-info">変更</button>
+			<button id="text-resources-submit-button" type="button" class="btn btn-primary btn-sm">変更</button>
 		</div>	<!-- /modal-footer -->
 		<input type="hidden" name="spotId" value="<%=spot.getSpotId() %>" />
 		<input type="hidden" name="resourcesKey" value="<%=resourcesKey %>" />

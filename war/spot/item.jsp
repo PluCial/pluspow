@@ -95,7 +95,7 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 		</section><!-- Portfolio item end -->
 		
 		<!-- Contact Info start -->
-		<jsp:include page="/spot/include-parts/spot_contact_info.jsp" />
+<%-- 		<jsp:include page="/spot/include-parts/spot_contact_info.jsp" /> --%>
 		<!--/ Contact Info end -->
 		
 		<!-- item-list start -->
@@ -114,6 +114,10 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 	<!-- javaScript start -->
 	<jsp:include page="/spot/include-parts/html_script.jsp" />
 	<!-- javaScript end -->
+	
+	<jsp:include page="/spot/include-parts/dialog_modal.jsp">
+		<jsp:param name="modelId" value="selectLangModel" />
+	</jsp:include>
 	
 	<%if(isOwner) { %>
 	<!-- secure JS start -->

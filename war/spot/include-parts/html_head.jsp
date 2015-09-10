@@ -46,7 +46,7 @@ String pageDescription = (String) request.getAttribute("pageDescription");
 	<!-- Flexslider -->
 	<link rel="stylesheet" href="/spot/css/cd-hero.css">
 	<!-- Style Swicther -->
-	<link id="style-switch" href="/spot/css/presets/preset3.css" media="screen" rel="stylesheet" type="text/css">
+<!-- 	<link id="style-switch" href="/spot/css/presets/preset3.css" media="screen" rel="stylesheet" type="text/css"> -->
 	<!-- Style Custom -->
 	<link rel="stylesheet" href="/spot/css/custom.css">
 

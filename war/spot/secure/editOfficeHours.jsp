@@ -24,6 +24,9 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 </head>
 <body>
 	<div class="modal-header">
+		<div class="pull-right">
+			<button class="btn btn-box-tool btn-sm" data-dismiss="modal"><i class="fa fa-times"></i></button>
+		</div>
 		<h4 class="modal-title"><i class="fa fa-calendar"></i> <%=officeHours != null ? officeHours.getDayOfWeek().getName() : "" %></h4>
 	</div><!-- /modal-header -->
     <form id="office-hours-submit-form">
@@ -65,8 +68,7 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 			<%} %>
 		</div><!-- /modal-body -->
 		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
-			<button id="office-hours-submit-button" type="button" class="btn btn-info">変更</button>
+			<button id="office-hours-submit-button" type="button" class="btn btn-primary btn-sm">変更</button>
 		</div>	<!-- /modal-footer -->
 		<input type="hidden" name="spotId" value="<%=spot.getSpotId() %>" />
 		<input type="hidden" name="dayOfWeek" value="<%=officeHours.getDayOfWeek().toString() %>" />

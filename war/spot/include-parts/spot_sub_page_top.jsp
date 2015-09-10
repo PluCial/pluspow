@@ -13,54 +13,26 @@ boolean isEditPage = Boolean.valueOf((String) request.getParameter("isEditPage")
 List<SupportLang> suppertLangList = (List<SupportLang>) request.getAttribute("suppertLangList");
 %>
 	<section id="spot-home" style="background-image:
-                  url(https://d13pix9kaak6wt.cloudfront.net/background/users/n/i/r/nirajmehdiratta_1405985339_55.jpg)">
-<!-- 		<div class="parallax-overlay"></div> -->
+                  url(<%=spot.getBackgroundImageUrl() %>)">
+<!-- <div class="parallax-overlay"></div> -->
 		<div id="spot-catch" class="spot-detail-inner"><!-- spot-image -->
                   
-				<div class="detail">
-					<h1>
-						<a href="/+<%=spot.getSpotId() %>/l-<%=lang.toString() %>/"><%=spot.getName() %></a>
-					</h1>
-				</div>
-				<div class="lang-box">
-                        
-					<!-- langs-select start -->
-					<%if(suppertLangList != null && suppertLangList.size() > 0) { %>
-						<select id="langs-select" class="" name="lang">
-							<%for(SupportLang suppertLang: suppertLangList) {%>
-								<option value="<%=suppertLang.toString() %>" <%=spot.getLangUnit().getLang() == suppertLang ? "selected" : "" %>><%=suppertLang.getName() %></option>
-							<%} %>
-							<%if(isOwner && isEditPage) { %>
-								<option value="add">&lt; 追加... &gt;</option>
-							<%} %>
-						</select>
-					<%} %>
-				</div>
-
-			</div><!-- spot-catch end-->
-	</section>
-	<!-- <section id="home" class="no-padding">
-		Carousel
-    	<div id="main-slide" class="carousel slide" data-ride="carousel">
-
-			Carousel inner
-			<div class="carousel-inner" style="background-image:
-                  url(/spot/images/spot.jpg)">
-
-			</div>Carousel inner end
-			
-			<div class="cd-slider-nav">
-				<nav>
-				<span class="cd-marker item-1"></span>
-					<ul>
-						<li class="selected"><a href="#0"><i class="fa fa-cutlery"></i> 飲食</a></li>
-						<li class="selected"><a href="#0"><i class="fa fa-hotel"></i> 宿泊</a></li>
-						<li class=""><a href="#0"><i class="fa fa-shopping-cart"></i> 買い物</a></li>
-						<li class=""><a href="#0"><i class="fa fa-bicycle"></i> 娯楽</a></li>
-						<li class=""><a href="#0"><i class="fa fa-heart-o"></i> 癒し</a></li>
-						<li class="selected"><a href="#0"><i class="fa fa-ellipsis-h"></i> その他</a></li>
-					</ul>
-				</nav> 
+			<div class="detail">
+				<h1>
+					<a href="/+<%=spot.getSpotId() %>/l-<%=lang.toString() %>/"><%=spot.getName() %></a>
+				</h1>
+				<p><%=spot.getCatchCopy() %></p>
 			</div>
-		</div>/carousel    	
-    </section> -->
+
+		</div><!-- spot-catch end-->
+			
+		<a id="langs-select-btn"
+			data-toggle="modal" 
+			data-backdrop="static"
+			data-target="#selectLangModel" 
+			style="color:#fff"
+			href="/spot/selectLang?spotId=<%=spot.getSpotId() %>&lang=<%=lang.toString() %>">
+			<img style="width:25px;vertical-align: middle;" class="flag-image" src="/images/flag/<%=lang.toString().toUpperCase() %>.png" />
+			<%=spot.getLangUnit().getLang().getName() %> <i class="fa fa-chevron-down"></i>
+		</a>
+	</section>

@@ -57,7 +57,13 @@ ul.navbar-nav > li > a {
 
 #spot-catch .detail {
 	padding: 0 30px;
-	padding-top: 80px;
+/* 	padding-top: 80px; */
+}
+
+#spot-catch .detail p {
+	color:#fff;
+	text-shadow: 1px 1px 3px rgba(0,0,0,.7),1px 1px 5px rgba(0,0,0,.3);
+	font-size: 22px;
 }
 
 #spot-catch .detail h1,
@@ -100,7 +106,7 @@ ul.navbar-nav > li > a {
 }
 
 body.home .spot-detail-inner {
-    min-height: 80vh;
+    min-height: 85vh;
 }
 
 #spot-catch.spot-detail-inner,
@@ -268,6 +274,18 @@ ol.breadcrumb a {
   
 ol.breadcrumb>li+li:before {
   content: '>\00a0';
+}
+
+#langs-select-btn {
+	display: block;
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    z-index: 999;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0,0,0,.7),1px 1px 5px rgba(0,0,0,.3);
 }
 
 #langs-select {
