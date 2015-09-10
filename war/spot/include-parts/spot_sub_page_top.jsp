@@ -28,7 +28,7 @@ List<SupportLang> suppertLangList = (List<SupportLang>) request.getAttribute("su
 					<%if(suppertLangList != null && suppertLangList.size() > 0) { %>
 						<select id="langs-select" class="" name="lang">
 							<%for(SupportLang suppertLang: suppertLangList) {%>
-								<option value="<%=suppertLang.toString() %>" <%=spot.getSpotLangInfo().getLang() == suppertLang ? "selected" : "" %>><%=suppertLang.getName() %></option>
+								<option value="<%=suppertLang.toString() %>" <%=spot.getLangUnit().getLang() == suppertLang ? "selected" : "" %>><%=suppertLang.getName() %></option>
 							<%} %>
 							<%if(isOwner && isEditPage) { %>
 								<option value="add">&lt; 追加... &gt;</option>

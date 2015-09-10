@@ -48,14 +48,16 @@ ul.navbar-nav > li > a {
 }
 
 #spot-catch {
+	position: relative;
 	-moz-justify-content: center;
-    -webkit-justify-content: center;
-    -ms-justify-content: center;
-     justify-content: center;
+	-webkit-justify-content: center;
+	-ms-justify-content: center;
+	justify-content: center;
 }
 
 #spot-catch .detail {
 	padding: 0 30px;
+	padding-top: 80px;
 }
 
 #spot-catch .detail h1,
@@ -113,6 +115,9 @@ body.home .spot-detail-inner {
     flex-direction: column;
 }
 
+#spot-home .tab-content {
+	padding-right: 15px;
+}
 
 .full-width-tabs > ul.nav.nav-tabs {
     display: table;
@@ -226,7 +231,7 @@ background: none !important;
 }
 
 #spot-info .detail{
-	padding: 0 30px;
+	padding: 0 80px;
 }
 
 #spot-info .detail p,

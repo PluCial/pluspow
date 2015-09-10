@@ -16,7 +16,7 @@ String detail = (String) request.getAttribute("detail");
 String selectItemType = (String) request.getAttribute("itemType");
 %>
 <!DOCTYPE html>
-<html lang="<%=spot.getSpotLangInfo().getLang() %>">
+<html lang="<%=spot.getLangUnit().getLang() %>">
 <head>
 	<jsp:include page="/spot/include-parts/html_head.jsp" />
 	<link href="/plugins/cropper/cropper.min.css" rel="stylesheet">

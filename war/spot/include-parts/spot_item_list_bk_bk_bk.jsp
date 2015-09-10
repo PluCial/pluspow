@@ -16,13 +16,13 @@ SupportLang lang = (SupportLang)request.getAttribute("lang");
 boolean isEditPage = Boolean.valueOf((String) request.getParameter("isEditPage"));
 %>
 		<div class="container">
-			<div class="row <%=isOwner && isEditPage && spot.getSpotLangInfo().getLang() == spot.getBaseLang() ? "connectedSortable" :""  %>">
+			<div class="row <%=isOwner && isEditPage && spot.getLangUnit().getLang() == spot.getBaseLang() ? "connectedSortable" :""  %>">
 				
 				<%for(Item item: itemList) { 
 					boolean isSupport = item.getSupportLangs().indexOf(lang) >= 0 ? true : false;
 					String itemLink = "/+" + spot.getSpotId() + "/l-";
 					if(isSupport) {
-						itemLink = itemLink + spot.getSpotLangInfo().getLang().toString();
+						itemLink = itemLink + spot.getLangUnit().getLang().toString();
 					}else {
 						itemLink = itemLink + item.getBaseLang().toString();
 					}

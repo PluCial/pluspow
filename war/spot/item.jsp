@@ -16,7 +16,7 @@ Item item = (Item) request.getAttribute("item");
 boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 %>
 <!DOCTYPE html>
-<html lang="<%=spot.getSpotLangInfo().getLang() %>">
+<html lang="<%=spot.getLangUnit().getLang() %>">
 <head>
 	<jsp:include page="/spot/include-parts/html_head.jsp" />
 	<style>
@@ -124,7 +124,7 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 	<%} %>
 	
 	<!-- javaScript Map start -->
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?language=<%=spot.getSpotLangInfo().getLang() %>"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?language=<%=spot.getLangUnit().getLang() %>"></script>
 	<script>
 	jQuery(function($) {
 		  "use strict";
