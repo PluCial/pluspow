@@ -2,6 +2,7 @@ package com.pluspow.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,7 +29,6 @@ import com.pluspow.model.GeoModel;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotPayPlan;
 import com.pluspow.model.SpotTextRes;
-import com.pluspow.model.TextResources;
 import com.pluspow.model.TransCredit;
 import com.pluspow.utils.Utils;
 
@@ -281,15 +281,17 @@ public class SpotService {
             SupportLang transLang) 
             throws UnsuitableException, TransException, TooManyException {
         
-        if(spot.getSupportLangs().indexOf(transLang) > 0) throw new TooManyException("この言語は既に追加されています。");
+        if(spot.getSupportLangs().indexOf(transLang) >= 0) throw new TooManyException("この言語は既に追加されています。");
         
         try {
             // 翻訳するコンテンツリスト
             List<SpotTextRes> transContentsList = SpotTextResService.getResourcesList(spot, spot.getBaseLang());
             
             int transCharCount = 0;
-            for(TextResources transcontents: transContentsList) {
-                transCharCount = transCharCount + transcontents.getContentString().length();
+            for(SpotTextRes transcontents: transContentsList) {
+                if(transcontents.getRole().isTransTarget()) {
+                    transCharCount = transCharCount + transcontents.getContentString().length();
+                }
             }
             
             // ---------------------------------------------------
@@ -382,10 +384,140 @@ public class SpotService {
     }
     
     /**
+     * 再翻訳
+     * @param spot
+     * @throws TransException
+     */
+    public static void machineRealReTrans(
+            Spot spot) 
+            throws TransException {
+        
+        try {
+            // 翻訳するコンテンツリスト
+            List<SpotTextRes> transContentsList = SpotTextResService.getResourcesList(spot, spot.getBaseLang());
+            
+            int transCharCount = 0;
+            for(SpotTextRes transcontents: transContentsList) {
+                if(transcontents.getRole().isTransTarget()) {
+                    transCharCount = transCharCount + transcontents.getContentString().length();
+                }
+            }
+            
+            // ---------------------------------------------------
+            // 翻訳処理
+            // ---------------------------------------------------
+            String translatedContents = TransService.machineTrans(
+                spot.getBaseLang(),
+                spot.getLangUnit().getLang(),
+                transContentsList);
+            
+            // 翻訳結果の取得
+            Document document = Jsoup.parse(translatedContents);
+            
+            // 再翻訳対象のリソースMAPを取得
+            Map<String, SpotTextRes> resMap = SpotTextResService.getResourcesMap(spot, spot.getLangUnit().getLang());
+            
+            // ---------------------------------------------------
+            // 保存処理
+            // ---------------------------------------------------
+            Transaction tx = Datastore.beginTransaction();
+            try {
+                
+                // テキストリソースの差し替え
+                for(SpotTextRes textRes: transContentsList) {
+                    
+                    // 翻訳対象の場合
+                    if(textRes.getRole().isTransTarget()) {
+                        // 改行が含まれるため、text()ではなくhtml()で取得する
+                        String tcText = document.getElementById(textRes.getKey().getName()).html();
+
+                        // getElementById から取得した値に余計な改行が含まれるため、一度手動で除去してからhtml改行をtext改行に置き換える
+                        String strTmp = Utils.clearTextIndention(tcText);
+                        String content = Utils.changeBrToTextIndention(strTmp);
+                        
+                        // 対象のリソースをリソースマップから取得し、内容を差し替える
+                        SpotTextRes spotTextRes = resMap.get(textRes);
+                        spotTextRes.setStringToContent(content);
+                        
+                        // リソースを更新
+                        Datastore.put(tx, spotTextRes);
+                    }
+                }
+            
+                // 翻訳クレジットの更新
+                TransCreditService.update(
+                    tx, 
+                    spot, 
+                    transCharCount, 
+                    transCharCount * TransType.MACHINE.getPrice());
+
+                // 翻訳履歴の追加
+                TransHistoryService.add(
+                    tx, 
+                    spot, 
+                    spot.getBaseLang(), 
+                    spot.getLangUnit().getLang(),
+                    TransType.MACHINE, 
+                    TransStatus.TRANSLATED, 
+                    transCharCount);
+                
+                // コミット
+                tx.commit();
+                
+            }finally {
+                if(tx.isActive()) {
+                    tx.rollback();
+                }
+            }
+        
+        } catch (Exception e) {
+            // 翻訳失敗の例外を生成
+            e.printStackTrace();
+            throw new TransException(e);
+        }
+    }
+    
+    /**
+     * 言語の削除
+     */
+    public static void deleteLang(Spot spot, SupportLang lang) {
+
+        List<SupportLang> langsList = spot.getSupportLangs();
+        langsList.remove(lang);
+        
+        List<SpotTextRes> resList = SpotTextResService.getResourcesList(spot, lang);
+        
+        // ---------------------------------------------------
+        // 保存処理
+        // ---------------------------------------------------
+        Transaction tx = Datastore.beginTransaction();
+        try {
+            // スポットの更新
+            Datastore.put(tx, spot);
+            
+            // 言語ユニットの削除
+            SpotLangUnitService.delete(tx, spot, lang);
+            
+            // テキストリソースの削除
+            for(SpotTextRes res: resList) {
+                Datastore.delete(tx, res.getKey());
+            }
+            
+            // コミット
+            tx.commit();
+            
+        }finally {
+            if(tx.isActive()) {
+                tx.rollback();
+            }
+        }
+    }
+    
+    /**
      * 削除
      * @param spot
      */
-    public static void delete(Client client, Spot spot) {
+    public static void deleteSpot(Client client, Spot spot) {
         dao.delete(spot.getKey());
     }
     

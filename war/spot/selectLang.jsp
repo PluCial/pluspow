@@ -21,7 +21,7 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 		}
 		#selectLangModel a.link,  #selectLangModel .row a{
 			color: #069;
-			font-size: 13px;
+			font-size: 14px;
 		}
 	</style>
 </head>

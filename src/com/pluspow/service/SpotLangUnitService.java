@@ -122,6 +122,21 @@ public class SpotLangUnitService {
     }
     
     /**
+     * 削除処理
+     * @param tx
+     * @param spot
+     * @param lang
+     */
+    public static void delete(Transaction tx, Spot spot, SupportLang lang) {
+        
+        SpotLangUnit langUnit = get(spot, lang);
+        if(langUnit == null) return;
+        
+        // 削除処理
+        Datastore.delete(tx, langUnit.getKey());
+    }
+    
+    /**
      * 電話番号表示フラグの変更
      * @param spot
      * @param lang
