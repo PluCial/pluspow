@@ -5,18 +5,33 @@ import java.util.UUID;
 import org.slim3.datastore.Datastore;
 
 import com.google.appengine.api.datastore.Key;
-import com.pluspow.meta.TextResourcesMeta;
+import com.pluspow.dao.TextResDao;
 import com.pluspow.model.Spot;
+import com.pluspow.model.TextRes;
 
 
-public class TextResourcesService {
+public class TextResService {
+    
+    /** DAO */
+    private static final TextResDao dao = new TextResDao();
+    
+    /**
+     * リソースの取得
+     * @param resourcesKey
+     * @return
+     */
+    public static TextRes getTextRes(String resourcesKey) {
+        return dao.get(createKey(resourcesKey));
+    }
+    
+    
     /**
      * キーの作成
      * @param keyString
      * @return
      */
     public static Key createKey(String keyString) {
-        return Datastore.createKey(TextResourcesMeta.get(), keyString);
+        return Datastore.createKey(TextRes.class, keyString);
     }
     
     

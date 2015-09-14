@@ -64,7 +64,7 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 									data-backdrop="static"
 									data-target="#textResModal" 
 									style="color:#323232;"
-									href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resRole=<%=TextResRole.ITEM_NAME %>&resourcesKey=<%=item.getNameResKey() %>">
+									href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resourcesKey=<%=item.getNameResKey() %>">
 									<i class="fa fa-pencil-square-o edit-mode"></i>
 								</a>
 								<%} %>
@@ -81,7 +81,7 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 									data-backdrop="static"
 									data-target="#textResModal" 
 									style="color:#6A6A6A;"
-									href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resRole=<%=TextResRole.ITEM_DETAIL %>&resourcesKey=<%=item.getDetailResKey() %>">
+									href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resourcesKey=<%=item.getDetailResKey() %>">
 									<i class="fa fa-pencil-square-o edit-mode"></i>
 								</a>
 								<%} %>

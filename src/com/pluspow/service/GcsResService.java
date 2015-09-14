@@ -19,14 +19,27 @@ import com.google.appengine.tools.cloudstorage.GcsOutputChannel;
 import com.google.appengine.tools.cloudstorage.GcsService;
 import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
 import com.google.appengine.tools.cloudstorage.RetryParams;
-import com.pluspow.meta.GcsResourcesMeta;
+import com.pluspow.dao.GcsResDao;
+import com.pluspow.model.GcsRes;
 import com.pluspow.model.Spot;
 
 
-public class GcsResourcesService {
+public class GcsResService {
+    
+    /** DAO */
+    private static final GcsResDao dao = new GcsResDao();
     
     /** ファイル権限 */
     protected static final String GCS_ACL = "public-read";
+    
+    /**
+     * Gcsリソースの取得
+     * @param gcsResKeyString
+     * @return
+     */
+    public static GcsRes getGcsRes(String gcsResKeyString) {
+        return dao.get(createKey(gcsResKeyString));
+    }
     
     /**
      * 画像の一部を切り取る
@@ -115,7 +128,7 @@ public class GcsResourcesService {
      * @return
      */
     public static Key createKey(String keyString) {
-        return Datastore.createKey(GcsResourcesMeta.get(), keyString);
+        return Datastore.createKey(GcsRes.class, keyString);
     }
     
     

@@ -30,7 +30,7 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 							data-backdrop="static"
 							data-target="#textResModal" 
 							style="color:#fff"
-							href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resRole=<%=TextResRole.SPOT_CATCH_COPY %>&resourcesKey=<%=spot.getCatchCopyResKey() %>">
+							href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resourcesKey=<%=spot.getCatchCopyResKey() %>">
 							<i class="fa fa-pencil-square-o edit-mode"></i>
 						</a>
 						<%} %>
@@ -106,7 +106,7 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 									data-backdrop="static"
 									data-target="#textResModal" 
 									style="color:#333"
-									href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resRole=<%=TextResRole.SPOT_NAME %>&resourcesKey=<%=spot.getNameResKey() %>">
+									href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resourcesKey=<%=spot.getNameResKey() %>">
 									<i class="fa fa-pencil-square-o edit-mode"></i>
 								</a>
 								<%} %>
@@ -120,7 +120,7 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 									data-backdrop="static"
 									data-target="#textResModal" 
 									style="color:#333"
-									href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resRole=<%=TextResRole.SPOT_ADDRESS %>&resourcesKey=<%=spot.getAddressResKey() %>">
+									href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resourcesKey=<%=spot.getAddressResKey() %>">
 									<i class="fa fa-pencil-square-o edit-mode"></i>
 								</a>
 								<%} %>
@@ -142,7 +142,7 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 									data-target="#textResModal" 
 									class="" 
 									style="color:#333"
-									href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resRole=<%=TextResRole.SPOT_DETAIL %>&resourcesKey=<%=spot.getDetailResKey() %>">
+									href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resourcesKey=<%=spot.getDetailResKey() %>">
 									<i class="fa fa-pencil-square-o edit-mode"></i>
 								</a>
 								<%} %>

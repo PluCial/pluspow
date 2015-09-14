@@ -7,7 +7,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 public class TransContentsServiceTest extends AppEngineTestCase {
 
-    private TextResourcesService service = new TextResourcesService();
+    private TextResService service = new TextResService();
 
     @Test
     public void test() throws Exception {

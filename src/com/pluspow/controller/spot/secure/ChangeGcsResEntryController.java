@@ -4,9 +4,8 @@ import org.slim3.controller.Navigation;
 import org.slim3.controller.upload.FileItem;
 import org.slim3.controller.validator.Validators;
 
+import com.pluspow.enums.GcsResRole;
 import com.pluspow.enums.Lang;
-import com.pluspow.enums.ResGroups;
-import com.pluspow.enums.SpotGcsResRole;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
@@ -24,7 +23,6 @@ public class ChangeGcsResEntryController extends BaseController {
         }
         
         // リクエストパラメーターの取得
-        ResGroups resGroups = ResGroups.valueOf(asString("resGroups"));
         String resourcesKey = asString("resourcesKey");
         Lang lang = Lang.valueOf(asString("lang"));
         int imageX = asInteger("imageX");
@@ -34,10 +32,12 @@ public class ChangeGcsResEntryController extends BaseController {
         
         FileItem fileItem = requestScope("uploadImage");
         
-        if(resGroups == ResGroups.SPOT) {
-            SpotGcsResRole target = SpotGcsResRole.valueOf(asString("target"));
+        // 役割の取得
+        GcsResRole role = GcsResRole.valueOf(asString("role"));
+        
+        if(role.isSpotRole()) {
             
-            if(SpotGcsResService.getResources(spot, target) != null) {
+            if(SpotGcsResService.getResources(spot, role) != null) {
                 // 更新
                 SpotGcsResService.updateImageRes(spot, resourcesKey, fileItem, imageX, imageY, imageWidth, imageHeight);
                 
@@ -46,14 +46,14 @@ public class ChangeGcsResEntryController extends BaseController {
                 SpotGcsResService.addImageRes(
                     spot, 
                     lang,
-                    target, 
+                    role, 
                     fileItem, 
                     imageX, imageY, imageWidth, imageHeight);
             }
             
             return redirect("/+" + spot.getSpotId() + "/l-" + lang.toString() + "/");
             
-        }else if(resGroups == ResGroups.ITEM) {
+        }else if(role.isItemRole()) {
             String itemId = asString("itemId");
             
             return redirect("/+" + spot.getSpotId() + "/l-" + lang.toString() + "/item/" + itemId);

@@ -328,8 +328,8 @@
                                                       <constraint>
                                                         <height>162</height>
                                                         <width>142</width>
-                                                        <x>853</x>
-                                                        <y>226</y>
+                                                        <x>684</x>
+                                                        <y>183</y>
                                                       </constraint>
                                                       <sourceConnections>
                                                         <net.java.amateras.uml.classdiagram.model.AssociationModel>
@@ -1238,34 +1238,14 @@
                                                                                                       <constraint>
                                                                                                         <height>-1</height>
                                                                                                         <width>-1</width>
-                                                                                                        <x>1334</x>
-                                                                                                        <y>749</y>
+                                                                                                        <x>1279</x>
+                                                                                                        <y>748</y>
                                                                                                       </constraint>
                                                                                                       <sourceConnections>
                                                                                                         <net.java.amateras.uml.classdiagram.model.RealizationModel reference="../../.."/>
                                                                                                       </sourceConnections>
                                                                                                       <targetConnections/>
-                                                                                                      <children>
-                                                                                                        <net.java.amateras.uml.classdiagram.model.AttributeModel>
-                                                                                                          <backgroundColor reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../backgroundColor"/>
-                                                                                                          <foregroundColor reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../foregroundColor"/>
-                                                                                                          <showIcon>true</showIcon>
-                                                                                                          <parent class="net.java.amateras.uml.classdiagram.model.ClassModel" reference="../../.."/>
-                                                                                                          <listeners serialization="custom">
-                                                                                                            <java.beans.PropertyChangeSupport>
-                                                                                                              <default>
-                                                                                                                <source class="net.java.amateras.uml.classdiagram.model.AttributeModel" reference="../../../.."/>
-                                                                                                                <propertyChangeSupportSerializedDataVersion>2</propertyChangeSupportSerializedDataVersion>
-                                                                                                              </default>
-                                                                                                              <null/>
-                                                                                                            </java.beans.PropertyChangeSupport>
-                                                                                                          </listeners>
-                                                                                                          <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2"/>
-                                                                                                          <name>role</name>
-                                                                                                          <type>SpotTextResRole</type>
-                                                                                                          <isStatic>false</isStatic>
-                                                                                                        </net.java.amateras.uml.classdiagram.model.AttributeModel>
-                                                                                                      </children>
+                                                                                                      <children/>
                                                                                                       <filterProperty/>
                                                                                                       <propertyDescriptors>
                                                                                                         <org.eclipse.ui.views.properties.TextPropertyDescriptor>
@@ -1347,8 +1327,8 @@
                                                                                                       <constraint>
                                                                                                         <height>-1</height>
                                                                                                         <width>-1</width>
-                                                                                                        <x>1331</x>
-                                                                                                        <y>860</y>
+                                                                                                        <x>1289</x>
+                                                                                                        <y>843</y>
                                                                                                       </constraint>
                                                                                                       <sourceConnections>
                                                                                                         <net.java.amateras.uml.classdiagram.model.RealizationModel reference="../../.."/>
@@ -1369,26 +1349,7 @@
                                                                                                               <null/>
                                                                                                             </java.beans.PropertyChangeSupport>
                                                                                                           </listeners>
-                                                                                                          <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../../../../net.java.amateras.uml.classdiagram.model.RealizationModel/source/children/net.java.amateras.uml.classdiagram.model.AttributeModel/visibility"/>
-                                                                                                          <name>role</name>
-                                                                                                          <type>ItemTextResRole</type>
-                                                                                                          <isStatic>false</isStatic>
-                                                                                                        </net.java.amateras.uml.classdiagram.model.AttributeModel>
-                                                                                                        <net.java.amateras.uml.classdiagram.model.AttributeModel>
-                                                                                                          <backgroundColor reference="../../../backgroundColor"/>
-                                                                                                          <foregroundColor reference="../../../foregroundColor"/>
-                                                                                                          <showIcon>true</showIcon>
-                                                                                                          <parent class="net.java.amateras.uml.classdiagram.model.ClassModel" reference="../../.."/>
-                                                                                                          <listeners serialization="custom">
-                                                                                                            <java.beans.PropertyChangeSupport>
-                                                                                                              <default>
-                                                                                                                <source class="net.java.amateras.uml.classdiagram.model.AttributeModel" reference="../../../.."/>
-                                                                                                                <propertyChangeSupportSerializedDataVersion>2</propertyChangeSupportSerializedDataVersion>
-                                                                                                              </default>
-                                                                                                              <null/>
-                                                                                                            </java.beans.PropertyChangeSupport>
-                                                                                                          </listeners>
-                                                                                                          <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../../../../net.java.amateras.uml.classdiagram.model.RealizationModel/source/children/net.java.amateras.uml.classdiagram.model.AttributeModel/visibility"/>
+                                                                                                          <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2"/>
                                                                                                           <name>itemRef</name>
                                                                                                           <type>Key</type>
                                                                                                           <isStatic>false</isStatic>
@@ -1476,6 +1437,25 @@
                                                                                                     <isStatic>false</isStatic>
                                                                                                   </net.java.amateras.uml.classdiagram.model.AttributeModel>
                                                                                                   <net.java.amateras.uml.classdiagram.model.AttributeModel>
+                                                                                                    <backgroundColor reference="../../../backgroundColor"/>
+                                                                                                    <foregroundColor reference="../../../foregroundColor"/>
+                                                                                                    <showIcon>true</showIcon>
+                                                                                                    <parent class="net.java.amateras.uml.classdiagram.model.ClassModel" reference="../../.."/>
+                                                                                                    <listeners serialization="custom">
+                                                                                                      <java.beans.PropertyChangeSupport>
+                                                                                                        <default>
+                                                                                                          <source class="net.java.amateras.uml.classdiagram.model.AttributeModel" reference="../../../.."/>
+                                                                                                          <propertyChangeSupportSerializedDataVersion>2</propertyChangeSupportSerializedDataVersion>
+                                                                                                        </default>
+                                                                                                        <null/>
+                                                                                                      </java.beans.PropertyChangeSupport>
+                                                                                                    </listeners>
+                                                                                                    <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2"/>
+                                                                                                    <name>role</name>
+                                                                                                    <type>TextResRole</type>
+                                                                                                    <isStatic>false</isStatic>
+                                                                                                  </net.java.amateras.uml.classdiagram.model.AttributeModel>
+                                                                                                  <net.java.amateras.uml.classdiagram.model.AttributeModel>
                                                                                                     <showIcon>true</showIcon>
                                                                                                     <parent class="net.java.amateras.uml.classdiagram.model.ClassModel" reference="../../.."/>
                                                                                                     <listeners serialization="custom">
@@ -1541,25 +1521,6 @@
                                                                                                     <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2"/>
                                                                                                     <name>updateDate</name>
                                                                                                     <type>Date</type>
-                                                                                                    <isStatic>false</isStatic>
-                                                                                                  </net.java.amateras.uml.classdiagram.model.AttributeModel>
-                                                                                                  <net.java.amateras.uml.classdiagram.model.AttributeModel>
-                                                                                                    <backgroundColor reference="../../../backgroundColor"/>
-                                                                                                    <foregroundColor reference="../../../foregroundColor"/>
-                                                                                                    <showIcon>true</showIcon>
-                                                                                                    <parent class="net.java.amateras.uml.classdiagram.model.ClassModel" reference="../../.."/>
-                                                                                                    <listeners serialization="custom">
-                                                                                                      <java.beans.PropertyChangeSupport>
-                                                                                                        <default>
-                                                                                                          <source class="net.java.amateras.uml.classdiagram.model.AttributeModel" reference="../../../.."/>
-                                                                                                          <propertyChangeSupportSerializedDataVersion>2</propertyChangeSupportSerializedDataVersion>
-                                                                                                        </default>
-                                                                                                        <null/>
-                                                                                                      </java.beans.PropertyChangeSupport>
-                                                                                                    </listeners>
-                                                                                                    <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2"/>
-                                                                                                    <name>role</name>
-                                                                                                    <type>TextResRole</type>
                                                                                                     <isStatic>false</isStatic>
                                                                                                   </net.java.amateras.uml.classdiagram.model.AttributeModel>
                                                                                                 </children>
@@ -1807,7 +1768,7 @@
                                                                                             <null/>
                                                                                           </java.beans.PropertyChangeSupport>
                                                                                         </listeners>
-                                                                                        <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../../parent/children/net.java.amateras.uml.model.NoteModel[5]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[11]/targetConnections/net.java.amateras.uml.classdiagram.model.RealizationModel/source/children/net.java.amateras.uml.classdiagram.model.AttributeModel/visibility"/>
+                                                                                        <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../../parent/children/net.java.amateras.uml.model.NoteModel[5]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[11]/targetConnections/net.java.amateras.uml.classdiagram.model.RealizationModel[2]/source/children/net.java.amateras.uml.classdiagram.model.AttributeModel/visibility"/>
                                                                                         <name>textResourcesRef</name>
                                                                                         <type>Key</type>
                                                                                         <isStatic>false</isStatic>
@@ -1845,7 +1806,7 @@
                                                                                             <null/>
                                                                                           </java.beans.PropertyChangeSupport>
                                                                                         </listeners>
-                                                                                        <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../../parent/children/net.java.amateras.uml.model.NoteModel[5]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[11]/children/net.java.amateras.uml.classdiagram.model.AttributeModel[6]/visibility"/>
+                                                                                        <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../../parent/children/net.java.amateras.uml.model.NoteModel[5]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[11]/children/net.java.amateras.uml.classdiagram.model.AttributeModel[7]/visibility"/>
                                                                                         <name>updateDate</name>
                                                                                         <type>Date</type>
                                                                                         <isStatic>false</isStatic>
@@ -2025,7 +1986,7 @@
                                                                                             <null/>
                                                                                           </java.beans.PropertyChangeSupport>
                                                                                         </listeners>
-                                                                                        <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../../../net.java.amateras.uml.classdiagram.model.ClassModel[8]/parent/children/net.java.amateras.uml.model.NoteModel[5]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[11]/children/net.java.amateras.uml.classdiagram.model.AttributeModel[6]/visibility"/>
+                                                                                        <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../../../net.java.amateras.uml.classdiagram.model.ClassModel[8]/parent/children/net.java.amateras.uml.model.NoteModel[5]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[11]/children/net.java.amateras.uml.classdiagram.model.AttributeModel[7]/visibility"/>
                                                                                         <name>updateDate</name>
                                                                                         <type>Date</type>
                                                                                         <isStatic>false</isStatic>
@@ -2696,25 +2657,7 @@ SpotIdがキーで一つのスポットには一つしか存在しない。
                                                                     <net.java.amateras.uml.classdiagram.model.RealizationModel reference="../../.."/>
                                                                   </sourceConnections>
                                                                   <targetConnections/>
-                                                                  <children>
-                                                                    <net.java.amateras.uml.classdiagram.model.AttributeModel>
-                                                                      <showIcon>true</showIcon>
-                                                                      <parent class="net.java.amateras.uml.classdiagram.model.ClassModel" reference="../../.."/>
-                                                                      <listeners serialization="custom">
-                                                                        <java.beans.PropertyChangeSupport>
-                                                                          <default>
-                                                                            <source class="net.java.amateras.uml.classdiagram.model.AttributeModel" reference="../../../.."/>
-                                                                            <propertyChangeSupportSerializedDataVersion>2</propertyChangeSupportSerializedDataVersion>
-                                                                          </default>
-                                                                          <null/>
-                                                                        </java.beans.PropertyChangeSupport>
-                                                                      </listeners>
-                                                                      <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2"/>
-                                                                      <name>role</name>
-                                                                      <type>SpotGcsResRole</type>
-                                                                      <isStatic>false</isStatic>
-                                                                    </net.java.amateras.uml.classdiagram.model.AttributeModel>
-                                                                  </children>
+                                                                  <children/>
                                                                   <filterProperty/>
                                                                   <propertyDescriptors>
                                                                     <org.eclipse.ui.views.properties.TextPropertyDescriptor>
@@ -2908,6 +2851,25 @@ SpotIdがキーで一つのスポットには一つしか存在しない。
                                                                 <isStatic>false</isStatic>
                                                               </net.java.amateras.uml.classdiagram.model.AttributeModel>
                                                               <net.java.amateras.uml.classdiagram.model.AttributeModel>
+                                                                <backgroundColor reference="../../../backgroundColor"/>
+                                                                <foregroundColor reference="../../../foregroundColor"/>
+                                                                <showIcon>true</showIcon>
+                                                                <parent class="net.java.amateras.uml.classdiagram.model.ClassModel" reference="../../.."/>
+                                                                <listeners serialization="custom">
+                                                                  <java.beans.PropertyChangeSupport>
+                                                                    <default>
+                                                                      <source class="net.java.amateras.uml.classdiagram.model.AttributeModel" reference="../../../.."/>
+                                                                      <propertyChangeSupportSerializedDataVersion>2</propertyChangeSupportSerializedDataVersion>
+                                                                    </default>
+                                                                    <null/>
+                                                                  </java.beans.PropertyChangeSupport>
+                                                                </listeners>
+                                                                <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2"/>
+                                                                <name>role</name>
+                                                                <type>GcsResRole</type>
+                                                                <isStatic>false</isStatic>
+                                                              </net.java.amateras.uml.classdiagram.model.AttributeModel>
+                                                              <net.java.amateras.uml.classdiagram.model.AttributeModel>
                                                                 <showIcon>true</showIcon>
                                                                 <parent class="net.java.amateras.uml.classdiagram.model.ClassModel" reference="../../.."/>
                                                                 <listeners serialization="custom">
@@ -2953,7 +2915,7 @@ SpotIdがキーで一つのスポットには一つしか存在しない。
                                                                     <null/>
                                                                   </java.beans.PropertyChangeSupport>
                                                                 </listeners>
-                                                                <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../net.java.amateras.uml.classdiagram.model.AttributeModel[4]/visibility"/>
+                                                                <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../net.java.amateras.uml.classdiagram.model.AttributeModel[5]/visibility"/>
                                                                 <name>height</name>
                                                                 <type>int</type>
                                                                 <isStatic>false</isStatic>
@@ -2970,7 +2932,7 @@ SpotIdがキーで一つのスポットには一つしか存在しない。
                                                                     <null/>
                                                                   </java.beans.PropertyChangeSupport>
                                                                 </listeners>
-                                                                <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../net.java.amateras.uml.classdiagram.model.AttributeModel[4]/visibility"/>
+                                                                <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../net.java.amateras.uml.classdiagram.model.AttributeModel[5]/visibility"/>
                                                                 <name>contentType</name>
                                                                 <type>String</type>
                                                                 <isStatic>false</isStatic>
@@ -2989,7 +2951,7 @@ SpotIdがキーで一つのスポットには一つしか存在しない。
                                                                     <null/>
                                                                   </java.beans.PropertyChangeSupport>
                                                                 </listeners>
-                                                                <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../../../net.java.amateras.uml.classdiagram.model.ClassModel[4]/targetConnections/net.java.amateras.uml.classdiagram.model.AssociationModel/source/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[5]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[6]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[8]/parent/children/net.java.amateras.uml.model.NoteModel[5]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[11]/targetConnections/net.java.amateras.uml.classdiagram.model.RealizationModel/source/children/net.java.amateras.uml.classdiagram.model.AttributeModel/visibility"/>
+                                                                <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../../../net.java.amateras.uml.classdiagram.model.ClassModel[4]/targetConnections/net.java.amateras.uml.classdiagram.model.AssociationModel/source/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[5]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[6]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[8]/parent/children/net.java.amateras.uml.model.NoteModel[5]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[11]/targetConnections/net.java.amateras.uml.classdiagram.model.RealizationModel[2]/source/children/net.java.amateras.uml.classdiagram.model.AttributeModel/visibility"/>
                                                                 <name>size</name>
                                                                 <type>int</type>
                                                                 <isStatic>false</isStatic>
@@ -3006,7 +2968,7 @@ SpotIdがキーで一つのスポットには一つしか存在しない。
                                                                     <null/>
                                                                   </java.beans.PropertyChangeSupport>
                                                                 </listeners>
-                                                                <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../net.java.amateras.uml.classdiagram.model.AttributeModel[4]/visibility"/>
+                                                                <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../net.java.amateras.uml.classdiagram.model.AttributeModel[5]/visibility"/>
                                                                 <name>servingUrl</name>
                                                                 <type>String</type>
                                                                 <isStatic>false</isStatic>
@@ -3025,7 +2987,7 @@ SpotIdがキーで一つのスポットには一つしか存在しない。
                                                                     <null/>
                                                                   </java.beans.PropertyChangeSupport>
                                                                 </listeners>
-                                                                <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../../../net.java.amateras.uml.classdiagram.model.ClassModel[4]/targetConnections/net.java.amateras.uml.classdiagram.model.AssociationModel/source/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[5]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[6]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[8]/parent/children/net.java.amateras.uml.model.NoteModel[5]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[11]/targetConnections/net.java.amateras.uml.classdiagram.model.RealizationModel/source/children/net.java.amateras.uml.classdiagram.model.AttributeModel/visibility"/>
+                                                                <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../../../net.java.amateras.uml.classdiagram.model.ClassModel[4]/targetConnections/net.java.amateras.uml.classdiagram.model.AssociationModel/source/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[5]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[6]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[8]/parent/children/net.java.amateras.uml.model.NoteModel[5]/parent/children/net.java.amateras.uml.classdiagram.model.ClassModel[11]/targetConnections/net.java.amateras.uml.classdiagram.model.RealizationModel[2]/source/children/net.java.amateras.uml.classdiagram.model.AttributeModel/visibility"/>
                                                                 <name>invalid</name>
                                                                 <type>boolean</type>
                                                                 <isStatic>false</isStatic>
@@ -5372,25 +5334,6 @@ SpotIdがキーで一つのスポットには一つしか存在しない。
                             <isStatic>false</isStatic>
                           </net.java.amateras.uml.classdiagram.model.AttributeModel>
                           <net.java.amateras.uml.classdiagram.model.AttributeModel>
-                            <backgroundColor reference="../../../backgroundColor"/>
-                            <foregroundColor reference="../../../foregroundColor"/>
-                            <showIcon>true</showIcon>
-                            <parent class="net.java.amateras.uml.classdiagram.model.ClassModel" reference="../../.."/>
-                            <listeners serialization="custom">
-                              <java.beans.PropertyChangeSupport>
-                                <default>
-                                  <source class="net.java.amateras.uml.classdiagram.model.AttributeModel" reference="../../../.."/>
-                                  <propertyChangeSupportSerializedDataVersion>2</propertyChangeSupportSerializedDataVersion>
-                                </default>
-                                <null/>
-                              </java.beans.PropertyChangeSupport>
-                            </listeners>
-                            <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../net.java.amateras.uml.classdiagram.model.AttributeModel[6]/visibility"/>
-                            <name>contactDisplayFlg</name>
-                            <type>boolean</type>
-                            <isStatic>false</isStatic>
-                          </net.java.amateras.uml.classdiagram.model.AttributeModel>
-                          <net.java.amateras.uml.classdiagram.model.AttributeModel>
                             <showIcon>true</showIcon>
                             <parent class="net.java.amateras.uml.classdiagram.model.ClassModel" reference="../../.."/>
                             <listeners serialization="custom">
@@ -6583,8 +6526,8 @@ SpotIdがキーで一つのスポットには一つしか存在しない。
       <constraint>
         <height>-1</height>
         <width>-1</width>
-        <x>1026</x>
-        <y>415</y>
+        <x>977</x>
+        <y>520</y>
       </constraint>
       <sourceConnections/>
       <targetConnections>
@@ -7332,8 +7275,8 @@ SpotIdがキーで一つのスポットには一つしか存在しない。
       <constraint>
         <height>-1</height>
         <width>-1</width>
-        <x>748</x>
-        <y>741</y>
+        <x>894</x>
+        <y>227</y>
       </constraint>
       <sourceConnections/>
       <targetConnections/>

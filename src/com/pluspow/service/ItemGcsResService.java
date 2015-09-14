@@ -13,6 +13,7 @@ import com.google.appengine.api.images.Image;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.tools.cloudstorage.GcsFilename;
 import com.pluspow.dao.ItemGcsResDao;
+import com.pluspow.enums.GcsResRole;
 import com.pluspow.enums.Lang;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.model.Item;
@@ -20,7 +21,7 @@ import com.pluspow.model.ItemGcsRes;
 import com.pluspow.model.Spot;
 
 
-public class ItemGcsResService extends GcsResourcesService {
+public class ItemGcsResService extends GcsResService {
     
     /** DAO */
     private static final ItemGcsResDao dao = new ItemGcsResDao();
@@ -75,6 +76,7 @@ public class ItemGcsResService extends GcsResourcesService {
         
         model.getSpotRef().setModel(spot);
         model.getItemRef().setModel(item);
+        model.setRole(GcsResRole.ITEM_IMAGE);
         model.setLang(spot.getLangUnit().getLang());
 
         // 保存

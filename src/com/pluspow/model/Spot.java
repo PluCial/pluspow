@@ -17,7 +17,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PostalAddress;
 import com.pluspow.enums.ServicePlan;
 import com.pluspow.enums.SpotActivity;
-import com.pluspow.enums.SpotGcsResRole;
+import com.pluspow.enums.GcsResRole;
 import com.pluspow.enums.Lang;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.service.SpotGcsResService;
@@ -298,11 +298,11 @@ public class Spot implements Serializable {
      */
     public void setGcsResources(Map<String, SpotGcsRes> resourcesMap) {
         this.setIconImageRes(
-            SpotGcsResService.getResourcesByMap(resourcesMap, SpotGcsResRole.SPOT_ICON_IMAGE)
+            SpotGcsResService.getResourcesByMap(resourcesMap, GcsResRole.SPOT_ICON_IMAGE)
                 );
         
         this.setBackgroundImageRes(
-            SpotGcsResService.getResourcesByMap(resourcesMap, SpotGcsResRole.SPOT_BACKGROUND_IMAGE)
+            SpotGcsResService.getResourcesByMap(resourcesMap, GcsResRole.SPOT_BACKGROUND_IMAGE)
                 );
     }
     

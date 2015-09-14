@@ -6,7 +6,7 @@ import org.slim3.datastore.Model;
 import org.slim3.datastore.ModelRef;
 
 @Model(schemaVersion = 1)
-public class ItemTextRes extends TextResources implements Serializable {
+public class ItemTextRes extends TextRes implements Serializable {
 
     private static final long serialVersionUID = 1L;
     

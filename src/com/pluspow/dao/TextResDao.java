@@ -2,9 +2,9 @@ package com.pluspow.dao;
 
 import org.slim3.datastore.DaoBase;
 
-import com.pluspow.model.TextResources;
+import com.pluspow.model.TextRes;
 
-public class TextResourcesDao extends DaoBase<TextResources>{
+public class TextResDao extends DaoBase<TextRes>{
     
     /** META */
 //    private static final  TextResourcesMeta meta =  TextResourcesMeta.get();

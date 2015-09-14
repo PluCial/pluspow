@@ -5,11 +5,11 @@
 <%@ page import="com.pluspow.model.*" %>
 <%@ page import="com.pluspow.enums.*" %>
 <%@ page import="org.slim3.util.StringUtil" %>
-<%@ page import="com.pluspow.model.TextResources" %>
+<%@ page import="com.pluspow.model.TextRes" %>
 <%
-Spot spot = (Spot) request.getAttribute("spot");
+	Spot spot = (Spot) request.getAttribute("spot");
 String resourcesKey = (String) request.getAttribute("resourcesKey");
-TextResources textResources = (TextResources) request.getAttribute("textResources");
+TextRes textResources = (TextRes) request.getAttribute("textResources");
 %>
 <!DOCTYPE html>
 <html>
@@ -44,7 +44,6 @@ TextResources textResources = (TextResources) request.getAttribute("textResource
 		</div>	<!-- /modal-footer -->
 		<input type="hidden" name="spotId" value="<%=spot.getSpotId() %>" />
 		<input type="hidden" name="resourcesKey" value="<%=resourcesKey %>" />
-		<input type="hidden" name="resRole" value="<%=textResources.getRole() %>" />
 	</form>
 </body>
 </html>

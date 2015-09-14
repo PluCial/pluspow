@@ -17,7 +17,7 @@ import com.pluspow.model.ItemTextRes;
 import com.pluspow.model.Spot;
 
 
-public class ItemTextResService  extends TextResourcesService{
+public class ItemTextResService  extends TextResService{
     
     /** DAO */
     private static final ItemTextResDao dao = new ItemTextResDao();

@@ -3,11 +3,12 @@ package com.pluspow.controller.spot.secure;
 import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Validators;
 
-import com.pluspow.enums.TextResRole;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
+import com.pluspow.model.TextRes;
 import com.pluspow.service.ItemTextResService;
 import com.pluspow.service.SpotTextResService;
+import com.pluspow.service.TextResService;
 
 public class EditTextResourcesEntryController extends BaseController {
     
@@ -24,13 +25,15 @@ public class EditTextResourcesEntryController extends BaseController {
         // ------------------------------------------
         String resourcesKey = asString("resourcesKey");
         String content = asString("content");
-        TextResRole resRole = TextResRole.valueOf(asString("resRole"));
         
-        if(TextResRole.isSpotRole(resRole)) {
+        // リソースの取得
+        TextRes textRes = TextResService.getTextRes(resourcesKey);
+        
+        if(textRes.getRole().isSpotRole()) {
             // Spotリソースを更新
             SpotTextResService.update(resourcesKey, content);
             
-        }else if(TextResRole.isItemRole(resRole)) {
+        }else if(textRes.getRole().isItemRole()) {
             // アイテムのリソースを更新
             ItemTextResService.update(resourcesKey, content);
             
@@ -51,7 +54,6 @@ public class EditTextResourcesEntryController extends BaseController {
 
         v.add("spotId", v.required());
         v.add("resourcesKey", v.required());
-        v.add("resRole", v.required());
         
         // コンテンツ
         v.add("content", v.required());

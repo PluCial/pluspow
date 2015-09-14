@@ -25,7 +25,7 @@ import com.pluspow.model.Item;
 import com.pluspow.model.ItemTextRes;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotLangUnit;
-import com.pluspow.model.TextResources;
+import com.pluspow.model.TextRes;
 import com.pluspow.utils.Utils;
 
 public class ItemService {
@@ -134,7 +134,7 @@ public class ItemService {
             List<ItemTextRes> transContentsList = ItemTextResService.getResourcesList(item, spot.getBaseLang());
             
             int transCharCount = 0;
-            for(TextResources transcontents: transContentsList) {
+            for(TextRes transcontents: transContentsList) {
                 transCharCount = transCharCount + transcontents.getContentString().length();
             }
             

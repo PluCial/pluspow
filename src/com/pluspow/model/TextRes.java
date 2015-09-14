@@ -17,7 +17,7 @@ import com.pluspow.enums.TextResRole;
 import com.pluspow.utils.Utils;
 
 @Model(schemaVersion = 1)
-public class TextResources implements Serializable {
+public class TextRes implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -133,7 +133,7 @@ public class TextResources implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        TextResources other = (TextResources) obj;
+        TextRes other = (TextRes) obj;
         if (key == null) {
             if (other.key != null) {
                 return false;

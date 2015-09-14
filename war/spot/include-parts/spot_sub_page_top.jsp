@@ -19,7 +19,7 @@ List<Lang> suppertLangList = (List<Lang>) request.getAttribute("suppertLangList"
                   
 			<div class="detail">
 				<h1>
-					<a href="/+<%=spot.getSpotId() %>/l-<%=lang.toString() %>/"><%=spot.getName() %></a>
+					<a href="/+<%=spot.getSpotId() %>/l-<%=spot.getLangUnit().getLang().toString() %>/"><%=spot.getName() %></a>
 				</h1>
 				<p><%=spot.getCatchCopy() %></p>
 			</div>
@@ -31,8 +31,8 @@ List<Lang> suppertLangList = (List<Lang>) request.getAttribute("suppertLangList"
 			data-backdrop="static"
 			data-target="#selectLangModel" 
 			style="color:#fff"
-			href="/spot/selectLang?spotId=<%=spot.getSpotId() %>&lang=<%=lang.toString() %>">
-			<img style="width:25px;vertical-align: middle;" class="flag-image" src="/images/flag/<%=lang.toString().toUpperCase() %>.png" />
+			href="/spot/selectLang?spotId=<%=spot.getSpotId() %>&lang=<%=spot.getLangUnit().getLang().toString() %>">
+			<img style="width:25px;vertical-align: middle;" class="flag-image" src="/images/flag/<%=spot.getLangUnit().getLang().toString().toUpperCase() %>.png" />
 			<%=spot.getLangUnit().getLang().getName() %> <i class="fa fa-chevron-down"></i>
 		</a>
 	</section>

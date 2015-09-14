@@ -16,13 +16,13 @@ import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.tools.cloudstorage.GcsFilename;
 import com.pluspow.dao.SpotGcsResDao;
 import com.pluspow.enums.Lang;
-import com.pluspow.enums.SpotGcsResRole;
+import com.pluspow.enums.GcsResRole;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotGcsRes;
 
 
-public class SpotGcsResService extends GcsResourcesService {
+public class SpotGcsResService extends GcsResService {
     
     /** DAO */
     private static final SpotGcsResDao dao = new SpotGcsResDao();
@@ -46,7 +46,7 @@ public class SpotGcsResService extends GcsResourcesService {
     public static SpotGcsRes addImageRes(
             Spot spot, 
             Lang lang, 
-            SpotGcsResRole role,
+            GcsResRole role,
             FileItem fileItem,
             int leftX, 
             int topY, 
@@ -153,7 +153,7 @@ public class SpotGcsResService extends GcsResourcesService {
      * @param role
      * @return
      */
-    public static SpotGcsRes getResources(Spot spot, SpotGcsResRole role) {
+    public static SpotGcsRes getResources(Spot spot, GcsResRole role) {
         return dao.getResources(spot, role);
     }
     
@@ -191,7 +191,7 @@ public class SpotGcsResService extends GcsResourcesService {
      * @param role
      * @return
      */
-    public static SpotGcsRes getResourcesByMap(Map<String, SpotGcsRes> resourcesMap, SpotGcsResRole role) {
+    public static SpotGcsRes getResourcesByMap(Map<String, SpotGcsRes> resourcesMap, GcsResRole role) {
         if(resourcesMap == null) return null; 
         return resourcesMap.get(role.toString());
     }

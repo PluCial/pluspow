@@ -6,7 +6,7 @@ import org.slim3.datastore.DaoBase;
 import org.slim3.datastore.Datastore;
 
 import com.google.appengine.api.datastore.Key;
-import com.pluspow.enums.SpotGcsResRole;
+import com.pluspow.enums.GcsResRole;
 import com.pluspow.meta.SpotGcsResMeta;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotGcsRes;
@@ -23,7 +23,7 @@ public class SpotGcsResDao extends DaoBase<SpotGcsRes>{
      * @param role
      * @return
      */
-    public SpotGcsRes getResources(Spot spot, SpotGcsResRole role) {
+    public SpotGcsRes getResources(Spot spot, GcsResRole role) {
         return Datastore.query(meta)
                 .filter(
                     meta.spotRef.equal(spot.getKey()),

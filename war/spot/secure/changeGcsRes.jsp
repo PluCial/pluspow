@@ -10,8 +10,7 @@
 <%
 Client client =(Client) request.getAttribute("client");
 Spot spot =(Spot) request.getAttribute("spot");
-String resGroups = (String) request.getAttribute("resGroups");
-String target = (String) request.getAttribute("target");
+String role = (String) request.getAttribute("role");
 String itemId = (String) request.getAttribute("itemId");
 String resourcesKey = (String) request.getAttribute("resourcesKey");
 Errors errors =(Errors) request.getAttribute("errors");
@@ -118,9 +117,8 @@ Errors errors =(Errors) request.getAttribute("errors");
 								</div><!-- /.box -->
 								<input type="hidden" name="spotId" value="<%=spot.getSpotId() %>">
 								<input type="hidden" name="lang" value="<%=spot.getLangUnit().getLang() %>">
-								<input type="hidden" name="resGroups" value="<%=resGroups %>">
 								<input type="hidden" name="resourcesKey" value="<%=resourcesKey %>">
-								<input type="hidden" name="target" value="<%=target == null ? "": target %>">
+								<input type="hidden" name="role" value="<%=role == null ? "": role %>">
 								<input type="hidden" name="itemId" value="<%=itemId == null ? "": itemId %>">
 								<input type="hidden" name="imageX" id="imageX" value="" />
 								<input type="hidden" name="imageY" id="imageY" value="" />

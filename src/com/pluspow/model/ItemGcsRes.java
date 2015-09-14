@@ -6,7 +6,7 @@ import org.slim3.datastore.Model;
 import org.slim3.datastore.ModelRef;
 
 @Model(schemaVersion = 1)
-public class ItemGcsRes extends GcsResources implements Serializable {
+public class ItemGcsRes extends GcsRes implements Serializable {
 
     private static final long serialVersionUID = 1L;
     

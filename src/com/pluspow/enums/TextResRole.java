@@ -39,11 +39,11 @@ public enum TextResRole {
      * @param role
      * @return
      */
-    public static boolean isSpotRole(TextResRole resRole) {
-        if(resRole == TextResRole.SPOT_NAME 
-                || resRole == TextResRole.SPOT_CATCH_COPY 
-                || resRole == TextResRole.SPOT_DETAIL 
-                || resRole == TextResRole.SPOT_ADDRESS) {
+    public boolean isSpotRole() {
+        if(this == TextResRole.SPOT_NAME 
+                || this == TextResRole.SPOT_CATCH_COPY 
+                || this == TextResRole.SPOT_DETAIL 
+                || this == TextResRole.SPOT_ADDRESS) {
             return true;
         }
         
@@ -55,9 +55,9 @@ public enum TextResRole {
      * @param role
      * @return
      */
-    public static boolean isItemRole(TextResRole resRole) {
-        if(resRole == TextResRole.ITEM_NAME 
-                || resRole == TextResRole.ITEM_DETAIL) {
+    public boolean isItemRole() {
+        if(this == TextResRole.ITEM_NAME 
+                || this == TextResRole.ITEM_DETAIL) {
             return true;
         }
         

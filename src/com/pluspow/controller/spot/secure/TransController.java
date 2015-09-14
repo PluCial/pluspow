@@ -11,7 +11,7 @@ import com.pluspow.exception.TransException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Item;
 import com.pluspow.model.Spot;
-import com.pluspow.model.TextResources;
+import com.pluspow.model.TextRes;
 import com.pluspow.service.ItemService;
 import com.pluspow.service.ItemTextResService;
 import com.pluspow.service.SpotTextResService;
@@ -28,7 +28,7 @@ public class TransController extends BaseController {
         
         int transCharCount = 0;
         
-        List<? extends TextResources> transContentsList = null;
+        List<? extends TextRes> transContentsList = null;
         
         ResGroups transGroup = ResGroups.valueOf(asString("transGroup"));
         
@@ -56,7 +56,7 @@ public class TransController extends BaseController {
         if(transContentsList == null) throw new TransException();
         
         // 翻訳文字数のカウント
-        for(TextResources transcontents: transContentsList) {
+        for(TextRes transcontents: transContentsList) {
             transCharCount = transCharCount + transcontents.getContentString().length();
         }
         

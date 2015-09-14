@@ -3,17 +3,18 @@ package com.pluspow.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.google.appengine.api.datastore.Key;
-import com.pluspow.enums.Lang;
-
 import org.slim3.datastore.Attribute;
 import org.slim3.datastore.CreationDate;
 import org.slim3.datastore.Model;
 import org.slim3.datastore.ModelRef;
 import org.slim3.datastore.ModificationDate;
 
+import com.google.appengine.api.datastore.Key;
+import com.pluspow.enums.GcsResRole;
+import com.pluspow.enums.Lang;
+
 @Model(schemaVersion = 1)
-public class GcsResources implements Serializable {
+public class GcsRes implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,6 +28,11 @@ public class GcsResources implements Serializable {
      * 言語
      */
     private Lang lang;
+    
+    /**
+     * 役割
+     */
+    private GcsResRole role;
     
     /** 幅 */
     @Attribute(unindexed = true)
@@ -128,7 +134,7 @@ public class GcsResources implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        GcsResources other = (GcsResources) obj;
+        GcsRes other = (GcsRes) obj;
         if (key == null) {
             if (other.key != null) {
                 return false;
@@ -213,5 +219,13 @@ public class GcsResources implements Serializable {
 
     public void setLang(Lang lang) {
         this.lang = lang;
+    }
+
+    public GcsResRole getRole() {
+        return role;
+    }
+
+    public void setRole(GcsResRole role) {
+        this.role = role;
     }
 }

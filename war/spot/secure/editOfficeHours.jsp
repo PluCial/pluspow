@@ -5,7 +5,7 @@
 <%@ page import="com.pluspow.model.*" %>
 <%@ page import="com.pluspow.enums.*" %>
 <%@ page import="org.slim3.util.StringUtil" %>
-<%@ page import="com.pluspow.model.TextResources" %>
+<%@ page import="com.pluspow.model.TextRes" %>
 <%@ page import="java.text.DecimalFormat" %>
 <%
 Spot spot = (Spot) request.getAttribute("spot");

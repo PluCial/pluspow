@@ -13,7 +13,7 @@ import com.google.api.services.translate.model.TranslationsResource;
 import com.pluspow.App;
 import com.pluspow.enums.Lang;
 import com.pluspow.exception.TransException;
-import com.pluspow.model.TextResources;
+import com.pluspow.model.TextRes;
 import com.pluspow.utils.Utils;
 
 public class TransService {
@@ -33,7 +33,7 @@ public class TransService {
     public static String machineTrans(
             Lang baseLang,
             Lang transLang, 
-            List<? extends TextResources> transContentsList) throws Exception {
+            List<? extends TextRes> transContentsList) throws Exception {
         
         if(transContentsList == null || transContentsList.size() <= 0) {
             throw new TransException("翻訳するコンテンツはありません。");
@@ -42,7 +42,7 @@ public class TransService {
         // 通常モード
         String transSrc = "";
         
-        for(TextResources tc: transContentsList) {
+        for(TextRes tc: transContentsList) {
             
             // 翻訳対象の場合
             if(tc.getRole().isTransTarget()) {
