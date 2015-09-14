@@ -15,7 +15,7 @@ import org.slim3.datastore.ModificationDate;
 
 import com.google.appengine.api.datastore.Key;
 import com.pluspow.enums.ItemType;
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.service.ItemTextResService;
 
@@ -49,12 +49,12 @@ public class Item implements Serializable {
      * ベース言語
      */
     @Attribute(unindexed = true)
-    private SupportLang baseLang;
+    private Lang baseLang;
     
     /**
      * 翻訳した言語リスト
      */
-    private List<SupportLang> supportLangs = new ArrayList<SupportLang>();
+    private List<Lang> langs = new ArrayList<Lang>();
     
     /**
      * 作成日時
@@ -222,20 +222,12 @@ public class Item implements Serializable {
         return true;
     }
 
-    public SupportLang getBaseLang() {
+    public Lang getBaseLang() {
         return baseLang;
     }
 
-    public void setBaseLang(SupportLang baseLang) {
+    public void setBaseLang(Lang baseLang) {
         this.baseLang = baseLang;
-    }
-
-    public List<SupportLang> getSupportLangs() {
-        return supportLangs;
-    }
-
-    public void setSupportLangs(List<SupportLang> supportLangs) {
-        this.supportLangs = supportLangs;
     }
 
     public ModelRef<Spot> getSpotRef() {
@@ -317,5 +309,13 @@ public class Item implements Serializable {
 
     public void setDetailRes(ItemTextRes detailRes) {
         this.detailRes = detailRes;
+    }
+
+    public List<Lang> getLangs() {
+        return langs;
+    }
+
+    public void setLangs(List<Lang> langs) {
+        this.langs = langs;
     }
 }

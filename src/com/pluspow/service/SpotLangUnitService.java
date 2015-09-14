@@ -9,7 +9,7 @@ import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.datastore.PostalAddress;
 import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.dao.SpotLangUnitDao;
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.exception.TooManyException;
 import com.pluspow.model.GeoModel;
 import com.pluspow.model.Spot;
@@ -27,7 +27,7 @@ public class SpotLangUnitService {
      * @param lang
      * @return
      */
-    public static SpotLangUnit get(Spot spot, SupportLang lang) {
+    public static SpotLangUnit get(Spot spot, Lang lang) {
         return dao.getLangInfo(spot, lang);
     }
     
@@ -47,7 +47,7 @@ public class SpotLangUnitService {
      * @param geoModel
      * @return
      */
-    public static SpotLangUnit getNewModel(Spot spot, SupportLang lang, String phoneNumber, GeoModel geoModel) {
+    public static SpotLangUnit getNewModel(Spot spot, Lang lang, String phoneNumber, GeoModel geoModel) {
         
         SpotLangUnit info = new SpotLangUnit();
         
@@ -106,7 +106,7 @@ public class SpotLangUnitService {
      * @return
      * @throws TooManyException 
      */
-    public static SpotLangUnit add(Transaction tx, Spot spot, SupportLang lang, GeoModel geoModel) throws TooManyException {
+    public static SpotLangUnit add(Transaction tx, Spot spot, Lang lang, GeoModel geoModel) throws TooManyException {
         
         if(get(spot, lang) != null) throw new TooManyException();
         
@@ -127,7 +127,7 @@ public class SpotLangUnitService {
      * @param spot
      * @param lang
      */
-    public static void delete(Transaction tx, Spot spot, SupportLang lang) {
+    public static void delete(Transaction tx, Spot spot, Lang lang) {
         
         SpotLangUnit langUnit = get(spot, lang);
         if(langUnit == null) return;
@@ -142,7 +142,7 @@ public class SpotLangUnitService {
      * @param lang
      * @param displayFlg
      */
-    public static void changePhoneDisplayFlg(Spot spot, SupportLang lang, boolean displayFlg) {
+    public static void changePhoneDisplayFlg(Spot spot, Lang lang, boolean displayFlg) {
         // 取得
         SpotLangUnit info = get(spot, lang);
         
@@ -156,7 +156,7 @@ public class SpotLangUnitService {
      * @param lang
      * @param displayFlg
      */
-    public static void changeContactDisplayFlg(Spot spot, SupportLang lang, boolean displayFlg) {
+    public static void changeContactDisplayFlg(Spot spot, Lang lang, boolean displayFlg) {
         // 取得
         SpotLangUnit info = get(spot, lang);
         
@@ -188,7 +188,7 @@ public class SpotLangUnitService {
      * @param keyString
      * @return
      */
-    private static Key createKey(Spot spot, SupportLang lang) {
+    private static Key createKey(Spot spot, Lang lang) {
         return Datastore.createKey(SpotLangUnit.class, spot.getKey().getId() + "_" + lang.toString());
     }
 

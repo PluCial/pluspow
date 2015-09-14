@@ -9,7 +9,7 @@ import org.slim3.util.StringUtil;
 import com.google.appengine.api.datastore.Email;
 import com.google.appengine.api.datastore.Key;
 import com.pluspow.dao.ClientDao;
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.exception.UnsuitableException;
 import com.pluspow.model.Client;
 
@@ -67,7 +67,7 @@ public class ClientService {
      * @throws UnsuitableException
      * @throws NoSuchAlgorithmException 
      */
-    public static Client add(String name, String email, String password, SupportLang lang) throws UnsuitableException, NoSuchAlgorithmException {
+    public static Client add(String name, String email, String password, Lang lang) throws UnsuitableException, NoSuchAlgorithmException {
         
         if(StringUtil.isEmpty(email)
                 || StringUtil.isEmpty(password)

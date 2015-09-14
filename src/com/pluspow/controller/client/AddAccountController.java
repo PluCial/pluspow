@@ -2,7 +2,7 @@ package com.pluspow.controller.client;
 
 import org.slim3.controller.Navigation;
 
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.model.Client;
 import com.pluspow.model.SignupEntry;
 import com.pluspow.service.ClientService;
@@ -31,7 +31,7 @@ public class AddAccountController extends BaseController {
             signupEntry.getName(), 
             signupEntry.getEmail().getEmail(), 
             signupEntry.getPassword(), 
-            SupportLang.ja);  //TODO: 国際化まで暫定
+            Lang.ja);  //TODO: 国際化まで暫定
         
         // セッションの設定
         sessionScope("client", client);

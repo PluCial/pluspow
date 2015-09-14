@@ -9,7 +9,7 @@ import org.slim3.datastore.Datastore;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.dao.ItemTextResDao;
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.model.Item;
@@ -35,7 +35,7 @@ public class ItemTextResService  extends TextResourcesService{
             Transaction tx, 
             Spot spot,
             Item item,
-            SupportLang lang, 
+            Lang lang, 
             TextResRole role, 
             String content) {
         
@@ -86,7 +86,7 @@ public class ItemTextResService  extends TextResourcesService{
      * @param lang
      * @return
      */
-    public static List<ItemTextRes> getResourcesList(Item item, SupportLang lang) {
+    public static List<ItemTextRes> getResourcesList(Item item, Lang lang) {
         
         List<ItemTextRes> list = dao.getResourcesList(item, lang);
         
@@ -98,7 +98,7 @@ public class ItemTextResService  extends TextResourcesService{
      * @param resourcesList
      * @return
      */
-    public static Map<String, ItemTextRes> getResourcesMap(Item item, SupportLang lang) {
+    public static Map<String, ItemTextRes> getResourcesMap(Item item, Lang lang) {
         
         Map<String,ItemTextRes> map = new HashMap<String,ItemTextRes>();
         List<ItemTextRes> list = getResourcesList(item, lang);

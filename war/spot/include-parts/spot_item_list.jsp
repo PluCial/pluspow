@@ -7,19 +7,19 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%
-Client client =(Client) request.getAttribute("client");
+	Client client =(Client) request.getAttribute("client");
 Spot spot =(Spot) request.getAttribute("spot");
 boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 List<Item> itemList =(List<Item>) request.getAttribute("itemList");
 Map<String,Item> langItemMap = (Map<String,Item>) request.getAttribute("langItemMap");
-SupportLang lang = (SupportLang)request.getAttribute("lang");
+Lang lang = (Lang)request.getAttribute("lang");
 boolean isEditPage = Boolean.valueOf((String) request.getParameter("isEditPage"));
 %>
 		<div class="container">
 			<div class="row <%=isOwner && isEditPage && spot.getLangUnit().getLang() == spot.getBaseLang() ? "connectedSortable" :""  %>">
 				
 				<%for(Item item: itemList) { 
-					boolean isSupport = item.getSupportLangs().indexOf(lang) >= 0 ? true : false;
+					boolean isSupport = item.getLangs().indexOf(lang) >= 0 ? true : false;
 					String itemLink = "/+" + spot.getSpotId() + "/l-";
 					if(isSupport) {
 						itemLink = itemLink + spot.getLangUnit().getLang().toString();

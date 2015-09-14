@@ -4,7 +4,7 @@ import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Validators;
 import org.slim3.util.StringUtil;
 
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.enums.ResGroups;
 import com.pluspow.exception.TransException;
 import com.pluspow.model.Client;
@@ -24,7 +24,7 @@ public class TransEntryController extends BaseController {
         }
         
         ResGroups targetGroup = ResGroups.valueOf(asString("transGroup"));
-        SupportLang transLang = SupportLang.valueOf(asString("transLang"));
+        Lang transLang = Lang.valueOf(asString("transLang"));
         
         // ---------------------------------------------------
         // スポットの翻訳

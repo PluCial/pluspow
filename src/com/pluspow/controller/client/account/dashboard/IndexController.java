@@ -18,8 +18,8 @@ public class IndexController extends BaseController {
     protected Navigation execute(Client client, Spot baseSpot) throws Exception {
         
         // サポートしている言語リスト
-        List<SpotLangUnit> supportLangInfoList = SpotLangUnitService.getList(baseSpot);
-        requestScope("supportLangInfoList", supportLangInfoList == null ? new ArrayList<SpotLangUnit>() : supportLangInfoList);
+        List<SpotLangUnit> spotLangUnitList = SpotLangUnitService.getList(baseSpot);
+        requestScope("spotLangUnitList", spotLangUnitList == null ? new ArrayList<SpotLangUnit>() : spotLangUnitList);
         
         // 翻訳履歴
         List<TransHistory> transHistoryList = TransHistoryService.getHistoryList(baseSpot);

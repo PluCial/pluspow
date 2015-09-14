@@ -2,7 +2,7 @@ package com.pluspow.enums;
 
 
 /** 機械翻訳言語 */
-public enum SupportLang {
+public enum Lang {
     af("af", "アフリカーンス語", false),
     sq("sq", "アルバニア語", false),
     ar("ar", "アラビア語", false),
@@ -72,20 +72,11 @@ public enum SupportLang {
     private String name;
     private boolean humanTransSupport;
 
-    private SupportLang(String langKey, String name, boolean humanTransSupport) {
+    private Lang(String langKey, String name, boolean humanTransSupport) {
         this.langKey = langKey;
         this.name = name;
         this.humanTransSupport = humanTransSupport;
     }
-//
-//    public static SupportLang valueOfLangKey(String langKey) {
-//        for (SupportLang e : values()) {
-//            if (e.getLangKey().equals(langKey)) {
-//                return e;
-//            }
-//        }
-//        return null;
-//    }
 
     public String getLangKey() {
         return langKey;

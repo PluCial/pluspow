@@ -84,7 +84,7 @@ Item item =(Item) request.getAttribute("item");
 														<td class="flag">
 															<span style="background-image: url(/images/flag/<%=transLang.toUpperCase() %>.png);background-repeat:no-repeat;background-position: center left;background-size: 34px;padding-left:50px;"></span>
 														</td>
-														<td class="lang"><%=SupportLang.valueOf(transLang).getName() %></td>
+														<td class="lang"><%=Lang.valueOf(transLang).getName()%></td>
 													</tr>
 												</tbody>
 											</table>
@@ -97,7 +97,7 @@ Item item =(Item) request.getAttribute("item");
 											<tbody>
 												<tr>
 													<th>翻訳する文字数</th>
-													<th><%=transCharCount %></th>
+													<th><%=transCharCount%></th>
 												</tr>
 											</tbody>
 										</table>
@@ -107,51 +107,65 @@ Item item =(Item) request.getAttribute("item");
 									<div class="row">
 										<div class="col-sm-3 col-xs-6">
 											<div class="description-block border-right">
-												<h4 class="description-text"><i class="fa fa-cogs"></i> <%=TransType.MACHINE.getName() %></h4>
-												<p>(¥<%=TransType.MACHINE.getPrice() %>/1文字)</p>
-												<h5 class="description-header">¥<%=(int)(transCharCount * TransType.MACHINE.getPrice()) %></h5>
+												<h4 class="description-text"><i class="fa fa-cogs"></i> <%=TransType.MACHINE.getName()%></h4>
+												<p>(¥<%=TransType.MACHINE.getPrice()%>/1文字)</p>
+												<h5 class="description-header">¥<%=(int)(transCharCount * TransType.MACHINE.getPrice())%></h5>
 												<div>
-													<a href="/spot/secure/transEntry?spotId=<%=baseSpot.getSpotId() %>&transLang=<%=transLang %>&transGroup=<%=transGroup.toString() %>&itemId=<%=item == null ? "" : item.getKey().getName() %>" class="btn btn-default"><i class="fa fa-language"></i> 翻訳する</a>
+													<a href="/spot/secure/transEntry?spotId=<%=baseSpot.getSpotId()%>&transLang=<%=transLang%>&transGroup=<%=transGroup.toString()%>&itemId=<%=item == null ? "" : item.getKey().getName()%>" class="btn btn-default"><i class="fa fa-language"></i> 翻訳する</a>
 												</div>
 												
 											</div><!-- /.description-block -->
                     					</div><!-- /.col -->
 										<div class="col-sm-3 col-xs-6">
 											<div class="description-block border-right">
-												<h4 class="description-text "><i class="fa fa-user"></i> <%=TransType.HUMAN_STANDARD.getName() %></h4>
+												<h4 class="description-text "><i class="fa fa-user"></i> <%=TransType.HUMAN_STANDARD.getName()%></h4>
 												
-												<%if(SupportLang.valueOf(transLang).isHumanTransSupport()) { %>
-												<p class="">(¥<%=TransType.HUMAN_STANDARD.getPrice() %>/1文字)</p>
-												<h5 class="description-header">¥<%=(int)(transCharCount * TransType.HUMAN_STANDARD.getPrice()) %></h5>
+												<%
+																									if(Lang.valueOf(transLang).isHumanTransSupport()) {
+																								%>
+												<p class="">(¥<%=TransType.HUMAN_STANDARD.getPrice()%>/1文字)</p>
+												<h5 class="description-header">¥<%=(int)(transCharCount * TransType.HUMAN_STANDARD.getPrice())%></h5>
 												<div>
 													<a href="#" class="btn btn-success"><i class="fa fa-language"></i> 翻訳する</a>
 												</div>
-												<%}else { %>
+												<%
+													}else {
+												%>
 												<p class="nosupport">対応していません。</p>
-												<%} %>
+												<%
+													}
+												%>
 											</div><!-- /.description-block -->
 										</div><!-- /.col -->
 										<div class="col-sm-3 col-xs-6">
 											<div class="description-block border-right">
-												<h4 class="description-text"><i class="fa fa-user"></i> <%=TransType.HUMAN_STANDARD.getName() %></h4>
+												<h4 class="description-text"><i class="fa fa-user"></i> <%=TransType.HUMAN_STANDARD.getName()%></h4>
 												
-												<%if(SupportLang.valueOf(transLang).isHumanTransSupport()) { %>
-												<p class="">(¥<%=TransType.HUMAN_BUSINESS.getPrice() %>/1文字)</p>
-												<h5 class="description-header">¥<%=(int)(transCharCount * TransType.HUMAN_BUSINESS.getPrice()) %></h5>
+												<%
+																									if(Lang.valueOf(transLang).isHumanTransSupport()) {
+																								%>
+												<p class="">(¥<%=TransType.HUMAN_BUSINESS.getPrice()%>/1文字)</p>
+												<h5 class="description-header">¥<%=(int)(transCharCount * TransType.HUMAN_BUSINESS.getPrice())%></h5>
 												<div>
 													<a href="#" class="btn btn-primary"><i class="fa fa-language"></i> 翻訳する</a>
 												</div>
-												<%}else { %>
+												<%
+													}else {
+												%>
 												<p class="nosupport">対応していません。</p>
-												<%} %>
+												<%
+													}
+												%>
 											</div><!-- /.description-block -->
 										</div><!-- /.col -->
                     
 										<div class="col-sm-3 col-xs-6">
 											<div class="description-block">
-												<h4 class="description-text"><i class="fa fa-user"></i> <%=TransType.HUMAN_ULTRA.getName() %></h4>
+												<h4 class="description-text"><i class="fa fa-user"></i> <%=TransType.HUMAN_ULTRA.getName()%></h4>
 												
-												<%if(SupportLang.valueOf(transLang).isHumanTransSupport()) { %>
+												<%
+																									if(Lang.valueOf(transLang).isHumanTransSupport()) {
+																								%>
 												<p class="">(¥<%=TransType.HUMAN_ULTRA.getPrice() %>/1文字)</p>
 												<h5 class="description-header">¥<%=(int)(transCharCount * TransType.HUMAN_ULTRA.getPrice()) %></h5>
 												<div>

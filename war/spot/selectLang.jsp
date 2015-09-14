@@ -40,8 +40,9 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 	
 	<div class="modal-body">
 		<div class="row">
-			<%for(SupportLang lang: spot.getSupportLangs()) {
-				if(lang != spot.getBaseLang()) {
+			<%
+				for(Lang lang: spot.getLangs()) {
+					if(lang != spot.getBaseLang()) {
 			%>
 			<div class="col-sm-4 col-xs-6">
 				<img class="flag-image" src="/images/flag/<%=lang.toString().toUpperCase() %>.png" />

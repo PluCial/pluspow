@@ -12,7 +12,7 @@ import org.slim3.util.StringUtil;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Text;
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.utils.Utils;
 
@@ -30,7 +30,7 @@ public class TextResources implements Serializable {
     /**
      * 言語
      */
-    private SupportLang lang;
+    private Lang lang;
     
     /**
      * 役割
@@ -160,11 +160,11 @@ public class TextResources implements Serializable {
         this.updateDate = updateDate;
     }
 
-    public SupportLang getLang() {
+    public Lang getLang() {
         return lang;
     }
 
-    public void setLang(SupportLang lang) {
+    public void setLang(Lang lang) {
         this.lang = lang;
     }
 

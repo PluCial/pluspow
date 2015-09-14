@@ -9,7 +9,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.App;
 import com.pluspow.dao.TransHistoryDao;
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.enums.TransStatus;
 import com.pluspow.enums.TransType;
 import com.pluspow.meta.TransHistoryMeta;
@@ -47,8 +47,8 @@ public class TransHistoryService {
     public static TransHistory add(
             Transaction tx,
             Spot spot, 
-            SupportLang baseLang, 
-            SupportLang transLang, 
+            Lang baseLang, 
+            Lang transLang, 
             TransType transType, 
             TransStatus transStatus, 
             int transCharCount) {

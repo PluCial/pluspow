@@ -4,7 +4,7 @@ package com.pluspow.controller.spot;
 import org.slim3.controller.Navigation;
 import org.slim3.util.StringUtil;
 
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
@@ -31,9 +31,9 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
         // -------------------------------------
         //言語の取得
         // -------------------------------------
-        SupportLang lang = null;
+        Lang lang = null;
         try {
-            lang = SupportLang.valueOf(langString);
+            lang = Lang.valueOf(langString);
             requestScope("lang", lang);
 
         }catch(IllegalArgumentException e) {
@@ -112,6 +112,6 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
      * @return
      * @throws Exception
      */
-    protected abstract Navigation execute(Spot spot, SupportLang lang, Client client, boolean isClientLogged, boolean isOwner) throws Exception;
+    protected abstract Navigation execute(Spot spot, Lang lang, Client client, boolean isClientLogged, boolean isOwner) throws Exception;
 
 }

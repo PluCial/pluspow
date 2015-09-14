@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.slim3.controller.Navigation;
 
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.model.Client;
 import com.pluspow.model.Item;
 import com.pluspow.model.Spot;
@@ -19,7 +19,7 @@ public class IndexController extends BaseController {
     @Override
     protected Navigation execute(
             Spot spot, 
-            SupportLang lang,
+            Lang lang,
             Client client,
             boolean isClientLogged,
             boolean isOwner) throws Exception {
@@ -27,8 +27,8 @@ public class IndexController extends BaseController {
         // 営業時間マップ
         requestScope("officeHoursMap", OfficeHoursService.getOfficeHoursMap(spot.getOfficeHourList()));
         
-        List<SupportLang> suppertLangList = spot.getSupportLangs();
-        requestScope("suppertLangList", suppertLangList != null ? suppertLangList : new ArrayList<SupportLang>());
+        List<Lang> suppertLangList = spot.getLangs();
+        requestScope("suppertLangList", suppertLangList != null ? suppertLangList : new ArrayList<Lang>());
         
         
         // 編集可能で、ベース言語ではない場合は翻訳用のベースアイテムを取得

@@ -8,7 +8,7 @@ import org.slim3.datastore.Datastore;
 
 import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.dao.SpotTextResDao;
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.model.Spot;
@@ -31,7 +31,7 @@ public class SpotTextResService  extends TextResourcesService{
     public static SpotTextRes add(
             Transaction tx, 
             Spot spot,
-            SupportLang lang, 
+            Lang lang, 
             TextResRole role, 
             String content) {
         
@@ -81,7 +81,7 @@ public class SpotTextResService  extends TextResourcesService{
      * @param lang
      * @return
      */
-    public static List<SpotTextRes> getResourcesList(Spot spot, SupportLang lang) {
+    public static List<SpotTextRes> getResourcesList(Spot spot, Lang lang) {
         
         List<SpotTextRes> list = dao.getResourcesList(spot, lang);
         
@@ -93,7 +93,7 @@ public class SpotTextResService  extends TextResourcesService{
      * @param resourcesList
      * @return
      */
-    public static Map<String, SpotTextRes> getResourcesMap(Spot spot, SupportLang lang) {
+    public static Map<String, SpotTextRes> getResourcesMap(Spot spot, Lang lang) {
         
         Map<String,SpotTextRes> map = new HashMap<String,SpotTextRes>();
         

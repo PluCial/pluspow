@@ -5,7 +5,7 @@ import java.util.List;
 import org.slim3.datastore.DaoBase;
 import org.slim3.datastore.Datastore;
 
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.meta.SpotMeta;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
@@ -31,11 +31,11 @@ public class SpotDao extends DaoBase<Spot>{
      * スポットIDからスポットを取得(有効なもののみ)
      * @return
      */
-    public Spot getBySpotId(String spotId, SupportLang lang) {
+    public Spot getBySpotId(String spotId, Lang lang) {
         return  Datastore.query(meta)
                 .filter(
                     meta.spotId.equal(spotId),
-                    meta.supportLangs.in(lang),
+                    meta.langs.in(lang),
                     meta.invalid.equal(false)
                     ).asSingle();
     }

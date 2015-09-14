@@ -10,7 +10,7 @@ import org.slim3.datastore.ModelRef;
 import org.slim3.datastore.ModificationDate;
 
 import com.google.appengine.api.datastore.Key;
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.enums.TransStatus;
 import com.pluspow.enums.TransType;
 
@@ -29,13 +29,13 @@ public class TransHistory implements Serializable {
      * 翻訳元の言語
      */
     @Attribute(unindexed = true)
-    private SupportLang baseLang;
+    private Lang baseLang;
     
     /**
      * 翻訳言語
      */
     @Attribute(unindexed = true)
-    private SupportLang transLang;
+    private Lang transLang;
     
     /**
      * 翻訳タイプ
@@ -198,19 +198,19 @@ public class TransHistory implements Serializable {
         this.charUnitPrice = charUnitPrice;
     }
 
-    public SupportLang getBaseLang() {
+    public Lang getBaseLang() {
         return baseLang;
     }
 
-    public void setBaseLang(SupportLang baseLang) {
+    public void setBaseLang(Lang baseLang) {
         this.baseLang = baseLang;
     }
 
-    public SupportLang getTransLang() {
+    public Lang getTransLang() {
         return transLang;
     }
 
-    public void setTransLang(SupportLang transLang) {
+    public void setTransLang(Lang transLang) {
         this.transLang = transLang;
     }
 

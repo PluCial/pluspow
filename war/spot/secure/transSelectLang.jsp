@@ -42,9 +42,10 @@ Spot spot =(Spot) request.getAttribute("spot");
 						</div><!-- /.box-header -->
 						<div class="box-body table-responsive no-padding">
 							<table class="table table-bordered">
-								<%for(int i=0; i < SupportLang.values().length; i++) {
-									SupportLang lang = SupportLang.values()[i];
-									boolean istranslated = spot.getSupportLangs().indexOf(lang) >= 0;
+								<%
+									for(int i=0; i < Lang.values().length; i++) {
+															Lang lang = Lang.values()[i];
+															boolean istranslated = spot.getLangs().indexOf(lang) >= 0;
 								%>
 							
 								<%if((i + 1)%5 == 1) { %>

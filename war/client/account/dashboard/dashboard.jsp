@@ -11,7 +11,7 @@
 <%
 	Client client =(Client) request.getAttribute("client");
 Spot baseSpot =(Spot) request.getAttribute("spot");
-List<SpotLangUnit> supportLangInfoList =(List<SpotLangUnit>) request.getAttribute("supportLangInfoList");
+List<SpotLangUnit> spotLangUnitList =(List<SpotLangUnit>) request.getAttribute("spotLangUnitList");
 List<TransHistory> transHistoryList =(List<TransHistory>) request.getAttribute("transHistoryList");
 NumberFormat fPrice = NumberFormat.getNumberInstance();
 /* ServicePlan planEnum = baseSpot.getPlan().getPlan(); */
@@ -88,9 +88,9 @@ Errors errors =(Errors) request.getAttribute("errors");
  									<div class="box-header">
 										<i class="fa fa-globe"></i>
 										<h3 class="box-title">グローバル化</h3>
-										<div style="text-align: right;"><b><span style="font-size:1.4em;color:red"><%=baseSpot.getSupportLangs().size() %></span> / <%=SupportLang.values().length %></b> 国語</div>
+										<div style="text-align: right;"><b><span style="font-size:1.4em;color:red"><%=baseSpot.getLangs().size() %></span> / <%=Lang.values().length%></b> 国語</div>
 										<div class="progress progress-xs">
-											<div class="progress-bar" style="width: <%=((float)baseSpot.getSupportLangs().size() / (float)SupportLang.values().length) * 100 %>%"></div>
+											<div class="progress-bar" style="width: <%=((float)baseSpot.getLangs().size() / (float)Lang.values().length) * 100%>%"></div>
 										</div>
 									</div>
 									<!-- /.box-header-->
@@ -99,7 +99,9 @@ Errors errors =(Errors) request.getAttribute("errors");
                 
 									<div class="box-body chat" id="chat-box">
 										<table class="table table-hover table-striped">
-											<%for(SupportLang langInfo: baseSpot.getSupportLangs()) { %>
+											<%
+												for(Lang langInfo: baseSpot.getLangs()) {
+											%>
 											<tr>
 												<td class="action">
 													<span style="background-image: url(/images/flag/<%=langInfo.getLangKey().toUpperCase() %>.png);background-repeat:no-repeat;background-position: center left;background-size: 34px;padding-left:50px;"></span>
@@ -117,34 +119,6 @@ Errors errors =(Errors) request.getAttribute("errors");
 										
 									</div><!-- /.box-body -->
 									
-									<%-- <div class="box-footer clearfix no-border">
-										<form action="/client/spot/trans" method="post">
-										<div class="row" style="border-top: 1px solid #f4f4f4;padding-top: 1em;">
-											<div class="col-xs-10">
-												<div class="form-group ${f:errorClass('transLang','has-error')}">
-												
-													<select class="form-control pull-left" name="transLang">
-														<option value="">- 言語 -</option>
-														<%
-														for(SupportLang mtLang: SupportLang.values()) { 
-															if(baseSpot.getSupportLangs().indexOf(mtLang) < 0) {
-														%>
-														<option value="<%=mtLang.toString() %>"><%=mtLang.getName() %></option>
-														<%	} %>
-														<%} %>
-													</select>
-													<%if (errors.containsKey("transLang")){ %>
-														<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> ${errors.transLang}</label>
-													<%} %>
-												</div>
-                     						</div>
-                     						<input type="hidden" name="spotId" value="<%=baseSpot.getSpotId() %>" />
-                      						<div class="col-xs-2">
-												<button type="submit" class="btn btn-primary btn-sm pull-right"><i class="fa fa-plus"></i> 追加</button>
-											</div>
-										</div>
-										</form>
-									</div> --%>
 								</section>
 							</div>
 							

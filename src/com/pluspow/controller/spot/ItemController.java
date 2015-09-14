@@ -6,7 +6,7 @@ import java.util.List;
 import org.slim3.controller.Navigation;
 import org.slim3.util.StringUtil;
 
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Item;
@@ -18,7 +18,7 @@ public class ItemController extends BaseController {
     @Override
     protected Navigation execute(
             Spot spot, 
-            SupportLang lang,
+            Lang lang,
             Client client,
             boolean isClientLogged,
             boolean isOwner) throws Exception {
@@ -29,11 +29,11 @@ public class ItemController extends BaseController {
         // アイテムの取得
         try {
             Item item = ItemService.getByKey(spot, itemId, lang);
-            if(item.getSupportLangs().indexOf(lang) < 0) throw new NoContentsException();
+            if(item.getLangs().indexOf(lang) < 0) throw new NoContentsException();
             requestScope("item", item);
             
-            List<SupportLang> suppertLangList = item.getSupportLangs();
-            requestScope("suppertLangList", suppertLangList != null ? suppertLangList : new ArrayList<SupportLang>());
+            List<Lang> suppertLangList = item.getLangs();
+            requestScope("suppertLangList", suppertLangList != null ? suppertLangList : new ArrayList<Lang>());
             
         }catch (Exception e){
             throw new NoContentsException();

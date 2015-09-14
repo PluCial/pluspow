@@ -6,11 +6,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.pluspow.utils.*" %>
 <%
-Spot spot =(Spot) request.getAttribute("spot");
-SupportLang lang =(SupportLang) request.getAttribute("lang");
+	Spot spot =(Spot) request.getAttribute("spot");
+Lang lang =(Lang) request.getAttribute("lang");
 boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 boolean isEditPage = Boolean.valueOf((String) request.getParameter("isEditPage"));
-List<SupportLang> suppertLangList = (List<SupportLang>) request.getAttribute("suppertLangList");
+List<Lang> suppertLangList = (List<Lang>) request.getAttribute("suppertLangList");
 %>
 	<section id="spot-home" style="background-image:
                   url(<%=spot.getBackgroundImageUrl() %>)">

@@ -16,7 +16,7 @@ import com.pluspow.constants.MemcacheKey;
 import com.pluspow.dao.SpotDao;
 import com.pluspow.enums.DayOfWeek;
 import com.pluspow.enums.ServicePlan;
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.enums.TransStatus;
 import com.pluspow.enums.TransType;
@@ -51,7 +51,7 @@ public class SpotService {
     public static Spot setStep1(
             Client client,
             String spotId, 
-            SupportLang lang,
+            Lang lang,
             String address, 
             String phoneNumber, 
             String email,
@@ -63,7 +63,7 @@ public class SpotService {
         model.setEmail(new Email(email));
         
         // 言語リストに母国語を追加
-        model.getSupportLangs().add(lang);
+        model.getLangs().add(lang);
         
         // クライアントとの関連
         model.getClientRef().setModel(client);
@@ -198,7 +198,7 @@ public class SpotService {
      * @param spot
      * @param lang
      */
-    private static void setSpotInfo(Spot spot, SupportLang lang) {
+    private static void setSpotInfo(Spot spot, Lang lang) {
         // 貯蓄の設定
         spot.setTransAcc(TransCreditService.get(spot));
         // 言語情報の設定
@@ -219,7 +219,7 @@ public class SpotService {
      * @param keyString
      * @return
      */
-    public static Spot getSpot(String spotId, SupportLang lang) {
+    public static Spot getSpot(String spotId, Lang lang) {
         
         Spot model = Memcache.get(MemcacheKey.getSpotKey(spotId, lang));
         if(model != null) return model;
@@ -228,7 +228,7 @@ public class SpotService {
         if(model == null) return null;
         
         // サポートしていない言語の場合
-        if(model.getSupportLangs().indexOf(lang) < 0) return null;
+        if(model.getLangs().indexOf(lang) < 0) return null;
         
         // 付属情報の追加
         setSpotInfo(model, lang);
@@ -278,10 +278,10 @@ public class SpotService {
      */
     public static void machineRealTrans(
             Spot spot, 
-            SupportLang transLang) 
+            Lang transLang) 
             throws UnsuitableException, TransException, TooManyException {
         
-        if(spot.getSupportLangs().indexOf(transLang) >= 0) throw new TooManyException("この言語は既に追加されています。");
+        if(spot.getLangs().indexOf(transLang) >= 0) throw new TooManyException("この言語は既に追加されています。");
         
         try {
             // 翻訳するコンテンツリスト
@@ -313,7 +313,7 @@ public class SpotService {
             // ---------------------------------------------------
             // Spotの言語リストの追加
             // ---------------------------------------------------
-            List<SupportLang> langsList = spot.getSupportLangs();
+            List<Lang> langsList = spot.getLangs();
             if(langsList.indexOf(transLang) < 0) {
                 langsList.add(transLang);
             }
@@ -480,9 +480,9 @@ public class SpotService {
     /**
      * 言語の削除
      */
-    public static void deleteLang(Spot spot, SupportLang lang) {
+    public static void deleteLang(Spot spot, Lang lang) {
 
-        List<SupportLang> langsList = spot.getSupportLangs();
+        List<Lang> langsList = spot.getLangs();
         langsList.remove(lang);
         
         List<SpotTextRes> resList = SpotTextResService.getResourcesList(spot, lang);

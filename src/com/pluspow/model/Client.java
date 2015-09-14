@@ -10,7 +10,7 @@ import org.slim3.datastore.ModificationDate;
 
 import com.google.appengine.api.datastore.Email;
 import com.google.appengine.api.datastore.Key;
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 
 @Model(schemaVersion = 1)
 public class Client implements Serializable {
@@ -36,7 +36,7 @@ public class Client implements Serializable {
      * 言語(ベースとなる言語、管理画面の言語などで使用する)
      */
     @Attribute(unindexed = true)
-    private SupportLang lang;
+    private Lang lang;
     
     /**
      * メールアドレス
@@ -186,11 +186,11 @@ public class Client implements Serializable {
         this.updateDate = updateDate;
     }
 
-    public SupportLang getLang() {
+    public Lang getLang() {
         return lang;
     }
 
-    public void setLang(SupportLang lang) {
+    public void setLang(Lang lang) {
         this.lang = lang;
     }
 }

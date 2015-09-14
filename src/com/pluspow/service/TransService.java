@@ -11,7 +11,7 @@ import com.google.api.services.translate.TranslateRequestInitializer;
 import com.google.api.services.translate.model.TranslationsListResponse;
 import com.google.api.services.translate.model.TranslationsResource;
 import com.pluspow.App;
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.exception.TransException;
 import com.pluspow.model.TextResources;
 import com.pluspow.utils.Utils;
@@ -31,8 +31,8 @@ public class TransService {
      * @throws Exception 
      */
     public static String machineTrans(
-            SupportLang baseLang,
-            SupportLang transLang, 
+            Lang baseLang,
+            Lang transLang, 
             List<? extends TextResources> transContentsList) throws Exception {
         
         if(transContentsList == null || transContentsList.size() <= 0) {
@@ -66,7 +66,7 @@ public class TransService {
      * @return
      * @throws IOException 
      */
-    private static String googleTrans(String source, SupportLang baseLang, SupportLang targetLang) throws Exception {
+    private static String googleTrans(String source, Lang baseLang, Lang targetLang) throws Exception {
         
         // 翻訳Translate の生成
         Translate translate = new Translate.Builder(new NetHttpTransport(), new JacksonFactory(), null)

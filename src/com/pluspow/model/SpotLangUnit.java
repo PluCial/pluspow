@@ -15,7 +15,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.datastore.PostalAddress;
 import com.pluspow.enums.SpotActivity;
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 
 @Model(schemaVersion = 1)
 public class SpotLangUnit implements Serializable {
@@ -31,7 +31,7 @@ public class SpotLangUnit implements Serializable {
     /**
      * 言語
      */
-    private SupportLang lang;
+    private Lang lang;
     
     /**
      * 電話番号
@@ -333,11 +333,11 @@ public class SpotLangUnit implements Serializable {
         return spotRef;
     }
 
-    public SupportLang getLang() {
+    public Lang getLang() {
         return lang;
     }
 
-    public void setLang(SupportLang lang) {
+    public void setLang(Lang lang) {
         this.lang = lang;
     }
 

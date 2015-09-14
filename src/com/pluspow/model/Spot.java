@@ -18,7 +18,7 @@ import com.google.appengine.api.datastore.PostalAddress;
 import com.pluspow.enums.ServicePlan;
 import com.pluspow.enums.SpotActivity;
 import com.pluspow.enums.SpotGcsResRole;
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.service.SpotGcsResService;
 import com.pluspow.service.SpotTextResService;
@@ -63,12 +63,12 @@ public class Spot implements Serializable {
      * ベース言語
      */
     @Attribute(unindexed = true)
-    private SupportLang baseLang;
+    private Lang baseLang;
     
     /**
      * 翻訳した言語リスト
      */
-    private List<SupportLang> supportLangs = new ArrayList<SupportLang>();
+    private List<Lang> langs = new ArrayList<Lang>();
     
     // ----------------------------------------------------------------------
     // 関連
@@ -470,20 +470,12 @@ public class Spot implements Serializable {
         this.langUnit = langUnit;
     }
 
-    public SupportLang getBaseLang() {
+    public Lang getBaseLang() {
         return baseLang;
     }
 
-    public void setBaseLang(SupportLang baseLang) {
+    public void setBaseLang(Lang baseLang) {
         this.baseLang = baseLang;
-    }
-
-    public List<SupportLang> getSupportLangs() {
-        return supportLangs;
-    }
-
-    public void setSupportLangs(List<SupportLang> supportLangs) {
-        this.supportLangs = supportLangs;
     }
 
     public boolean isInvalid() {
@@ -560,5 +552,13 @@ public class Spot implements Serializable {
 
     public void setOfficeHourList(List<OfficeHours> officeHourList) {
         this.officeHourList = officeHourList;
+    }
+
+    public List<Lang> getLangs() {
+        return langs;
+    }
+
+    public void setLangs(List<Lang> langs) {
+        this.langs = langs;
     }
 }

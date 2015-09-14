@@ -2,10 +2,10 @@
 <%@ page import="com.pluspow.App" %>
 <%@ page import="com.pluspow.model.*" %>
 <%@ page import="com.pluspow.enums.*" %>
-<% 
-Spot spot =(Spot) request.getAttribute("spot");
+<%
+	Spot spot =(Spot) request.getAttribute("spot");
 boolean isClientLogged = Boolean.valueOf((String) request.getAttribute("isClientLogged"));
-boolean adFlg = (spot.getLangUnit().getLang() == SupportLang.ja);
+boolean adFlg = (spot.getLangUnit().getLang() == Lang.ja);
 %>
 	<section id="footer" class="footer service-footer">
 		<div class="container">

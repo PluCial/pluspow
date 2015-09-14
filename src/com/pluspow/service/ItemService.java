@@ -13,7 +13,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.dao.ItemDao;
 import com.pluspow.enums.ItemType;
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.enums.TransStatus;
 import com.pluspow.enums.TransType;
@@ -63,7 +63,7 @@ public class ItemService {
         model.setSortOrder(spot.getItemCounts().getItem() + 1);
         
         // 言語リストに母国語を追加
-        model.getSupportLangs().add(spot.getBaseLang());
+        model.getLangs().add(spot.getBaseLang());
         
         // ---------------------------------------------------
         // スポットのアイテムカウントを設定
@@ -124,10 +124,10 @@ public class ItemService {
     public static void machineRealTrans(
             Spot spot, 
             Item item,
-            SupportLang transLang) 
+            Lang transLang) 
             throws UnsuitableException, TransException, TooManyException {
         
-        if(item.getSupportLangs().indexOf(transLang) > 0) throw new TooManyException("この言語は既に追加されています。");
+        if(item.getLangs().indexOf(transLang) > 0) throw new TooManyException("この言語は既に追加されています。");
         
         try {
             // 翻訳するコンテンツリスト
@@ -152,7 +152,7 @@ public class ItemService {
             // ---------------------------------------------------
             // Itemの言語リストの追加
             // ---------------------------------------------------
-            List<SupportLang> langsList = item.getSupportLangs();
+            List<Lang> langsList = item.getLangs();
             if(langsList.indexOf(transLang) < 0) {
                 langsList.add(transLang);
             }
@@ -225,7 +225,7 @@ public class ItemService {
      * @param spot
      * @param lang
      */
-    public static void setItemInfo(Spot spot, Item item, SupportLang lang) {
+    public static void setItemInfo(Spot spot, Item item, Lang lang) {
         
         item.setTextResources(ItemTextResService.getResourcesMap(item, lang));
         
@@ -240,7 +240,7 @@ public class ItemService {
      * @return
      * @throws UnsuitableException 
      */
-    public static Item getByKey(Spot spot, String key, SupportLang lang) throws UnsuitableException {
+    public static Item getByKey(Spot spot, String key, Lang lang) throws UnsuitableException {
         
         if(key == null || lang == null) throw new UnsuitableException();
         
@@ -270,7 +270,7 @@ public class ItemService {
      * @param lang
      * @return
      */
-    public static List<Item> getItemList(Spot spot, SupportLang lang) {
+    public static List<Item> getItemList(Spot spot, Lang lang) {
         
         List<Item> itemList = dao.getItemList(spot, lang);
         

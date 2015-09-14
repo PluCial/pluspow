@@ -1,6 +1,6 @@
 package com.pluspow.constants;
 
-import com.pluspow.enums.SupportLang;
+import com.pluspow.enums.Lang;
 
 
 public class MemcacheKey {
@@ -18,7 +18,7 @@ public class MemcacheKey {
      * @param lang
      * @return
      */
-    public static String getSpotKey(String spotId, SupportLang lang) {
+    public static String getSpotKey(String spotId, Lang lang) {
         return SPOT_INFO_MEMCACHE_KEY + "_" + spotId + "_" + lang.getLangKey();
     }
 
