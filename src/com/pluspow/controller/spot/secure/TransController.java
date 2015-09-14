@@ -6,14 +6,18 @@ import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Validators;
 import org.slim3.util.StringUtil;
 
-import com.pluspow.enums.ResGroups;
+import com.pluspow.enums.Lang;
+import com.pluspow.enums.ObjectType;
 import com.pluspow.exception.TransException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Item;
 import com.pluspow.model.Spot;
+import com.pluspow.model.SpotLangUnit;
 import com.pluspow.model.TextRes;
 import com.pluspow.service.ItemService;
 import com.pluspow.service.ItemTextResService;
+import com.pluspow.service.SpotLangUnitService;
+import com.pluspow.service.SpotService;
 import com.pluspow.service.SpotTextResService;
 
 public class TransController extends BaseController {
@@ -26,18 +30,27 @@ public class TransController extends BaseController {
             throw new TransException();
         }
         
+        Lang transLang = Lang.valueOf(asString("transLang"));
+        
         int transCharCount = 0;
         
         List<? extends TextRes> transContentsList = null;
         
-        ResGroups transGroup = ResGroups.valueOf(asString("transGroup"));
+        ObjectType objectType = ObjectType.valueOf(asString("objectType"));
         
-        if(transGroup == ResGroups.SPOT) {
-            // 翻訳テキストリストの取得
+        if(objectType == ObjectType.SPOT) {
+            SpotLangUnit spotLangUnit = SpotLangUnitService.get(spot, transLang);
+            
+            // 無効になっている言語を復活させる
+            if(spotLangUnit != null && spotLangUnit.isInvalid()) {
+                SpotService.setInvalid(spot, transLang, false);
+                
+                return redirect("/+" + spot.getSpotId() + "/l-" + transLang.toString() + "/");
+            }
             
             transContentsList = SpotTextResService.getResourcesList(spot, spot.getBaseLang());
             
-        }else if(transGroup == ResGroups.ITEM) {
+        }else if(objectType == ObjectType.ITEM) {
             
             String itemId = asString("itemId");
             if(StringUtil.isEmpty(itemId)) throw new TransException();
@@ -60,7 +73,7 @@ public class TransController extends BaseController {
             transCharCount = transCharCount + transcontents.getContentString().length();
         }
         
-        requestScope("transGroup", transGroup);
+        requestScope("objectType", objectType);
         requestScope("transCharCount", String.valueOf(transCharCount));
         
         return forward("trans.jsp");
@@ -79,7 +92,7 @@ public class TransController extends BaseController {
                 );
         
         // 翻訳言語
-        v.add("transGroup", 
+        v.add("objectType", 
             v.required("翻訳するターゲットが選択されていません。")
                 );
         

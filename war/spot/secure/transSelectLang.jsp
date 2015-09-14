@@ -57,7 +57,7 @@ Spot spot =(Spot) request.getAttribute("spot");
 										<%if(istranslated) { %>
 											<span><%=lang.getName() %></span>
 										<%}else { %>
-											<a href="/spot/secure/trans?spotId=<%=spot.getSpotId() %>&transGroup=<%=ResGroups.SPOT%>&transLang=<%=lang.toString() %>"><%=lang.getName() %></a>
+											<a href="/spot/secure/trans?spotId=<%=spot.getSpotId() %>&objectType=<%=ObjectType.SPOT%>&transLang=<%=lang.toString() %>"><%=lang.getName() %></a>
 										<%} %>
 										</span>
 										

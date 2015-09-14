@@ -15,18 +15,21 @@ import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.constants.MemcacheKey;
 import com.pluspow.dao.SpotDao;
 import com.pluspow.enums.DayOfWeek;
-import com.pluspow.enums.ServicePlan;
 import com.pluspow.enums.Lang;
+import com.pluspow.enums.ServicePlan;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.enums.TransStatus;
 import com.pluspow.enums.TransType;
+import com.pluspow.exception.NoContentsException;
 import com.pluspow.exception.TooManyException;
 import com.pluspow.exception.TransException;
 import com.pluspow.exception.UnsuitableException;
 import com.pluspow.meta.SpotMeta;
 import com.pluspow.model.Client;
 import com.pluspow.model.GeoModel;
+import com.pluspow.model.LangUnit;
 import com.pluspow.model.Spot;
+import com.pluspow.model.SpotLangUnit;
 import com.pluspow.model.SpotPayPlan;
 import com.pluspow.model.SpotTextRes;
 import com.pluspow.model.TransCredit;
@@ -197,19 +200,29 @@ public class SpotService {
      * スポットの付属情報の設定
      * @param spot
      * @param lang
+     * @throws NoContentsException 
      */
-    private static void setSpotInfo(Spot spot, Lang lang) {
+    private static void setSpotInfo(Spot spot, Lang lang) throws NoContentsException {
         // 貯蓄の設定
         spot.setTransAcc(TransCreditService.get(spot));
+        
         // 言語情報の設定
+        SpotLangUnit unit = SpotLangUnitService.get(spot, lang);
+        if(unit.isInvalid() || !unit.getTransStatus().equals(TransStatus.TRANSLATED)) {
+            throw new NoContentsException();
+        }
         spot.setLangUnit(SpotLangUnitService.get(spot, lang));
-        // 翻訳コンテンツの設定
+        
+        // テキストリソースの設定
         spot.setTextResources(SpotTextResService.getResourcesMap(spot, lang));
+        
         // プラン
         SpotPayPlan payPlan = SpotPayPlanService.getPlan(spot);
         spot.setPlan(payPlan == null ? ServicePlan.FREE : payPlan.getPlan());
+        
         // GCS
         spot.setGcsResources(SpotGcsResService.getResourcesMap(spot));
+        
         // 営業時間
         spot.setOfficeHourList(OfficeHoursService.getOfficeHourList(spot));
     }
@@ -218,17 +231,18 @@ public class SpotService {
      * スポットを取得
      * @param keyString
      * @return
+     * @throws NoContentsException 
      */
-    public static Spot getSpot(String spotId, Lang lang) {
+    public static Spot getSpot(String spotId, Lang lang) throws NoContentsException {
         
         Spot model = Memcache.get(MemcacheKey.getSpotKey(spotId, lang));
         if(model != null) return model;
 
         model = dao.getBySpotId(spotId, lang);
-        if(model == null) return null;
+        if(model == null) throw new NoContentsException();
         
         // サポートしていない言語の場合
-        if(model.getLangs().indexOf(lang) < 0) return null;
+        if(model.getLangs().indexOf(lang) < 0) throw new NoContentsException();
         
         // 付属情報の追加
         setSpotInfo(model, lang);
@@ -240,8 +254,9 @@ public class SpotService {
      * スポットの取得(ベース言語)
      * @param spotId
      * @return
+     * @throws NoContentsException 
      */
-    public static Spot getSpot(String spotId) {
+    public static Spot getSpot(String spotId) throws NoContentsException {
         Spot spot = getSpotModelOnly(spotId);
         if(spot == null) return null;
         
@@ -251,8 +266,9 @@ public class SpotService {
     /**
      * クライアントからベース言語スポットリストを取得
      * @return
+     * @throws NoContentsException 
      */
-    public static List<Spot> getSpotListByClient(Client client) {
+    public static List<Spot> getSpotListByClient(Client client) throws NoContentsException {
         
         List<Spot> modelOnlylist = dao.getSpotListByClient(client);
         if(modelOnlylist == null) return new ArrayList<Spot>();
@@ -347,7 +363,7 @@ public class SpotService {
                 SpotTextResService.add(tx, spot, transLang, TextResRole.SPOT_ADDRESS, geoModel.getFormattedAddress());
                 
                 // 言語情報の追加
-                SpotLangUnitService.add(tx, spot, transLang, geoModel);
+                SpotLangUnitService.add(tx, spot, transLang, TransType.MACHINE, TransStatus.TRANSLATED, geoModel);
                 
                 // Gcsリソースの複製
                 SpotGcsResService.replicationOtherLangRes(tx, spot, transLang);
@@ -481,30 +497,37 @@ public class SpotService {
     }
     
     /**
-     * 言語の削除
+     * 言語の有効無効切り替え
+     * @param spot
+     * @param lang
+     * @param invalid
      */
-    public static void deleteLang(Spot spot, Lang lang) {
-
-        List<Lang> langsList = spot.getLangs();
-        langsList.remove(lang);
+    public static void setInvalid(Spot spot, Lang lang, boolean invalid) {
         
-        List<SpotTextRes> resList = SpotTextResService.getResourcesList(spot, lang);
+        if(spot.getBaseLang() == lang) throw new IllegalArgumentException();
+
+        // Spot の言語リストを設定
+        List<Lang> langsList = spot.getLangs();
+        if(invalid) {
+            langsList.remove(lang);
+            
+        }else {
+
+            if(langsList.indexOf(lang) < 0) {
+                langsList.add(lang);
+            }
+        }
+        
+        LangUnit langUnit = SpotLangUnitService.get(spot, lang);
+        if(langUnit == null) throw new IllegalArgumentException();
         
         // ---------------------------------------------------
         // 保存処理
         // ---------------------------------------------------
         Transaction tx = Datastore.beginTransaction();
         try {
-            // スポットの更新
-            Datastore.put(tx, spot);
-            
-            // 言語ユニットの削除
-            SpotLangUnitService.delete(tx, spot, lang);
-            
-            // テキストリソースの削除
-            for(SpotTextRes res: resList) {
-                Datastore.delete(tx, res.getKey());
-            }
+            langUnit.setInvalid(invalid);
+            Datastore.put(tx, spot, langUnit);
             
             // コミット
             tx.commit();
@@ -520,8 +543,23 @@ public class SpotService {
      * 削除
      * @param spot
      */
-    public static void deleteSpot(Client client, Spot spot) {
-        dao.delete(spot.getKey());
+    public static void deleteSpot(Spot spot) {
+        
+        spot.setInvalid(true);
+        
+        Transaction tx = Datastore.beginTransaction();
+        try {
+            // スポットの更新
+            Datastore.put(tx, spot);
+            
+            // コミット
+            tx.commit();
+            
+        }finally {
+            if(tx.isActive()) {
+                tx.rollback();
+            }
+        }
     }
     
     /**

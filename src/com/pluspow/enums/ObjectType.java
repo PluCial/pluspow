@@ -1,6 +1,6 @@
 package com.pluspow.enums;
 
-public enum ResGroups {
+public enum ObjectType {
     SPOT,
     ITEM;
 }

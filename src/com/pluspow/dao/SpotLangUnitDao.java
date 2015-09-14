@@ -36,7 +36,8 @@ public class SpotLangUnitDao extends DaoBase<SpotLangUnit>{
     public List<SpotLangUnit> getList(Spot spot) {
         return  Datastore.query(meta)
                 .filter(
-                    meta.spotRef.equal(spot.getKey())
+                    meta.spotRef.equal(spot.getKey()),
+                    meta.invalid.equal(false)
                     )
                 .sort(new Sort(meta.createDate, SortDirection.ASCENDING)).asList();
     }

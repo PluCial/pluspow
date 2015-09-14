@@ -127,10 +127,6 @@ public class Spot implements Serializable {
     public boolean isPhoneDisplayFlg() {
         return langUnit.isPhoneDisplayFlg();
     }
-
-    public boolean isContactDisplayFlg() {
-        return langUnit.isContactDisplayFlg();
-    }
     
     public String getGeoFormattedAddress() {
         return langUnit.getGeoFormattedAddress();

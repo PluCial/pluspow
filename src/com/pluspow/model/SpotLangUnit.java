@@ -2,36 +2,19 @@ package com.pluspow.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.slim3.datastore.Attribute;
-import org.slim3.datastore.CreationDate;
 import org.slim3.datastore.Model;
-import org.slim3.datastore.ModelRef;
-import org.slim3.datastore.ModificationDate;
 
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.datastore.PostalAddress;
 import com.pluspow.enums.SpotActivity;
-import com.pluspow.enums.Lang;
 
 @Model(schemaVersion = 1)
-public class SpotLangUnit implements Serializable {
+public class SpotLangUnit extends LangUnit implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @Attribute(primaryKey = true)
-    private Key key;
-
-    @Attribute(version = true)
-    private Long version;
-    
-    /**
-     * 言語
-     */
-    private Lang lang;
     
     /**
      * 電話番号
@@ -50,27 +33,6 @@ public class SpotLangUnit implements Serializable {
      */
     @Attribute(unindexed = true)
     private boolean phoneDisplayFlg = false;
-    
-    /**
-     * コンタクトページ表示フラグ
-     */
-    @Attribute(unindexed = true)
-    private boolean contactDisplayFlg = false;
-    
-    /** Spotとの関連 */
-    private ModelRef<Spot> spotRef = new ModelRef<Spot>(Spot.class);
-    
-    /**
-     * 作成日時
-     */
-    @Attribute(listener = CreationDate.class)
-    private Date createDate;
-    
-    /**
-     * 更新日時
-     */
-    @Attribute(listener = ModificationDate.class)
-    private Date updateDate;
     
     // ----------------------------------------------------------------------
     // GEO情報
@@ -141,104 +103,12 @@ public class SpotLangUnit implements Serializable {
     @Attribute(unindexed = true)
     private String geoSublocality;
 
-    /**
-     * Returns the key.
-     *
-     * @return the key
-     */
-    public Key getKey() {
-        return key;
-    }
-
-    /**
-     * Sets the key.
-     *
-     * @param key
-     *            the key
-     */
-    public void setKey(Key key) {
-        this.key = key;
-    }
-
-    /**
-     * Returns the version.
-     *
-     * @return the version
-     */
-    public Long getVersion() {
-        return version;
-    }
-
-    /**
-     * Sets the version.
-     *
-     * @param version
-     *            the version
-     */
-    public void setVersion(Long version) {
-        this.version = version;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((key == null) ? 0 : key.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        SpotLangUnit other = (SpotLangUnit) obj;
-        if (key == null) {
-            if (other.key != null) {
-                return false;
-            }
-        } else if (!key.equals(other.key)) {
-            return false;
-        }
-        return true;
-    }
-
     public boolean isPhoneDisplayFlg() {
         return phoneDisplayFlg;
     }
 
     public void setPhoneDisplayFlg(boolean phoneDisplayFlg) {
         this.phoneDisplayFlg = phoneDisplayFlg;
-    }
-
-    public boolean isContactDisplayFlg() {
-        return contactDisplayFlg;
-    }
-
-    public void setContactDisplayFlg(boolean contactDisplayFlg) {
-        this.contactDisplayFlg = contactDisplayFlg;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
     }
 
     public String getGeoFormattedAddress() {
@@ -327,18 +197,6 @@ public class SpotLangUnit implements Serializable {
 
     public void setGeoPostalAddress(PostalAddress geoPostalAddress) {
         this.geoPostalAddress = geoPostalAddress;
-    }
-
-    public ModelRef<Spot> getSpotRef() {
-        return spotRef;
-    }
-
-    public Lang getLang() {
-        return lang;
-    }
-
-    public void setLang(Lang lang) {
-        this.lang = lang;
     }
 
     public List<SpotActivity> getActivitys() {

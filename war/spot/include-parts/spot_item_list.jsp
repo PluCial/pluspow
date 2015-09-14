@@ -55,7 +55,7 @@ boolean isEditPage = Boolean.valueOf((String) request.getParameter("isEditPage")
                                 </h4>
                                 <%if(!isSupport) { %>
                                 <div class="parallax-overlay">
-                                	<a class="btn btn-default" href="/spot/secure/trans?spotId=<%=spot.getSpotId() %>&transGroup=<%=ResGroups.ITEM.toString()%>&itemId=<%=item.getKey().getName() %>&transLang=<%=lang.toString() %>"><i class="fa fa-language"></i> 翻訳</a>
+                                	<a class="btn btn-default" href="/spot/secure/trans?spotId=<%=spot.getSpotId() %>&objectType=<%=ObjectType.ITEM.toString()%>&itemId=<%=item.getKey().getName() %>&transLang=<%=lang.toString() %>"><i class="fa fa-language"></i> 翻訳</a>
                                 </div>
                                 <%} %>
                              </figcaption>

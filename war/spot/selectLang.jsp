@@ -64,7 +64,7 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 		</div>
 		<%if(spot.getLangUnit().getLang() != spot.getBaseLang()) {%>
 		<div class="pull-left">
-			<a class="link" style="color:#333" href="/spot/secure/transSelectLang?spotId=<%=spot.getSpotId() %>"><i class="fa fa-trash"></i> <%=spot.getLangUnit().getLang().getName() %>ページを削除</a>
+			<a class="link" style="color:#333" href="/spot/secure/setSpotLangInvalid?spotId=<%=spot.getSpotId() %>&lang=<%=spot.getLangUnit().getLang() %>&invalid=true"><i class="fa fa-trash"></i> <%=spot.getLangUnit().getLang().getName() %>ページを削除</a>
 		</div>
 		<%} %>
 	</div>

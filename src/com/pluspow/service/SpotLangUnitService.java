@@ -1,22 +1,24 @@
 package com.pluspow.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slim3.datastore.Datastore;
 
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.datastore.PostalAddress;
 import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.dao.SpotLangUnitDao;
 import com.pluspow.enums.Lang;
+import com.pluspow.enums.TransStatus;
+import com.pluspow.enums.TransType;
 import com.pluspow.exception.TooManyException;
 import com.pluspow.model.GeoModel;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotLangUnit;
 
 
-public class SpotLangUnitService {
+public class SpotLangUnitService extends LangUnitService {
     
     /** DAO */
     private static final SpotLangUnitDao dao = new SpotLangUnitDao();
@@ -41,6 +43,26 @@ public class SpotLangUnitService {
     }
     
     /**
+     * リストの取得
+     * @param spot
+     * @param invalid
+     * @return
+     */
+    public static List<SpotLangUnit> getList(Spot spot, boolean invalid) {
+        
+        List<SpotLangUnit> unitList = new ArrayList<SpotLangUnit>();
+        
+        List<SpotLangUnit> allUnitList = getList(spot);
+        if(allUnitList == null) return unitList;
+        
+        for(SpotLangUnit unit: allUnitList) {
+            if(unit.isInvalid() == invalid) unitList.add(unit);
+        }
+        
+        return unitList;
+    }
+    
+    /**
      * 新しいモデルの取得(未永久化)
      * @param spot
      * @param lang
@@ -57,7 +79,6 @@ public class SpotLangUnitService {
         // ベース言語の場合
         if(spot.getBaseLang() == lang) {
             info.setPhoneDisplayFlg(true);
-            info.setContactDisplayFlg(true);
         }
         
         // Spotキーの設定
@@ -86,7 +107,9 @@ public class SpotLangUnitService {
         if(get(spot, info.getLang()) != null) throw new TooManyException();
         
         // キーの設定
-        info.setKey(createKey(spot, spot.getBaseLang()));
+        info.setKey(createKey(spot));
+        info.setBaseLang(true);
+        info.setTransStatus(TransStatus.TRANSLATED);
         
         // 保存
         Datastore.put(tx, info);
@@ -96,44 +119,40 @@ public class SpotLangUnitService {
     
     /**
      * 追加(用コミット)
-     * <pre>
-     * 言語を一回削除して再追加する場合は以前の情報を上書きする
-     * </pre>
      * @param tx
      * @param spot
      * @param lang
      * @param geoModel
+     * @param transType
+     * @param trans
      * @return
-     * @throws TooManyException 
+     * @throws TooManyException
      */
-    public static SpotLangUnit add(Transaction tx, Spot spot, Lang lang, GeoModel geoModel) throws TooManyException {
+    public static SpotLangUnit add(
+            Transaction tx, 
+            Spot spot, 
+            Lang lang, 
+            TransType transType, 
+            TransStatus trans,
+            GeoModel geoModel
+            ) throws TooManyException {
         
         if(get(spot, lang) != null) throw new TooManyException();
+        
+        if(spot.getBaseLang() == lang) throw new IllegalArgumentException();
         
         SpotLangUnit info =  getNewModel(spot, lang, spot.getPhoneNumber(), geoModel);
         
         // キーの設定
-        info.setKey(createKey(spot, lang));
+        info.setKey(createKey(spot));
+        
+        info.setTransType(transType);
+        info.setTransStatus(trans);
         
         // 保存
         Datastore.put(tx, info);
         
         return info;
-    }
-    
-    /**
-     * 削除処理
-     * @param tx
-     * @param spot
-     * @param lang
-     */
-    public static void delete(Transaction tx, Spot spot, Lang lang) {
-        
-        SpotLangUnit langUnit = get(spot, lang);
-        if(langUnit == null) return;
-        
-        // 削除処理
-        Datastore.delete(tx, langUnit.getKey());
     }
     
     /**
@@ -147,20 +166,6 @@ public class SpotLangUnitService {
         SpotLangUnit info = get(spot, lang);
         
         info.setPhoneDisplayFlg(displayFlg);
-        dao.put(info);
-    }
-    
-    /**
-     * コンタクト表示フラグの変更
-     * @param spot
-     * @param lang
-     * @param displayFlg
-     */
-    public static void changeContactDisplayFlg(Spot spot, Lang lang, boolean displayFlg) {
-        // 取得
-        SpotLangUnit info = get(spot, lang);
-        
-        info.setContactDisplayFlg(displayFlg);
         dao.put(info);
     }
     
@@ -181,15 +186,6 @@ public class SpotLangUnitService {
         info.setGeoLocality(geoModel.getLocalityLongName());
         info.setGeoWardLocality(geoModel.getWardLocalityLongName());
         info.setGeoSublocality(geoModel.getSublocalityLongName());
-    }
-    
-    /**
-     * キーの作成
-     * @param keyString
-     * @return
-     */
-    private static Key createKey(Spot spot, Lang lang) {
-        return Datastore.createKey(SpotLangUnit.class, spot.getKey().getId() + "_" + lang.toString());
     }
 
 }

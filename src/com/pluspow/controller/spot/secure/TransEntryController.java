@@ -5,7 +5,7 @@ import org.slim3.controller.validator.Validators;
 import org.slim3.util.StringUtil;
 
 import com.pluspow.enums.Lang;
-import com.pluspow.enums.ResGroups;
+import com.pluspow.enums.ObjectType;
 import com.pluspow.exception.TransException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Item;
@@ -23,13 +23,13 @@ public class TransEntryController extends BaseController {
             throw new TransException();
         }
         
-        ResGroups targetGroup = ResGroups.valueOf(asString("transGroup"));
+        ObjectType objectType = ObjectType.valueOf(asString("objectType"));
         Lang transLang = Lang.valueOf(asString("transLang"));
         
         // ---------------------------------------------------
         // スポットの翻訳
         // ---------------------------------------------------
-        if(targetGroup == ResGroups.SPOT) {
+        if(objectType == ObjectType.SPOT) {
             SpotService.machineRealTrans(spot, transLang);
             
             return redirect("/+" + spot.getSpotId() + "/l-" + transLang.toString() + "/");
@@ -38,7 +38,7 @@ public class TransEntryController extends BaseController {
         // ---------------------------------------------------
         // アイテムの翻訳
         // ---------------------------------------------------
-        }else if(targetGroup == ResGroups.ITEM) {
+        }else if(objectType == ObjectType.ITEM) {
             
             String itemId = asString("itemId");
             if(StringUtil.isEmpty(itemId)) throw new TransException();
@@ -71,7 +71,7 @@ public class TransEntryController extends BaseController {
                 );
         
         // 翻訳言語
-        v.add("transGroup", 
+        v.add("objectType", 
             v.required("翻訳するターゲットが選択されていません。")
                 );
         

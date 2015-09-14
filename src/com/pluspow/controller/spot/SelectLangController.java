@@ -17,7 +17,7 @@ public class SelectLangController extends BaseController {
     protected Navigation execute(Spot spot, Lang lang, Client client,
             boolean isClientLogged, boolean isOwner) throws Exception {
         
-        List<SpotLangUnit> langUnitList = SpotLangUnitService.getList(spot);
+        List<SpotLangUnit> langUnitList = SpotLangUnitService.getList(spot, false);
         requestScope("langUnitList", langUnitList != null ? langUnitList : new ArrayList<SpotLangUnit>());
         
         return forward("selectLang.jsp");

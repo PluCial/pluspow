@@ -12,7 +12,7 @@
 Spot baseSpot =(Spot) request.getAttribute("spot");
 String transLang = (String) request.getAttribute("transLang");
 int transCharCount = Integer.parseInt((String)request.getAttribute("transCharCount"));
-ResGroups transGroup = (ResGroups) request.getAttribute("transGroup");
+ObjectType objectType = (ObjectType) request.getAttribute("objectType");
 Item item =(Item) request.getAttribute("item");
 %>
 <!DOCTYPE html>
@@ -111,7 +111,7 @@ Item item =(Item) request.getAttribute("item");
 												<p>(¥<%=TransType.MACHINE.getPrice()%>/1文字)</p>
 												<h5 class="description-header">¥<%=(int)(transCharCount * TransType.MACHINE.getPrice())%></h5>
 												<div>
-													<a href="/spot/secure/transEntry?spotId=<%=baseSpot.getSpotId()%>&transLang=<%=transLang%>&transGroup=<%=transGroup.toString()%>&itemId=<%=item == null ? "" : item.getKey().getName()%>" class="btn btn-default"><i class="fa fa-language"></i> 翻訳する</a>
+													<a href="/spot/secure/transEntry?spotId=<%=baseSpot.getSpotId()%>&transLang=<%=transLang%>&objectType=<%=objectType.toString()%>&itemId=<%=item == null ? "" : item.getKey().getName()%>" class="btn btn-default"><i class="fa fa-language"></i> 翻訳する</a>
 												</div>
 												
 											</div><!-- /.description-block -->
