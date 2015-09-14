@@ -31,7 +31,7 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 			<button class="btn btn-box-tool btn-sm" data-dismiss="modal"><i class="fa fa-times"></i></button>
 		</div>
 		<p style="margin-bottom: 0;"><strong>元の言語:</strong> 
-			<img class="flag-image" src="/images/flag/<%=spot.getBaseLang().toString().toUpperCase() %>.png" />
+			<img class="flag-image" src="/images/flag/<%=spot.getBaseLang().getLangKey().toUpperCase() %>.png" />
 			<a href="/+<%=spot.getSpotId() %>/l-<%=spot.getBaseLang().toString() %>/" class="link">
 				<%=spot.getBaseLang().getName() %>
 			</a>
@@ -45,7 +45,7 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 					if(lang != spot.getBaseLang()) {
 			%>
 			<div class="col-sm-4 col-xs-6">
-				<img class="flag-image" src="/images/flag/<%=lang.toString().toUpperCase() %>.png" />
+				<img class="flag-image" src="/images/flag/<%=lang.getLangKey().toUpperCase() %>.png" />
 				<a href="/+<%=spot.getSpotId() %>/l-<%=lang.toString() %>/"><%=lang.getName() %></a>
 			</div>
 			<%	} %>

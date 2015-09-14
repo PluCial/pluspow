@@ -137,6 +137,7 @@ public class ItemGcsResService extends GcsResService {
         
         for(ItemGcsRes res: resList) {
             res.setKey(createKey(spot));
+            res.setLang(lang);
             
             Datastore.put(tx, res);
         }

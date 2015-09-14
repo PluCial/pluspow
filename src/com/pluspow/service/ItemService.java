@@ -185,6 +185,9 @@ public class ItemService {
                     
                     ItemTextResService.add(tx, spot, item, transLang, tc.getRole(), content);
                 }
+                
+                // GCSリソースの複製
+                ItemGcsResService.replicationOtherLangRes(tx, spot, item, transLang);
             
                 // 翻訳クレジットの更新
                 TransCreditService.update(

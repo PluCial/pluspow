@@ -32,7 +32,7 @@ List<Lang> suppertLangList = (List<Lang>) request.getAttribute("suppertLangList"
 			data-target="#selectLangModel" 
 			style="color:#fff"
 			href="/spot/selectLang?spotId=<%=spot.getSpotId() %>&lang=<%=spot.getLangUnit().getLang().toString() %>">
-			<img style="width:25px;vertical-align: middle;" class="flag-image" src="/images/flag/<%=spot.getLangUnit().getLang().toString().toUpperCase() %>.png" />
+			<img style="width:25px;vertical-align: middle;" class="flag-image" src="/images/flag/<%=spot.getLangUnit().getLang().getLangKey().toUpperCase() %>.png" />
 			<%=spot.getLangUnit().getLang().getName() %> <i class="fa fa-chevron-down"></i>
 		</a>
 	</section>

@@ -43,7 +43,7 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 					data-target="#selectLangModel" 
 					style="color:#fff"
 					href="/spot/selectLang?spotId=<%=spot.getSpotId() %>&lang=<%=lang.toString() %>">
-					<img style="width:25px;vertical-align: middle;" class="flag-image" src="/images/flag/<%=lang.toString().toUpperCase() %>.png" />
+					<img style="width:25px;vertical-align: middle;" class="flag-image" src="/images/flag/<%=lang.getLangKey().toUpperCase() %>.png" />
 					<%=spot.getLangUnit().getLang().getName() %> <i class="fa fa-chevron-down"></i>
 				</a>
 				
