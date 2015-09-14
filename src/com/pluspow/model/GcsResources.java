@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.google.appengine.api.datastore.Key;
+import com.pluspow.enums.Lang;
 
 import org.slim3.datastore.Attribute;
 import org.slim3.datastore.CreationDate;
@@ -21,6 +22,11 @@ public class GcsResources implements Serializable {
 
     @Attribute(version = true)
     private Long version;
+    
+    /**
+     * 言語
+     */
+    private Lang lang;
     
     /** 幅 */
     @Attribute(unindexed = true)
@@ -199,5 +205,13 @@ public class GcsResources implements Serializable {
 
     public void setInvalid(boolean invalid) {
         this.invalid = invalid;
+    }
+
+    public Lang getLang() {
+        return lang;
+    }
+
+    public void setLang(Lang lang) {
+        this.lang = lang;
     }
 }

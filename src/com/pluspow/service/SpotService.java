@@ -348,6 +348,9 @@ public class SpotService {
                 
                 // 言語情報の追加
                 SpotLangUnitService.add(tx, spot, transLang, geoModel);
+                
+                // Gcsリソースの複製
+                SpotGcsResService.replicationOtherLangRes(tx, spot, transLang);
             
                 // 翻訳クレジットの更新
                 TransCreditService.update(

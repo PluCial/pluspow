@@ -10,10 +10,12 @@ import org.slim3.datastore.Datastore;
 import org.slim3.util.StringUtil;
 
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.images.Image;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.tools.cloudstorage.GcsFilename;
 import com.pluspow.dao.SpotGcsResDao;
+import com.pluspow.enums.Lang;
 import com.pluspow.enums.SpotGcsResRole;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.model.Spot;
@@ -31,6 +33,8 @@ public class SpotGcsResService extends GcsResourcesService {
     /**
      * アイコン画像を追加
      * @param spot
+     * @param lang
+     * @param role
      * @param fileItem
      * @param leftX
      * @param topY
@@ -41,6 +45,7 @@ public class SpotGcsResService extends GcsResourcesService {
      */
     public static SpotGcsRes addImageRes(
             Spot spot, 
+            Lang lang, 
             SpotGcsResRole role,
             FileItem fileItem,
             int leftX, 
@@ -72,6 +77,7 @@ public class SpotGcsResService extends GcsResourcesService {
         model.setContentType(fileItem.getContentType());
 
         model.getSpotRef().setModel(spot);
+        model.setLang(lang);
         
         // 保存
         Datastore.put(model);
@@ -110,7 +116,26 @@ public class SpotGcsResService extends GcsResourcesService {
         oldModel.setInvalid(true);
         dao.put(oldModel);
         
-        return addImageRes(spot, oldModel.getRole(), fileItem, leftX, topY, rightX, bottomY);
+        return addImageRes(spot, oldModel.getLang(), oldModel.getRole(), fileItem, leftX, topY, rightX, bottomY);
+    }
+    
+    /**
+     * 言語セットの複製
+     * @param tx
+     * @param spot
+     * @param lang
+     */
+    public static void replicationOtherLangRes(Transaction tx, Spot spot, Lang lang) {
+        List<SpotGcsRes> resList = getResourcesList(spot);
+        
+        if(resList == null) return;
+        
+        for(SpotGcsRes res: resList) {
+            res.setKey(createKey(spot));
+            res.setLang(lang);
+            
+            Datastore.put(tx, res);
+        }
     }
     
     /**
@@ -138,7 +163,6 @@ public class SpotGcsResService extends GcsResourcesService {
      * @return
      */
     private static List<SpotGcsRes> getResourcesList(Spot spot) {
-        // TODO: キャッシュ対応
         List<SpotGcsRes> list = dao.getResourcesList(spot);
         
         return list;

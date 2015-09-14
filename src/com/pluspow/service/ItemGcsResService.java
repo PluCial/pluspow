@@ -13,6 +13,7 @@ import com.google.appengine.api.images.Image;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.tools.cloudstorage.GcsFilename;
 import com.pluspow.dao.ItemGcsResDao;
+import com.pluspow.enums.Lang;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.model.Item;
 import com.pluspow.model.ItemGcsRes;
@@ -74,6 +75,7 @@ public class ItemGcsResService extends GcsResourcesService {
         
         model.getSpotRef().setModel(spot);
         model.getItemRef().setModel(item);
+        model.setLang(spot.getLangUnit().getLang());
 
         // 保存
         Datastore.put(tx, model);
@@ -117,6 +119,25 @@ public class ItemGcsResService extends GcsResourcesService {
         dao.put(oldModel);
         
         return addImageResources(tx, spot, item, fileItem, leftX, topY, rightX, bottomY);
+    }
+    
+    /**
+     * 言語セットの複製
+     * @param tx
+     * @param spot
+     * @param item
+     * @param lang
+     */
+    public static void replicationOtherLangRes(Transaction tx, Spot spot, Item item, Lang lang) {
+        List<ItemGcsRes> resList = getResourcesList(item);
+        
+        if(resList == null) return;
+        
+        for(ItemGcsRes res: resList) {
+            res.setKey(createKey(spot));
+            
+            Datastore.put(tx, res);
+        }
     }
     
     /**

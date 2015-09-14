@@ -3,6 +3,7 @@ package com.pluspow.controller.spot.secure;
 import org.slim3.controller.Navigation;
 import org.slim3.util.StringUtil;
 
+import com.pluspow.enums.Lang;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.exception.NoLoginException;
 import com.pluspow.exception.PermissionException;
@@ -31,7 +32,6 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
             requestScope("client", client);
             
             requestScope("spot", spot);
-            requestScope("lang", spot.getBaseLang()); // アイテム追加ページで必要
             
             // ログインしている場合
             return execute(client, spot);
@@ -54,8 +54,13 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
         String spotId = asString("spotId");
         if(StringUtil.isEmpty(spotId)) throw new NoContentsException();
         
-        
-        Spot spot = SpotService.getSpot(spotId);
+        String lang = asString("lang");
+        Spot spot = null;
+        if(StringUtil.isEmpty(lang)) {
+        spot = SpotService.getSpot(spotId);
+        }else {
+            spot = SpotService.getSpot(spotId, Lang.valueOf(lang));
+        }
 
         if(spot == null) throw new NoContentsException();
 

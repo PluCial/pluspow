@@ -117,6 +117,7 @@ Errors errors =(Errors) request.getAttribute("errors");
 								
 								</div><!-- /.box -->
 								<input type="hidden" name="spotId" value="<%=spot.getSpotId() %>">
+								<input type="hidden" name="lang" value="<%=spot.getLangUnit().getLang() %>">
 								<input type="hidden" name="resGroups" value="<%=resGroups %>">
 								<input type="hidden" name="resourcesKey" value="<%=resourcesKey %>">
 								<input type="hidden" name="target" value="<%=target == null ? "": target %>">

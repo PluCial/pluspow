@@ -18,13 +18,16 @@ public class SpotGcsResDao extends DaoBase<SpotGcsRes>{
     
     /**
      * アイテムのすべてのリソースリストを取得
-     * @param spotId
+     * @param spot
+     * @param lang
+     * @param role
      * @return
      */
     public SpotGcsRes getResources(Spot spot, SpotGcsResRole role) {
         return Datastore.query(meta)
                 .filter(
                     meta.spotRef.equal(spot.getKey()),
+                    meta.lang.equal(spot.getLangUnit().getLang()),
                     meta.role.equal(role),
                     meta.invalid.equal(false)
                     ).asSingle();
@@ -32,13 +35,15 @@ public class SpotGcsResDao extends DaoBase<SpotGcsRes>{
     
     /**
      * アイテムのすべてのリソースリストを取得
-     * @param spotId
+     * @param spot
+     * @param lang
      * @return
      */
     public List<SpotGcsRes> getResourcesList(Spot spot) {
         return Datastore.query(meta)
                 .filter(
                     meta.spotRef.equal(spot.getKey()),
+                    meta.lang.equal(spot.getLangUnit().getLang()),
                     meta.invalid.equal(false)
                     ).asList();
     }
@@ -51,7 +56,8 @@ public class SpotGcsResDao extends DaoBase<SpotGcsRes>{
     public List<Key> getResourcesKeyList(Spot spot) {
         return Datastore.query(meta)
                 .filter(
-                    meta.spotRef.equal(spot.getKey())
+                    meta.spotRef.equal(spot.getKey()),
+                    meta.lang.equal(spot.getLangUnit().getLang())
                     ).asKeyList();
     }
 

@@ -31,7 +31,7 @@ List<Item> itemList =(List<Item>) request.getAttribute("itemList");
 		<%if(isOwner) { %>
 		<a id="background-image-btn" 
 			class="btn btn-default" 
-			href="/spot/secure/changeGcsRes?spotId=<%=spot.getSpotId() %>&resGroups=<%=ResGroups.SPOT %>&target=<%=SpotGcsResRole.SPOT_BACKGROUND_IMAGE.toString() %>&resourcesKey=<%=spot.getBackgroundImageResKey() == null ? "" : spot.getBackgroundImageResKey() %>">
+			href="/spot/secure/changeGcsRes?spotId=<%=spot.getSpotId() %>&lang=<%=spot.getLangUnit().getLang() %>&resGroups=<%=ResGroups.SPOT %>&target=<%=SpotGcsResRole.SPOT_BACKGROUND_IMAGE.toString() %>&resourcesKey=<%=spot.getBackgroundImageResKey() == null ? "" : spot.getBackgroundImageResKey() %>">
 			<i class="fa fa-file-image-o"></i> 背景画像</a>
 		<%} %>
 

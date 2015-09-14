@@ -4,6 +4,7 @@ import org.slim3.controller.Navigation;
 import org.slim3.controller.upload.FileItem;
 import org.slim3.controller.validator.Validators;
 
+import com.pluspow.enums.Lang;
 import com.pluspow.enums.ResGroups;
 import com.pluspow.enums.SpotGcsResRole;
 import com.pluspow.exception.NoContentsException;
@@ -25,6 +26,7 @@ public class ChangeGcsResEntryController extends BaseController {
         // リクエストパラメーターの取得
         ResGroups resGroups = ResGroups.valueOf(asString("resGroups"));
         String resourcesKey = asString("resourcesKey");
+        Lang lang = Lang.valueOf(asString("lang"));
         int imageX = asInteger("imageX");
         int imageY = asInteger("imageY");
         int imageWidth = asInteger("imageWidth");
@@ -43,17 +45,18 @@ public class ChangeGcsResEntryController extends BaseController {
                 // 追加
                 SpotGcsResService.addImageRes(
                     spot, 
+                    lang,
                     target, 
                     fileItem, 
                     imageX, imageY, imageWidth, imageHeight);
             }
             
-            return redirect("/+" + spot.getSpotId() + "/l-" + spot.getBaseLang().toString() + "/");
+            return redirect("/+" + spot.getSpotId() + "/l-" + lang.toString() + "/");
             
         }else if(resGroups == ResGroups.ITEM) {
             String itemId = asString("itemId");
             
-            return redirect("/+" + spot.getSpotId() + "/l-" + spot.getBaseLang().toString() + "/item/" + itemId);
+            return redirect("/+" + spot.getSpotId() + "/l-" + lang.toString() + "/item/" + itemId);
         }
         
         
@@ -75,6 +78,7 @@ public class ChangeGcsResEntryController extends BaseController {
         v.add("imageY", v.required());
         v.add("imageWidth", v.required());
         v.add("imageHeight", v.required());
+        v.add("lang", v.required());
 
         return v.validate();
     }
