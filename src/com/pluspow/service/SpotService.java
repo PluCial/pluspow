@@ -16,7 +16,6 @@ import com.pluspow.constants.MemcacheKey;
 import com.pluspow.dao.SpotDao;
 import com.pluspow.enums.DayOfWeek;
 import com.pluspow.enums.Lang;
-import com.pluspow.enums.ServicePlan;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.enums.TransStatus;
 import com.pluspow.enums.TransType;
@@ -30,7 +29,6 @@ import com.pluspow.model.GeoModel;
 import com.pluspow.model.LangUnit;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotLangUnit;
-import com.pluspow.model.SpotPayPlan;
 import com.pluspow.model.SpotTextRes;
 import com.pluspow.model.TransCredit;
 import com.pluspow.utils.Utils;
@@ -64,9 +62,6 @@ public class SpotService {
         model.setSpotId(spotId);
         model.setBaseLang(lang);
         model.setEmail(new Email(email));
-        
-        // 言語リストに母国語を追加
-        model.getLangs().add(lang);
         
         // クライアントとの関連
         model.getClientRef().setModel(client);
@@ -197,34 +192,16 @@ public class SpotService {
     }
     
     /**
-     * スポットの付属情報の設定
-     * @param spot
-     * @param lang
+     * スポットの取得(ベース言語)
+     * @param spotId
+     * @return
      * @throws NoContentsException 
      */
-    private static void setSpotInfo(Spot spot, Lang lang) throws NoContentsException {
-        // 貯蓄の設定
-        spot.setTransAcc(TransCreditService.get(spot));
+    public static Spot getSpotBaseLang(String spotId) throws NoContentsException {
+        Spot spot = getSpotModelOnly(spotId);
+        if(spot == null) return null;
         
-        // 言語情報の設定
-        SpotLangUnit unit = SpotLangUnitService.get(spot, lang);
-        if(unit.isInvalid() || !unit.getTransStatus().equals(TransStatus.TRANSLATED)) {
-            throw new NoContentsException();
-        }
-        spot.setLangUnit(SpotLangUnitService.get(spot, lang));
-        
-        // テキストリソースの設定
-        spot.setTextResources(SpotTextResService.getResourcesMap(spot, lang));
-        
-        // プラン
-        SpotPayPlan payPlan = SpotPayPlanService.getPlan(spot);
-        spot.setPlan(payPlan == null ? ServicePlan.FREE : payPlan.getPlan());
-        
-        // GCS
-        spot.setGcsResources(SpotGcsResService.getResourcesMap(spot));
-        
-        // 営業時間
-        spot.setOfficeHourList(OfficeHoursService.getOfficeHourList(spot));
+        return getSpot(spotId, spot.getBaseLang());
     }
     
     /**
@@ -238,11 +215,8 @@ public class SpotService {
         Spot model = Memcache.get(MemcacheKey.getSpotKey(spotId, lang));
         if(model != null) return model;
 
-        model = dao.getBySpotId(spotId, lang);
+        model = getSpotModelOnly(spotId);
         if(model == null) throw new NoContentsException();
-        
-        // サポートしていない言語の場合
-        if(model.getLangs().indexOf(lang) < 0) throw new NoContentsException();
         
         // 付属情報の追加
         setSpotInfo(model, lang);
@@ -251,16 +225,46 @@ public class SpotService {
     }
     
     /**
-     * スポットの取得(ベース言語)
-     * @param spotId
-     * @return
+     * スポットの付属情報の設定
+     * @param spot
+     * @param lang
      * @throws NoContentsException 
      */
-    public static Spot getSpot(String spotId) throws NoContentsException {
-        Spot spot = getSpotModelOnly(spotId);
-        if(spot == null) return null;
+    private static void setSpotInfo(Spot spot, Lang lang) throws NoContentsException {
         
-        return getSpot(spotId, spot.getBaseLang());
+        // ---------------------------------------------------
+        // 言語情報の設定
+        // ---------------------------------------------------
+        List<SpotLangUnit> langUnitList = SpotLangUnitService.getList(spot);
+        if(langUnitList == null) throw new NoContentsException();
+        
+        for(SpotLangUnit langUnit: langUnitList) {
+            // サーポート言語リストの設定
+            if(langUnit != null 
+                    && !langUnit.isInvalid() 
+                    && langUnit.getTransStatus().equals(TransStatus.TRANSLATED)
+                    ) {
+                spot.getLangs().add(langUnit.getLang());
+            }
+            
+            // 言語情報の設定
+            if(langUnit.getLang() == lang) {
+                spot.setLangUnit(langUnit);
+            }
+        }
+        
+        // ---------------------------------------------------
+        // テキストリソースの設定
+        // ---------------------------------------------------
+        spot.setTextResources(SpotTextResService.getResourcesMap(spot, lang));
+        
+        // ---------------------------------------------------
+        // GCS
+        // ---------------------------------------------------
+        spot.setGcsResources(SpotGcsResService.getResourcesMap(spot));
+        
+        // 営業時間
+        spot.setOfficeHourList(OfficeHoursService.getOfficeHourList(spot));
     }
     
     /**
@@ -275,7 +279,7 @@ public class SpotService {
         
         List<Spot> list = new ArrayList<Spot>();
         for(Spot spot: modelOnlylist) {
-            Spot spotModel = getSpot(spot.getSpotId(), spot.getBaseLang());
+            Spot spotModel = getSpotBaseLang(spot.getSpotId());
             if(spotModel != null) {
                 list.add(spotModel);
             }
@@ -297,7 +301,9 @@ public class SpotService {
             Lang transLang) 
             throws UnsuitableException, TransException, TooManyException {
         
-        if(spot.getLangs().indexOf(transLang) >= 0) throw new TooManyException("この言語は既に追加されています。");
+        SpotLangUnit spotLangUnit = SpotLangUnitService.get(spot, transLang);
+        
+        if(spotLangUnit != null) throw new TooManyException("この言語は既に追加されています。");
         
         try {
             // 翻訳するコンテンツリスト
@@ -327,21 +333,10 @@ public class SpotService {
             GeoModel geoModel = GeoService.getGeoModel(spot.getAddress(), transLang);
             
             // ---------------------------------------------------
-            // Spotの言語リストの追加
-            // ---------------------------------------------------
-            List<Lang> langsList = spot.getLangs();
-            if(langsList.indexOf(transLang) < 0) {
-                langsList.add(transLang);
-            }
-            
-            // ---------------------------------------------------
             // 保存処理
             // ---------------------------------------------------
             Transaction tx = Datastore.beginTransaction();
             try {
-
-                // スポットの更新
-                Datastore.put(tx, spot);
 
                 // 翻訳したコンテンツを追加
                 for(SpotTextRes textRes: transContentsList) {
@@ -504,19 +499,8 @@ public class SpotService {
      */
     public static void setInvalid(Spot spot, Lang lang, boolean invalid) {
         
+        // ベース言語の有効無効切り替えはできない。
         if(spot.getBaseLang() == lang) throw new IllegalArgumentException();
-
-        // Spot の言語リストを設定
-        List<Lang> langsList = spot.getLangs();
-        if(invalid) {
-            langsList.remove(lang);
-            
-        }else {
-
-            if(langsList.indexOf(lang) < 0) {
-                langsList.add(lang);
-            }
-        }
         
         LangUnit langUnit = SpotLangUnitService.get(spot, lang);
         if(langUnit == null) throw new IllegalArgumentException();
@@ -527,7 +511,7 @@ public class SpotService {
         Transaction tx = Datastore.beginTransaction();
         try {
             langUnit.setInvalid(invalid);
-            Datastore.put(tx, spot, langUnit);
+            Datastore.put(tx, langUnit);
             
             // コミット
             tx.commit();

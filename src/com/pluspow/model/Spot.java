@@ -65,11 +65,6 @@ public class Spot implements Serializable {
     @Attribute(unindexed = true)
     private Lang baseLang;
     
-    /**
-     * 翻訳した言語リスト
-     */
-    private List<Lang> langs = new ArrayList<Lang>();
-    
     // ----------------------------------------------------------------------
     // 関連
     // ----------------------------------------------------------------------
@@ -101,13 +96,19 @@ public class Spot implements Serializable {
     private Date updateDate;
     
     // ----------------------------------------------------------------------
-    // SpotLangInfo(永久かしない)
+    // SpotLangUnit(永久かしない)
     // ----------------------------------------------------------------------
     /**
      * 言語情報
      */
     @Attribute(persistent = false)
     private SpotLangUnit langUnit;
+    
+    /**
+     * サポート言語リスト
+     */
+    @Attribute(persistent = false)
+    private List<Lang> langs = new ArrayList<Lang>();
     
     public String getPhoneNumber() {
         if(langUnit.getPhoneNumber() == null) return null;

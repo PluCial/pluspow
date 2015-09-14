@@ -67,7 +67,7 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
         if(StringUtil.isEmpty(spotId)) throw new NoContentsException();
         
         
-        Spot spot = SpotService.getSpot(spotId);
+        Spot spot = SpotService.getSpotBaseLang(spotId);
 
         if(spot == null) throw new NoContentsException();
 

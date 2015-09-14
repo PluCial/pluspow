@@ -57,7 +57,7 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
         String lang = asString("lang");
         Spot spot = null;
         if(StringUtil.isEmpty(lang)) {
-            spot = SpotService.getSpot(spotId);
+            spot = SpotService.getSpotBaseLang(spotId);
         }else {
             spot = SpotService.getSpot(spotId, Lang.valueOf(lang));
         }

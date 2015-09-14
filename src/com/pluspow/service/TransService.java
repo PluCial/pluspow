@@ -39,6 +39,10 @@ public class TransService {
             throw new TransException("翻訳するコンテンツはありません。");
         }
         
+        if(baseLang == null || transLang == null || baseLang == transLang) {
+            throw new IllegalArgumentException("言語指定が正しくありません");
+        }
+        
         // 通常モード
         String transSrc = "";
         
