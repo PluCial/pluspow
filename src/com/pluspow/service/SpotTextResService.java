@@ -10,7 +10,7 @@ import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.dao.SpotTextResDao;
 import com.pluspow.enums.Lang;
 import com.pluspow.enums.TextResRole;
-import com.pluspow.exception.NoContentsException;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotTextRes;
 
@@ -28,7 +28,7 @@ public class SpotTextResService  extends TextResService{
      * @param role
      * @param content
      */
-    public static SpotTextRes add(
+    protected static SpotTextRes add(
             Transaction tx, 
             Spot spot,
             Lang lang, 
@@ -54,11 +54,10 @@ public class SpotTextResService  extends TextResService{
      * @param resourcesKey
      * @param content
      * @return
-     * @throws NoContentsException
+     * @throws ObjectNotExistException 
      */
-    public static SpotTextRes update(String resourcesKey, String content) throws NoContentsException {
+    public static SpotTextRes update(String resourcesKey, String content) throws ObjectNotExistException {
         SpotTextRes model = getResources(resourcesKey);
-        if(model == null) throw new NoContentsException("更新するコンテンツはありません");
 
         model.setStringToContent(content);
         dao.put(model);
@@ -70,9 +69,12 @@ public class SpotTextResService  extends TextResService{
      * リソースの取得
      * @param resourcesKey
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static SpotTextRes getResources(String resourcesKey) {
-        return dao.get(createKey(resourcesKey));
+    protected static SpotTextRes getResources(String resourcesKey) throws ObjectNotExistException {
+        SpotTextRes model = dao.get(createKey(resourcesKey));
+        if(model == null) throw new ObjectNotExistException();
+        return model;
     }
     
     /**
@@ -80,11 +82,12 @@ public class SpotTextResService  extends TextResService{
      * @param target(User or Item)
      * @param lang
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static List<SpotTextRes> getResourcesList(Spot spot, Lang lang) {
+    public static List<SpotTextRes> getResourcesList(Spot spot, Lang lang) throws ObjectNotExistException {
         
         List<SpotTextRes> list = dao.getResourcesList(spot, lang);
-        
+        if(list == null) throw new ObjectNotExistException();
         return list;
     }
     
@@ -92,13 +95,13 @@ public class SpotTextResService  extends TextResService{
      * リソースマップを取得
      * @param resourcesList
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static Map<String, SpotTextRes> getResourcesMap(Spot spot, Lang lang) {
+    protected static Map<String, SpotTextRes> getResourcesMap(Spot spot, Lang lang) throws ObjectNotExistException {
         
         Map<String,SpotTextRes> map = new HashMap<String,SpotTextRes>();
         
         List<SpotTextRes> list = getResourcesList(spot, lang);
-        if(list == null) return map;
         
         for (SpotTextRes i : list) map.put(i.getRole().toString(),i);
         

@@ -31,7 +31,7 @@ public class LangUnitService {
      * キーの作成
      * @return
      */
-    public static Key createKey(Spot spot) {
+    protected static Key createKey(Spot spot) {
         // キーを乱数にする
         UUID uniqueKey = UUID.randomUUID();
         return createKey(spot.getKey().getId() + "_" + uniqueKey.toString());

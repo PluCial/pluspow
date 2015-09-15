@@ -66,7 +66,7 @@ public abstract class BaseController extends Controller {
     protected Navigation handleError(Throwable error) throws Throwable {
         
         // 404エラー
-        if(error.getClass().equals(NoContentsException.class)) {
+        if(error instanceof NoContentsException) {
             return forward("/error404");
         }
         

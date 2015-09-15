@@ -21,7 +21,7 @@ public class TransCreditService {
      * @return
      * @throws TooManyException
      */
-    public static TransCredit add(Transaction tx, Spot spot) throws TooManyException {
+    protected static TransCredit add(Transaction tx, Spot spot) throws TooManyException {
         
         TransCredit transAcc = new TransCredit();
         transAcc.getSpotRef().setModel(spot);
@@ -39,14 +39,14 @@ public class TransCreditService {
      * @param transCost
      * @return
      */
-    public static void update(
+    protected static void update(
             Transaction tx,
             Spot spot, 
             int transCharCount, 
             double transCost) {
         
         // 対象スポットの翻訳貯蓄を取得・設定
-        TransCredit transAcc = TransCreditService.get(spot);
+        TransCredit transAcc = get(spot);
         
         transAcc.setTransCharCount(transAcc.getTransCharCount() + transCharCount);
         transAcc.setTransCost(transAcc.getTransCost() + transCost);

@@ -6,6 +6,7 @@ import org.slim3.datastore.Datastore;
 
 import com.google.appengine.api.datastore.Key;
 import com.pluspow.dao.ResetPasswordEntryDao;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.meta.ResetPasswordEntryMeta;
 import com.pluspow.model.Client;
 import com.pluspow.model.ResetPasswordEntry;
@@ -21,7 +22,7 @@ public class ResetPasswordEntryService {
      * @param model
      * @return
      */
-    public static ResetPasswordEntry put(ResetPasswordEntry model) {
+    protected static ResetPasswordEntry put(ResetPasswordEntry model) {
         
         dao.put(model);
         
@@ -47,7 +48,11 @@ public class ResetPasswordEntryService {
      * <pre>存在しない場合エラー</pre>
      */
     public static ResetPasswordEntry getByKey(String keyString) throws Exception {
-        return dao.get(createKey(keyString));
+        ResetPasswordEntry model =  dao.get(createKey(keyString));
+        
+        if(model == null) throw new ObjectNotExistException();
+        
+        return model;
     }
     
     // ----------------------------------------------------------------------
@@ -67,7 +72,7 @@ public class ResetPasswordEntryService {
      * キーの作成
      * @return
      */
-    public static Key createKey() {
+    private static Key createKey() {
         // キーを乱数にする
         UUID uniqueKey = UUID.randomUUID();
         return createKey(uniqueKey.toString());

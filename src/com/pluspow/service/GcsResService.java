@@ -20,6 +20,7 @@ import com.google.appengine.tools.cloudstorage.GcsService;
 import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
 import com.google.appengine.tools.cloudstorage.RetryParams;
 import com.pluspow.dao.GcsResDao;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.GcsRes;
 import com.pluspow.model.Spot;
 
@@ -36,9 +37,14 @@ public class GcsResService {
      * Gcsリソースの取得
      * @param gcsResKeyString
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static GcsRes getGcsRes(String gcsResKeyString) {
-        return dao.get(createKey(gcsResKeyString));
+    protected static GcsRes getGcsRes(String gcsResKeyString) throws ObjectNotExistException {
+        GcsRes model =  dao.getOrNull(createKey(gcsResKeyString));
+
+        if(model == null) throw new ObjectNotExistException();
+
+        return model;
     }
     
     /**
@@ -127,7 +133,7 @@ public class GcsResService {
      * @param keyString
      * @return
      */
-    public static Key createKey(String keyString) {
+    protected static Key createKey(String keyString) {
         return Datastore.createKey(GcsRes.class, keyString);
     }
     
@@ -136,7 +142,7 @@ public class GcsResService {
      * キーの作成
      * @return
      */
-    public static Key createKey(Spot spot) {
+    protected static Key createKey(Spot spot) {
         // キーを乱数にする
         UUID uniqueKey = UUID.randomUUID();
         return createKey(spot.getKey().getId() + "_" + uniqueKey.toString());

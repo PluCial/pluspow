@@ -6,12 +6,11 @@ import java.util.Map;
 
 import org.slim3.datastore.Datastore;
 
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.dao.ItemTextResDao;
 import com.pluspow.enums.Lang;
 import com.pluspow.enums.TextResRole;
-import com.pluspow.exception.NoContentsException;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Item;
 import com.pluspow.model.ItemTextRes;
 import com.pluspow.model.Spot;
@@ -31,7 +30,7 @@ public class ItemTextResService  extends TextResService{
      * @param role
      * @param content
      */
-    public static ItemTextRes add(
+    protected static ItemTextRes add(
             Transaction tx, 
             Spot spot,
             Item item,
@@ -59,11 +58,10 @@ public class ItemTextResService  extends TextResService{
      * @param resourcesKey
      * @param content
      * @return
-     * @throws NoContentsException
+     * @throws ObjectNotExistException 
      */
-    public static ItemTextRes update(String resourcesKey, String content) throws NoContentsException {
+    public static ItemTextRes update(String resourcesKey, String content) throws ObjectNotExistException {
         ItemTextRes model = getResources(resourcesKey);
-        if(model == null) throw new NoContentsException("更新するコンテンツはありません");
 
         model.setStringToContent(content);
         dao.put(model);
@@ -75,9 +73,14 @@ public class ItemTextResService  extends TextResService{
      * リソースの取得
      * @param resourcesKey
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static ItemTextRes getResources(String resourcesKey) {
-        return dao.get(createKey(resourcesKey));
+    protected static ItemTextRes getResources(String resourcesKey) throws ObjectNotExistException {
+        ItemTextRes model = dao.getOrNull(createKey(resourcesKey));
+        
+        if(model == null) throw new ObjectNotExistException();
+        
+        return model;
     }
     
     /**
@@ -85,10 +88,12 @@ public class ItemTextResService  extends TextResService{
      * @param target(User or Item)
      * @param lang
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static List<ItemTextRes> getResourcesList(Item item, Lang lang) {
+    protected static List<ItemTextRes> getResourcesList(Item item, Lang lang) throws ObjectNotExistException {
         
         List<ItemTextRes> list = dao.getResourcesList(item, lang);
+        if(list == null) throw new ObjectNotExistException();
         
         return list;
     }
@@ -97,13 +102,12 @@ public class ItemTextResService  extends TextResService{
      * リソースマップを取得
      * @param resourcesList
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static Map<String, ItemTextRes> getResourcesMap(Item item, Lang lang) {
+    protected static Map<String, ItemTextRes> getResourcesMap(Item item, Lang lang) throws ObjectNotExistException {
         
         Map<String,ItemTextRes> map = new HashMap<String,ItemTextRes>();
         List<ItemTextRes> list = getResourcesList(item, lang);
-        
-        if(list == null) return map;
         
         for (ItemTextRes i : list) map.put(i.getRole().toString(),i);
         
@@ -119,16 +123,5 @@ public class ItemTextResService  extends TextResService{
     public static ItemTextRes getResourcesByMap(Map<String, ItemTextRes> resourcesMap, TextResRole role) {
         if(resourcesMap == null) return null; 
         return resourcesMap.get(role.toString());
-    }
-    
-    /**
-     * アイテムリソースを全削除(用コミット)
-     * @param tx
-     * @param item
-     */
-    public static void deleteItemResourcesAll(Transaction tx, Item item) {
-        List<Key> keys = dao.getResourcesKeyList(item);
-
-        Datastore.delete(tx, keys);
     }
 }

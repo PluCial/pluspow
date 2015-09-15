@@ -5,7 +5,9 @@ import java.io.IOException;
 import com.google.code.geocoder.Geocoder;
 import com.google.code.geocoder.GeocoderRequestBuilder;
 import com.google.code.geocoder.model.GeocodeResponse;
+import com.google.code.geocoder.model.GeocoderLocationType;
 import com.google.code.geocoder.model.GeocoderRequest;
+import com.google.code.geocoder.model.GeocoderStatus;
 import com.pluspow.enums.Lang;
 import com.pluspow.exception.GeocodeStatusException;
 import com.pluspow.exception.GeocoderLocationTypeException;
@@ -18,16 +20,15 @@ public class GeoService {
     
     /**
      * 位置情報の取得
-     * @param prefecture
-     * @param city
      * @param address
+     * @param lang
      * @return
-     * @throws IOException
      * @throws GeocodeStatusException
-     * @throws GeocoderLocationTypeException
+     * @throws IOException
+     * @throws GeocoderLocationTypeException 
      */
     public static GeoModel getGeoModel(
-            String address, Lang lang) throws IOException, GeocodeStatusException, GeocoderLocationTypeException {
+            String address, Lang lang) throws GeocodeStatusException, IOException, GeocoderLocationTypeException {
         
         // Geocodeリクエスト
         GeocoderRequest geocoderRequest = new GeocoderRequestBuilder()
@@ -37,7 +38,18 @@ public class GeoService {
 
         GeocodeResponse geocoderResponse = geocoder.geocode(geocoderRequest);
         
-        return new GeoModel(geocoderResponse);
+        // ステータスがOKではない場合エラーを生成
+        if(geocoderResponse.getStatus() != GeocoderStatus.OK) {
+            throw new GeocodeStatusException(geocoderResponse.getStatus());
+        }
+        
+        // 不完全な住所の場合はエラー
+        GeoModel model = new GeoModel(geocoderResponse);
+        if(model.getLocationType() != GeocoderLocationType.ROOFTOP) {
+            throw new GeocoderLocationTypeException();
+        }
+        
+        return model;
     }
 
 }

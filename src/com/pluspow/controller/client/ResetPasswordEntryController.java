@@ -4,12 +4,13 @@ import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Validators;
 
 import com.pluspow.enums.EntryType;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Client;
 import com.pluspow.model.ResetPasswordEntry;
 import com.pluspow.service.ClientService;
 import com.pluspow.service.EMailService;
 import com.pluspow.service.ResetPasswordEntryService;
-import com.pluspow.validator.NoContentsValidator;
+import com.pluspow.validator.NGValidator;
 
 public class ResetPasswordEntryController extends BaseController {
 
@@ -22,9 +23,17 @@ public class ResetPasswordEntryController extends BaseController {
         
         String email = asString("email");
         
-        Client client = ClientService.get(email);
-        
-        if (!validate(client)) {
+        Client client = null;
+        try {
+            client = ClientService.get(email);
+            
+        } catch (ObjectNotExistException e) {
+            // Email未登録の場合
+            Validators v = new Validators(request);
+            v.add("email", 
+                new NGValidator("このメールアドレスは登録されていません。"));
+            v.validate();
+            
             return forward("/client/resetPassword");
         }
         
@@ -55,20 +64,4 @@ public class ResetPasswordEntryController extends BaseController {
 
         return v.validate();
     }
-    
-    /**
-     * バリデーション
-     * @return
-     */
-    private boolean validate(Client client) {
-        Validators v = new Validators(request);
-
-        // メール
-        v.add("email", 
-            new NoContentsValidator(client, "このメールアドレスは登録されていません。"));
-
-        return v.validate();
-    }
-    
-    // NoContentsValidator
 }

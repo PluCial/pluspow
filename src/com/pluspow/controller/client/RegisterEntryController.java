@@ -4,13 +4,14 @@ import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Validators;
 
 import com.pluspow.enums.EntryType;
-import com.pluspow.model.Client;
+import com.pluspow.exception.ArgumentException;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.SignupEntry;
 import com.pluspow.service.ClientService;
 import com.pluspow.service.EMailService;
 import com.pluspow.service.SignupEntryService;
+import com.pluspow.validator.NGValidator;
 import com.pluspow.validator.PasswordConfirmationValidator;
-import com.pluspow.validator.TooManyValidator;
 
 public class RegisterEntryController extends BaseController {
 
@@ -83,20 +84,25 @@ public class RegisterEntryController extends BaseController {
     /**
      * バリデーション
      * @return
+     * @throws ArgumentException 
      */
-    private boolean validate(String email, String password) {
+    private boolean validate(String email, String password) throws ArgumentException {
         Validators v = new Validators(request);
-        
-        Client client = ClientService.get(email);
 
         // パスワード と 確認用パスワードの相関チェック
         v.add("passwordConfirmation",
             new PasswordConfirmationValidator(password, "入力したパスワードが異なります。<br />もう一度確認用パスワードをご入力ください。")
              );
         
-        // メール
-        v.add("email", 
-            new TooManyValidator(client, "このメールアドレスは既に利用されています。<br />ログインをする場合はログイン画面をご利用ください。"));
+        try {
+            // メールの重複チェック
+            ClientService.get(email);
+            
+            // 重複エラーを生成
+            v.add("email", 
+                new NGValidator("このメールアドレスは既に利用されています。<br />ログインをする場合はログイン画面をご利用ください。"));
+
+        } catch (ObjectNotExistException e) {}
 
         return v.validate();
     }

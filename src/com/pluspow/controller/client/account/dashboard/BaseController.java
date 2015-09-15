@@ -5,6 +5,7 @@ import org.slim3.util.StringUtil;
 
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.exception.NoLoginException;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.exception.PermissionException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
@@ -65,13 +66,14 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
 
         String spotId = asString("spotId");
         if(StringUtil.isEmpty(spotId)) throw new NoContentsException();
-        
-        
-        Spot spot = SpotService.getSpotBaseLang(spotId);
 
-        if(spot == null) throw new NoContentsException();
-
-        return spot;
+        try {
+            Spot spot = SpotService.getSpotBaseLang(spotId);
+            return spot;
+            
+        } catch (ObjectNotExistException e) {
+            throw new NoContentsException();
+        }
     }
 
     /**

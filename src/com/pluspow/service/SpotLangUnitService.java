@@ -12,6 +12,8 @@ import com.pluspow.dao.SpotLangUnitDao;
 import com.pluspow.enums.Lang;
 import com.pluspow.enums.TransStatus;
 import com.pluspow.enums.TransType;
+import com.pluspow.exception.ArgumentException;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.exception.TooManyException;
 import com.pluspow.model.GeoModel;
 import com.pluspow.model.Spot;
@@ -28,18 +30,28 @@ public class SpotLangUnitService extends LangUnitService {
      * @param spot
      * @param lang
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static SpotLangUnit get(Spot spot, Lang lang) {
-        return dao.getLangInfo(spot, lang);
+    public static SpotLangUnit get(Spot spot, Lang lang) throws ObjectNotExistException {
+        SpotLangUnit model = dao.getLangInfo(spot, lang);
+        
+        if(model == null) throw new ObjectNotExistException();
+        
+        return model;
     }
     
     /**
      * リストの取得
      * @param spot
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static List<SpotLangUnit> getList(Spot spot) {
-        return dao.getList(spot);
+    public static List<SpotLangUnit> getList(Spot spot) throws ObjectNotExistException {
+        List<SpotLangUnit> list = dao.getList(spot);
+        
+        if(list == null) throw new ObjectNotExistException();
+        
+        return list;
     }
     
     /**
@@ -47,14 +59,13 @@ public class SpotLangUnitService extends LangUnitService {
      * @param spot
      * @param invalid
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static List<SpotLangUnit> getList(Spot spot, boolean invalid) {
+    public static List<SpotLangUnit> getList(Spot spot, boolean invalid) throws ObjectNotExistException {
+
+        List<SpotLangUnit> allUnitList = getList(spot);
         
         List<SpotLangUnit> unitList = new ArrayList<SpotLangUnit>();
-        
-        List<SpotLangUnit> allUnitList = getList(spot);
-        if(allUnitList == null) return unitList;
-        
         for(SpotLangUnit unit: allUnitList) {
             if(unit.isInvalid() == invalid) unitList.add(unit);
         }
@@ -102,9 +113,14 @@ public class SpotLangUnitService extends LangUnitService {
      * @return
      * @throws TooManyException 
      */
-    public static SpotLangUnit addBaseLang(Transaction tx, Spot spot, SpotLangUnit info) throws TooManyException {
-        
-        if(get(spot, info.getLang()) != null) throw new TooManyException();
+    protected static SpotLangUnit addBaseLang(Transaction tx, Spot spot, SpotLangUnit info) throws TooManyException {
+
+        try {
+            // 既に存在した場合はエラー
+            get(spot, info.getLang());
+            throw new TooManyException();
+            
+        } catch (ObjectNotExistException e) {}
         
         // キーの設定
         info.setKey(createKey(spot));
@@ -126,20 +142,27 @@ public class SpotLangUnitService extends LangUnitService {
      * @param transType
      * @param trans
      * @return
+     * @throws ArgumentException 
      * @throws TooManyException
      */
-    public static SpotLangUnit add(
+    protected static SpotLangUnit add(
             Transaction tx, 
             Spot spot, 
             Lang lang, 
             TransType transType, 
             TransStatus trans,
             GeoModel geoModel
-            ) throws TooManyException {
+            ) throws ArgumentException, TooManyException {
         
-        if(get(spot, lang) != null) throw new TooManyException();
+        // baseLangの場合はエラー
+        if(spot.getBaseLang() == lang) throw new ArgumentException();
         
-        if(spot.getBaseLang() == lang) throw new IllegalArgumentException();
+        try {
+            // 既に存在した場合はエラー
+            get(spot, lang);
+            throw new TooManyException();
+            
+        } catch (ObjectNotExistException e) {}
         
         SpotLangUnit info =  getNewModel(spot, lang, spot.getPhoneNumber(), geoModel);
         
@@ -151,7 +174,7 @@ public class SpotLangUnitService extends LangUnitService {
         
         // 保存
         Datastore.put(tx, info);
-        
+
         return info;
     }
     
@@ -160,8 +183,9 @@ public class SpotLangUnitService extends LangUnitService {
      * @param spot
      * @param lang
      * @param displayFlg
+     * @throws ObjectNotExistException 
      */
-    public static void changePhoneDisplayFlg(Spot spot, Lang lang, boolean displayFlg) {
+    public static void changePhoneDisplayFlg(Spot spot, Lang lang, boolean displayFlg) throws ObjectNotExistException {
         // 取得
         SpotLangUnit info = get(spot, lang);
         

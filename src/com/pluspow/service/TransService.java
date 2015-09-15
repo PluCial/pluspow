@@ -12,35 +12,31 @@ import com.google.api.services.translate.model.TranslationsListResponse;
 import com.google.api.services.translate.model.TranslationsResource;
 import com.pluspow.App;
 import com.pluspow.enums.Lang;
-import com.pluspow.exception.TransException;
+import com.pluspow.exception.ArgumentException;
 import com.pluspow.model.TextRes;
 import com.pluspow.utils.Utils;
 
 public class TransService {
-//    
-//    /** History DAO */
-//    private static final TransHistoryDao historyDao = new TransHistoryDao();
-//    
-//    /** TransAccumulationDao DAO */
-//    private static final TransHistoryDao accDao = new TransHistoryDao();
     
     /**
      * 機械翻訳
      * @param contents
      * @return
+     * @throws ArgumentException 
+     * @throws IOException 
      * @throws Exception 
      */
-    public static String machineTrans(
+    protected static String machineTrans(
             Lang baseLang,
             Lang transLang, 
-            List<? extends TextRes> transContentsList) throws Exception {
+            List<? extends TextRes> transContentsList) throws ArgumentException, IOException {
         
         if(transContentsList == null || transContentsList.size() <= 0) {
-            throw new TransException("翻訳するコンテンツはありません。");
+            throw new ArgumentException("翻訳するコンテンツはありません。");
         }
         
         if(baseLang == null || transLang == null || baseLang == transLang) {
-            throw new IllegalArgumentException("言語指定が正しくありません");
+            throw new ArgumentException("言語指定が正しくありません");
         }
         
         // 通常モード
@@ -70,7 +66,7 @@ public class TransService {
      * @return
      * @throws IOException 
      */
-    private static String googleTrans(String source, Lang baseLang, Lang targetLang) throws Exception {
+    private static String googleTrans(String source, Lang baseLang, Lang targetLang) throws IOException {
         
         // 翻訳Translate の生成
         Translate translate = new Translate.Builder(new NetHttpTransport(), new JacksonFactory(), null)

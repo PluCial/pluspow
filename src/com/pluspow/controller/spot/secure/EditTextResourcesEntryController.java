@@ -3,6 +3,7 @@ package com.pluspow.controller.spot.secure;
 import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Validators;
 
+import com.pluspow.exception.ArgumentException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
 import com.pluspow.model.TextRes;
@@ -38,7 +39,7 @@ public class EditTextResourcesEntryController extends BaseController {
             ItemTextResService.update(resourcesKey, content);
             
         }else {
-            throw new IllegalArgumentException();
+            throw new ArgumentException();
         }
         
         requestScope("status", "OK");

@@ -15,7 +15,7 @@ import com.google.appengine.tools.cloudstorage.GcsFilename;
 import com.pluspow.dao.ItemGcsResDao;
 import com.pluspow.enums.GcsResRole;
 import com.pluspow.enums.Lang;
-import com.pluspow.exception.NoContentsException;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Item;
 import com.pluspow.model.ItemGcsRes;
 import com.pluspow.model.Spot;
@@ -42,7 +42,7 @@ public class ItemGcsResService extends GcsResService {
      * @return
      * @throws IOException
      */
-    public static ItemGcsRes addImageResources(
+    protected static ItemGcsRes addImageResources(
             Transaction tx, 
             Spot spot, 
             Item item,
@@ -98,9 +98,9 @@ public class ItemGcsResService extends GcsResService {
      * @param bottomY
      * @return
      * @throws IOException
-     * @throws NoContentsException
+     * @throws ObjectNotExistException 
      */
-    public static ItemGcsRes updateImageResources(
+    protected static ItemGcsRes updateImageResources(
             Transaction tx, 
             Spot spot,
             Item item, 
@@ -109,12 +109,11 @@ public class ItemGcsResService extends GcsResService {
             int leftX, 
             int topY, 
             int rightX,
-            int bottomY) throws IOException, NoContentsException {
+            int bottomY) throws IOException, ObjectNotExistException {
         
-        if(StringUtil.isEmpty(resourcesKey)) throw new NoContentsException("更新するコンテンツはありません");
+        if(StringUtil.isEmpty(resourcesKey)) throw new ObjectNotExistException("更新するコンテンツはありません");
         
         ItemGcsRes oldModel = getResources(resourcesKey);
-        if(oldModel == null) throw new NoContentsException("更新するコンテンツはありません");
         
         // 古いモデルを無効にする
         oldModel.setInvalid(true);
@@ -130,10 +129,15 @@ public class ItemGcsResService extends GcsResService {
      * @param item
      * @param lang
      */
-    public static void replicationOtherLangRes(Transaction tx, Spot spot, Item item, Lang lang) {
-        List<ItemGcsRes> resList = getResourcesList(item);
-        
-        if(resList == null) return;
+    protected static void replicationOtherLangRes(Transaction tx, Spot spot, Item item, Lang lang) {
+        List<ItemGcsRes> resList;
+        try {
+            resList = getResourcesList(item);
+            
+        } catch (ObjectNotExistException e) {
+            // 複製するものがない場合は何も処理せずに終了
+            return;
+        }
         
         for(ItemGcsRes res: resList) {
             res.setKey(createKey(spot));
@@ -147,31 +151,28 @@ public class ItemGcsResService extends GcsResService {
      * リソースの取得
      * @param resourcesKey
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static ItemGcsRes getResources(String resourcesKey) {
-        return dao.get(createKey(resourcesKey));
+    private static ItemGcsRes getResources(String resourcesKey) throws ObjectNotExistException {
+        ItemGcsRes model =  dao.get(createKey(resourcesKey));
+        
+        if(model == null) throw new ObjectNotExistException();
+
+        return model;
     }
     
     /**
      * リソースリストを取得
      * @param target
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static List<ItemGcsRes> getResourcesList(Item item) {
+    protected static List<ItemGcsRes> getResourcesList(Item item) throws ObjectNotExistException {
         List<ItemGcsRes> list = dao.getResourcesList(item);
         
+        if(list == null) throw new ObjectNotExistException();
+        
         return list;
-    }
-    
-    /**
-     * アイテムリソースを全削除(用コミット)
-     * @param tx
-     * @param item
-     */
-    public static void deleteItemResourcesAll(Transaction tx, Item item) {
-        List<Key> keys = dao.getResourcesKeyList(item);
-
-        Datastore.delete(tx, keys);
     }
 
 }

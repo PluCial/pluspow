@@ -6,6 +6,7 @@ import com.pluspow.enums.Lang;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
 import com.pluspow.service.SpotService;
+import com.pluspow.utils.PathUtils;
 
 public class SetSpotLangInvalidController extends BaseController {
 
@@ -16,6 +17,6 @@ public class SetSpotLangInvalidController extends BaseController {
         
         SpotService.setInvalid(spot, lang, invalid);
 
-        return redirect("/+" + spot.getSpotId() + "/l-" + spot.getBaseLang().toString() + "/");
+        return redirect(PathUtils.spotRelativePath(spot, spot.getBaseLang()));
     }
 }

@@ -17,6 +17,7 @@ import com.pluspow.enums.Lang;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.enums.TransStatus;
 import com.pluspow.enums.TransType;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.exception.TooManyException;
 import com.pluspow.exception.TransException;
 import com.pluspow.exception.UnsuitableException;
@@ -41,6 +42,7 @@ public class ItemService {
      * @param dutyFree
      * @return
      * @throws IOException 
+     * @throws ObjectNotExistException 
      */
     public static Item add(
             Spot spot, 
@@ -49,7 +51,7 @@ public class ItemService {
             boolean dutyFree,
             String name, 
             String detail,
-            FileItem fileItem, int leftX, int topY, int width, int height) throws IOException {
+            FileItem fileItem, int leftX, int topY, int width, int height) throws IOException, ObjectNotExistException {
         
         // ---------------------------------------------------
         // アイテムの設定
@@ -224,11 +226,12 @@ public class ItemService {
     }
     
     /**
-     * スポットの付属情報の設定
+     * アイテムの付属情報の設定
      * @param spot
      * @param lang
+     * @throws ObjectNotExistException 
      */
-    public static void setItemInfo(Spot spot, Item item, Lang lang) {
+    public static void setItemInfo(Spot spot, Item item, Lang lang) throws ObjectNotExistException {
         
         item.setTextResources(ItemTextResService.getResourcesMap(item, lang));
         
@@ -241,11 +244,11 @@ public class ItemService {
      * @param key
      * @param lang
      * @return
-     * @throws UnsuitableException 
+     * @throws ObjectNotExistException 
      */
-    public static Item getByKey(Spot spot, String key, Lang lang) throws UnsuitableException {
+    public static Item getByKey(Spot spot, String key, Lang lang) throws ObjectNotExistException {
         
-        if(key == null || lang == null) throw new UnsuitableException();
+        if(key == null || lang == null) throw new ObjectNotExistException();
         
         Item model = dao.get(createKey(key));
 
@@ -272,16 +275,19 @@ public class ItemService {
      * @param spot
      * @param lang
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static List<Item> getItemList(Spot spot, Lang lang) {
+    public static List<Item> getItemList(Spot spot, Lang lang) throws ObjectNotExistException {
         
         List<Item> itemList = dao.getItemList(spot, lang);
-        
-        if(itemList == null) return null;
+        if(itemList == null) throw new ObjectNotExistException();
         
         // 詳細の追加
         for(Item item: itemList) {
-            setItemInfo(spot, item, lang);
+            try {
+                setItemInfo(spot, item, lang);
+            } catch (ObjectNotExistException e) {
+            }
         }
         
         return itemList;

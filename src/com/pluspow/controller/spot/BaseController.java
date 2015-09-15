@@ -6,6 +6,7 @@ import org.slim3.util.StringUtil;
 
 import com.pluspow.enums.Lang;
 import com.pluspow.exception.NoContentsException;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
 import com.pluspow.service.SpotService;
@@ -15,45 +16,48 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
     @Override
     protected Navigation run() throws Exception {
         
-        // -------------------------------------
-        // スポットモデルの取得（付属情報なし）
-        // -------------------------------------
-        Spot spot = getSpotModelOnly();
+        String spotId = asString("spotId");
+        if(StringUtil.isEmpty(spotId)) {
+            throw new NoContentsException();
+        }
+
+        Spot spot = null;
+        Lang lang = null;
         
-        // -------------------------------------
-        // 言語の指定がない場合はベース言語にリダイレクトする
-        // -------------------------------------
         String langString = asString("lang");
-        if(StringUtil.isEmpty(langString)) {
-            return redirect("/+" + spot.getSpotId() + "/l-" + spot.getBaseLang().getLangKey() + "/");
+        try {
+            if(StringUtil.isEmpty(langString)) {
+                // -------------------------------------
+                // 言語の指定がない場合はベース言語にリダイレクトする
+                // -------------------------------------
+                spot = SpotService.getSpotBaseLang(spotId);
+                return redirect("/+" + spot.getSpotId() + "/l-" + spot.getBaseLang().getLangKey() + "/");
+
+            }else {
+                // -------------------------------------
+                // スポットと言語を取得
+                // -------------------------------------
+                try {
+                    lang = Lang.valueOf(langString);
+                    spot = SpotService.getSpot(spotId, lang);
+
+                }catch(IllegalArgumentException e) {
+                    // 存在しない言語パラメーターの場合
+                    throw new NoContentsException();
+
+                }
+            }
+            
+        }catch(ObjectNotExistException e) {
+            // SPOTが存在しない場合
+            throw new NoContentsException();
         }
         
         // -------------------------------------
         //言語の取得
         // -------------------------------------
-        Lang lang = null;
-        try {
-            lang = Lang.valueOf(langString);
-            requestScope("lang", lang);
-
-        }catch(IllegalArgumentException e) {
-
-            if(langString.equals("add")) {
-
-                // 言語の追加処理へ
-                return redirect("/spot/secure/transSelectLang?spotId=" + spot.getSpotId());
-                
-            }else {
-                throw new NoContentsException();
-            }
-        }
-        
-        // -------------------------------------
-        // スポット情報を取得
-        // -------------------------------------
-        spot = SpotService.getSpot(spot.getSpotId(), lang);
-        if(spot == null) throw new NoContentsException();
         requestScope("spot", spot);
+        requestScope("lang", lang);
         
         // -------------------------------------
         // リクエストスコープの基本設定
@@ -79,29 +83,6 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
         }catch(Exception e) {
             return execute(spot, lang, null, false, false);
         }
-    }
-    
-    /**
-     * 対象スポットの取得
-     * 
-     * @return
-     * @throws NoContentsException
-     */
-    public Spot getSpotModelOnly() throws NoContentsException {
-
-        String spotId = asString("spotId");
-        
-        // spot Id がNullの場合
-        if(StringUtil.isEmpty(spotId)) {
-            throw new NoContentsException();
-        }
-        
-        // スポットの取得
-        Spot spot = SpotService.getSpotModelOnly(spotId);
-
-        if(spot == null) throw new NoContentsException();
-
-        return spot;
     }
 
     /**

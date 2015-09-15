@@ -6,6 +6,7 @@ import java.util.Date;
 import com.pluspow.dao.SpotPayPlanDao;
 import com.pluspow.enums.ServicePlan;
 import com.pluspow.exception.ChangePlanException;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotPayPlan;
 
@@ -20,9 +21,12 @@ public class SpotPayPlanService {
      * @param spot
      * @param plan
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static SpotPayPlan getPlan(Spot spot) {
-        return dao.getPlan(spot);
+    public static SpotPayPlan getPlan(Spot spot) throws ObjectNotExistException {
+        SpotPayPlan model =  dao.getPlan(spot);
+        if(model == null) throw new ObjectNotExistException();
+        return model;
     }
     
     /**
@@ -33,10 +37,13 @@ public class SpotPayPlanService {
      */
     public static SpotPayPlan startStandardPlan(Spot spot) throws ChangePlanException {
 
-        SpotPayPlan plan = dao.getPlan(spot);
-        
-        // 有効なものが既に存在している場合はエラー
-        if(plan != null) throw new ChangePlanException();
+        SpotPayPlan plan = null;
+        try {
+            plan = getPlan(spot);
+            // 有効なものが既に存在している場合はエラー
+            throw new ChangePlanException();
+            
+        } catch (ObjectNotExistException e) {}
         
         plan = new SpotPayPlan();
         plan.setPlan(ServicePlan.STANDARD);
@@ -57,10 +64,14 @@ public class SpotPayPlanService {
      */
     public static SpotPayPlan startPremiumPlan(Spot spot) throws ChangePlanException {
         
-        SpotPayPlan plan = dao.getPlan(spot);
-        
-        // 有効なものが既に存在している場合はエラー
-        if(plan != null) throw new ChangePlanException();
+
+        SpotPayPlan plan = null;
+        try {
+            plan = getPlan(spot);
+            // 有効なものが既に存在している場合はエラー
+            throw new ChangePlanException();
+            
+        } catch (ObjectNotExistException e) {}
         
         plan = new SpotPayPlan();
         plan.setPlan(ServicePlan.PREMIUM);

@@ -2,14 +2,15 @@ package com.pluspow.controller.client.account;
 
 import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Validators;
+
+import com.pluspow.exception.GeocoderLocationTypeException;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Client;
 import com.pluspow.model.GeoModel;
 import com.pluspow.model.Spot;
 import com.pluspow.service.GeoService;
 import com.pluspow.service.SpotService;
-import com.pluspow.validator.GeoAddressValidator;
-import com.pluspow.validator.GeoStatusValidator;
-import com.pluspow.validator.TooManyValidator;
+import com.pluspow.validator.NGValidator;
 
 public class AddSpotStep1EntryController extends BaseController {
 
@@ -32,16 +33,40 @@ public class AddSpotStep1EntryController extends BaseController {
         // ------------------------------------------
         // spotId重複チェック
         // ------------------------------------------
-        Spot spot = SpotService.getSpotModelOnly(spotId);
-        if (!validate(spot)) {
+        Spot spot = null;
+        try {
+            spot = SpotService.getSpotModelOnly(spotId);
+            
+            // Spot Id 重複エラー
+            Validators v = new Validators(request);
+            v.add("spotId", new NGValidator("このスポットIDは既に利用されています。"));
+            v.validate();
             return forward("/client/account/addSpotStep1.jsp");
-        }
+            
+        } catch (ObjectNotExistException e) {}
+        
         
         // ------------------------------------------
         // 住所の整合性チェック
         // ------------------------------------------
-        GeoModel geoModel = GeoService.getGeoModel(address, client.getLang());
-        if (!validate(geoModel)) {
+        GeoModel geoModel = null;
+        try {
+            geoModel = GeoService.getGeoModel(address, client.getLang());
+            
+        } catch (Exception e) {
+            Validators v = new Validators(request);
+            
+            if(e instanceof GeocoderLocationTypeException) {
+                v.add("address",
+                    new NGValidator("入力した住所が正しくないか、もしくは完全な住所ではありません。"));
+                
+            }else {
+                v.add("address",
+                    new NGValidator("住所の確認に失敗しました。しばらく立ってから再度実行してください。"));
+            }
+            
+            v.validate();
+            
             return forward("/client/account/addSpotStep1.jsp");
         }
         
@@ -94,33 +119,4 @@ public class AddSpotStep1EntryController extends BaseController {
         
         return v.validate();
     }
-    
-    /**
-     * スポット重複バリデーション
-     * @return
-     */
-   private boolean validate(Spot spot) {
-       Validators v = new Validators(request);
-       
-       // spotId
-       v.add("spotId", v.required(), new TooManyValidator(spot, "このスポットIDは既に利用されています。"));
-       
-       return v.validate();
-   }
-   
-   /**
-    * 住所バリデーション
-    * @return
-    */
-   private boolean validate(GeoModel geoModel) {
-       Validators v = new Validators(request);
-
-       // 住所
-       v.add("address",
-           new GeoStatusValidator(geoModel, "住所の確認に失敗しました。しばらく立ってから再度実行してください。"),
-           new GeoAddressValidator(geoModel, "入力した住所が正しくないか、もしくは完全な住所ではありません。")
-       );
-
-       return v.validate();
-   }
 }

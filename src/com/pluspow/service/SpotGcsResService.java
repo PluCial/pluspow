@@ -18,6 +18,7 @@ import com.pluspow.dao.SpotGcsResDao;
 import com.pluspow.enums.Lang;
 import com.pluspow.enums.GcsResRole;
 import com.pluspow.exception.NoContentsException;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotGcsRes;
 
@@ -97,6 +98,7 @@ public class SpotGcsResService extends GcsResService {
      * @return
      * @throws IOException
      * @throws NoContentsException
+     * @throws ObjectNotExistException 
      */
     public static SpotGcsRes updateImageRes(
             Spot spot, 
@@ -105,12 +107,11 @@ public class SpotGcsResService extends GcsResService {
             int leftX, 
             int topY, 
             int rightX,
-            int bottomY) throws IOException, NoContentsException {
+            int bottomY) throws IOException, NoContentsException, ObjectNotExistException {
         
         if(StringUtil.isEmpty(resourcesKey)) throw new NoContentsException("更新するコンテンツはありません");
         
         SpotGcsRes oldModel = getResources(resourcesKey);
-        if(oldModel == null) throw new NoContentsException("更新するコンテンツはありません");
         
         // 古いモデルを無効にする
         oldModel.setInvalid(true);
@@ -125,10 +126,14 @@ public class SpotGcsResService extends GcsResService {
      * @param spot
      * @param lang
      */
-    public static void replicationOtherLangRes(Transaction tx, Spot spot, Lang lang) {
-        List<SpotGcsRes> resList = getResourcesList(spot);
-        
-        if(resList == null) return;
+    protected static void replicationOtherLangRes(Transaction tx, Spot spot, Lang lang) {
+        List<SpotGcsRes> resList;
+        try {
+            resList = getResourcesList(spot);
+        } catch (ObjectNotExistException e) {
+            // 更新するものがなければそのまま終了
+            return;
+        }
         
         for(SpotGcsRes res: resList) {
             res.setKey(createKey(spot));
@@ -142,9 +147,12 @@ public class SpotGcsResService extends GcsResService {
      * リソースの取得
      * @param resourcesKey
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static SpotGcsRes getResources(String resourcesKey) {
-        return dao.get(createKey(resourcesKey));
+    protected static SpotGcsRes getResources(String resourcesKey) throws ObjectNotExistException {
+        SpotGcsRes model =  dao.getOrNull(createKey(resourcesKey));
+        if(model == null) throw new ObjectNotExistException();
+        return model;
     }
     
     /**
@@ -152,19 +160,24 @@ public class SpotGcsResService extends GcsResService {
      * @param spot
      * @param role
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static SpotGcsRes getResources(Spot spot, GcsResRole role) {
-        return dao.getResources(spot, role);
+    public static SpotGcsRes getResources(Spot spot, GcsResRole role) throws ObjectNotExistException {
+        SpotGcsRes model =  dao.getResources(spot, role);
+        
+        if(model == null) throw new ObjectNotExistException();
+        return model;
     }
     
     /**
      * リソースリストを取得
      * @param target
      * @return
+     * @throws ObjectNotExistException 
      */
-    private static List<SpotGcsRes> getResourcesList(Spot spot) {
+    protected static List<SpotGcsRes> getResourcesList(Spot spot) throws ObjectNotExistException {
         List<SpotGcsRes> list = dao.getResourcesList(spot);
-        
+        if(list == null) throw new ObjectNotExistException();
         return list;
     }
     
@@ -172,13 +185,13 @@ public class SpotGcsResService extends GcsResService {
      * リソースマップを取得
      * @param resourcesList
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static Map<String, SpotGcsRes> getResourcesMap(Spot spot) {
+    protected static Map<String, SpotGcsRes> getResourcesMap(Spot spot) throws ObjectNotExistException {
         
         Map<String,SpotGcsRes> map = new HashMap<String,SpotGcsRes>();
         
         List<SpotGcsRes> list = getResourcesList(spot);
-        if(list == null) return map;
         
         for (SpotGcsRes i : list) map.put(i.getRole().toString(),i);
         

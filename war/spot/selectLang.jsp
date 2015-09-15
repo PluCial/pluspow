@@ -57,7 +57,7 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 	<div class="modal-footer">
 		<div class="pull-right">
 			<%if(spot.getLangUnit().getLang() != spot.getBaseLang()) {%>
-			<a href="/spot/secure/transSelectLang?spotId=<%=spot.getSpotId() %>" class="btn btn-default btn-sm"><i class="fa fa-language"></i> 再翻訳</a>
+			<a href="/spot/secure/transEntry?spotId=<%=spot.getSpotId() %>&objectType=<%=ObjectType.SPOT %>&transLang=<%=spot.getLangUnit().getLang().getLangKey() %>" class="btn btn-default btn-sm"><i class="fa fa-language"></i> 再翻訳</a>
 			<%} %>
 			
 			<a href="/spot/secure/transSelectLang?spotId=<%=spot.getSpotId() %>" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> 言語を追加</a>

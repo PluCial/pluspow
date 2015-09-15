@@ -7,6 +7,7 @@ import org.slim3.datastore.Datastore;
 import com.google.appengine.api.datastore.Email;
 import com.google.appengine.api.datastore.Key;
 import com.pluspow.dao.SignupEntryDao;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.meta.SignupEntryMeta;
 import com.pluspow.model.Entry;
 import com.pluspow.model.SignupEntry;
@@ -49,7 +50,7 @@ public class SignupEntryService {
      * エントリーの終了
      * @param entry
      */
-    public static void entryBeEnd(SignupEntry entry) {
+    protected static void entryBeEnd(SignupEntry entry) {
         entry.setInvalid(true);
         put(entry);
     }
@@ -57,9 +58,14 @@ public class SignupEntryService {
     /**
      * キーから取得
      * <pre>存在しない場合エラー</pre>
+     * @throws ObjectNotExistException 
      */
-    public static SignupEntry getByKey(String keyString) throws Exception {
-        return dao.get(createKey(keyString));
+    public static SignupEntry getByKey(String keyString) throws ObjectNotExistException {
+        SignupEntry model =  dao.getOrNull(createKey(keyString));
+        
+        if(model == null) throw new ObjectNotExistException();
+        
+        return model;
     }
     
     /**
@@ -67,7 +73,7 @@ public class SignupEntryService {
      * @param keyString
      */
     public static void delete(Entry entry) {
-        dao.delete(createKey(entry.getKey().getName()));
+        dao.delete(entry.getKey());
     }
     
     // ----------------------------------------------------------------------
@@ -78,7 +84,7 @@ public class SignupEntryService {
      * @param keyString
      * @return
      */
-    public static Key createKey(String keyString) {
+    private static Key createKey(String keyString) {
         return Datastore.createKey(SignupEntryMeta.get(), keyString);
     }
     
@@ -87,7 +93,7 @@ public class SignupEntryService {
      * キーの作成
      * @return
      */
-    public static Key createKey() {
+    private static Key createKey() {
         // キーを乱数にする
         UUID uniqueKey = UUID.randomUUID();
         return createKey(uniqueKey.toString());

@@ -10,7 +10,8 @@ import com.google.appengine.api.datastore.Email;
 import com.google.appengine.api.datastore.Key;
 import com.pluspow.dao.ClientDao;
 import com.pluspow.enums.Lang;
-import com.pluspow.exception.UnsuitableException;
+import com.pluspow.exception.ArgumentException;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Client;
 
 
@@ -23,9 +24,10 @@ public class ClientService {
      * PUT
      * @param model
      * @return
+     * @throws ArgumentException 
      */
-    public static Client put(Client model) {
-        
+    public static Client put(Client model) throws ArgumentException {
+        if(model == null) throw new ArgumentException();
         dao.put(model);
         
         return model;
@@ -34,10 +36,17 @@ public class ClientService {
     /**
      * Get
      * @return
+     * @throws ObjectNotExistException 
+     * @throws ArgumentException 
      */
-    public static Client get(String email) {
+    public static Client get(String email) throws ObjectNotExistException, ArgumentException {
+        if(StringUtil.isEmpty(email)) throw new ArgumentException();
         
-        return dao.get(email);
+        Client model =  dao.get(email);
+        
+        if(model == null) throw new ObjectNotExistException();
+        
+        return model;
     }
     
     /**
@@ -64,25 +73,25 @@ public class ClientService {
      * @param password
      * @param name
      * @return
-     * @throws UnsuitableException
+     * @throws ArgumentException
      * @throws NoSuchAlgorithmException 
      */
-    public static Client add(String name, String email, String password, Lang lang) throws UnsuitableException, NoSuchAlgorithmException {
+    public static Client add(String name, String email, String password, Lang lang) throws ArgumentException, NoSuchAlgorithmException {
         
         if(StringUtil.isEmpty(email)
                 || StringUtil.isEmpty(password)
                 || StringUtil.isEmpty(name)) {
-            throw new UnsuitableException("登録情報が不十分です");
+            throw new ArgumentException("登録情報が不十分です");
         }
         
         // 既に存在しているかチェック
-        if(get(email) != null) {
-            throw new UnsuitableException("このメールアドレスは既に登録されています。");
-        }
+        try {
+            get(email);
+            throw new ArgumentException("このメールアドレスは既に登録されています。");
+        } catch (ObjectNotExistException e) {}
         
         Key key = createKey();
-        
-        
+
         Client model = new Client();
         model.setKey(key);
         model.setName(name);
@@ -99,8 +108,12 @@ public class ClientService {
      * @param password
      * @return
      * @throws NoSuchAlgorithmException 
+     * @throws ArgumentException 
      */
-    public static void updatePassword(Client model, String password) throws NoSuchAlgorithmException {
+    public static void updatePassword(Client model, String password) throws NoSuchAlgorithmException, ArgumentException {
+        
+        if(model == null || StringUtil.isEmpty(password)) throw new ArgumentException();
+        
         model.setPassword(getCipherPassword(model.getKey().getId(), password));
         
         dao.put(model);

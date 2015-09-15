@@ -10,6 +10,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.dao.OfficeHoursDao;
 import com.pluspow.enums.DayOfWeek;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.OfficeHours;
 import com.pluspow.model.Spot;
 
@@ -29,9 +30,14 @@ public class OfficeHoursService {
      * 営業時間曜日リストの取得
      * @param spot
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static List<OfficeHours> getOfficeHourList(Spot spot) {
-        return dao.getOfficeHourList(spot);
+    protected static List<OfficeHours> getOfficeHourList(Spot spot) throws ObjectNotExistException {
+        List<OfficeHours> list =  dao.getOfficeHourList(spot);
+        
+        if(list == null) throw new ObjectNotExistException();
+        
+        return list;
     }
     
     /**
@@ -40,8 +46,6 @@ public class OfficeHoursService {
      */
     public static Map<String, OfficeHours> getOfficeHoursMap(List<OfficeHours> list) {
         Map<String,OfficeHours> map = new HashMap<String,OfficeHours>();
-        
-        if(list == null) return map;
         
         for (OfficeHours i : list) map.put(i.getDayOfWeek().toString(),i);
         
@@ -53,9 +57,14 @@ public class OfficeHoursService {
      * @param spot
      * @param dayOfWeek
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static OfficeHours getOfficeHour(Spot spot, DayOfWeek dayOfWeek) {
-        return dao.get(createKey(spot, dayOfWeek));
+    public static OfficeHours getOfficeHour(Spot spot, DayOfWeek dayOfWeek) throws ObjectNotExistException {
+        OfficeHours model =  dao.get(createKey(spot, dayOfWeek));
+        
+        if(model == null) throw new ObjectNotExistException();
+        
+        return model;
     }
     
     /**
@@ -65,7 +74,7 @@ public class OfficeHoursService {
      * @param dayOfWeek
      * @return
      */
-    public static OfficeHours addDefault(
+    protected static OfficeHours addDefault(
             Transaction tx, 
             Spot spot, 
             DayOfWeek dayOfWeek) {
@@ -91,8 +100,10 @@ public class OfficeHoursService {
      * @param closeHour
      * @param closeMinute
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static OfficeHours update(Spot spot, DayOfWeek dayOfWeek, int openHour, int openMinute, int closeHour, int closeMinute) {
+    public static OfficeHours update(Spot spot, DayOfWeek dayOfWeek, int openHour, int openMinute, int closeHour, int closeMinute) throws ObjectNotExistException {
+        
         OfficeHours model = getOfficeHour(spot, dayOfWeek);
 
         model.setOpen(true);
@@ -112,8 +123,9 @@ public class OfficeHoursService {
      * @param spot
      * @param dayOfWeek
      * @return
+     * @throws ObjectNotExistException 
      */
-    public static OfficeHours setIsNotOpen(Spot spot, DayOfWeek dayOfWeek) {
+    public static OfficeHours setIsNotOpen(Spot spot, DayOfWeek dayOfWeek) throws ObjectNotExistException {
         OfficeHours model = getOfficeHour(spot, dayOfWeek);
 
         model.setOpen(false);
@@ -141,7 +153,7 @@ public class OfficeHoursService {
      * キーの作成
      * @return
      */
-    public static Key createKey(Spot spot, DayOfWeek dayOfWeek) {
+    protected static Key createKey(Spot spot, DayOfWeek dayOfWeek) {
         return createKey(spot.getKey().getId() + "_" + dayOfWeek.toString());
     }
 

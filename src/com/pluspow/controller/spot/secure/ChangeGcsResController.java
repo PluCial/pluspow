@@ -9,8 +9,7 @@ public class ChangeGcsResController extends BaseController {
 
     @Override
     protected Navigation execute(Client client, Spot spot) throws Exception {
-        
-        
+
         return forward("changeGcsRes.jsp");
     }
 }

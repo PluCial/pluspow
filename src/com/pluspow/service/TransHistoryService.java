@@ -44,7 +44,7 @@ public class TransHistoryService {
      * @param transCost
      * @return
      */
-    public static TransHistory add(
+    protected static TransHistory add(
             Transaction tx,
             Spot spot, 
             Lang baseLang, 
@@ -80,7 +80,7 @@ public class TransHistoryService {
      * @param keyString
      * @return
      */
-    public static Key createKey(String keyString) {
+    protected static Key createKey(String keyString) {
         return Datastore.createKey(TransHistoryMeta.get(), keyString);
     }
     
@@ -88,7 +88,7 @@ public class TransHistoryService {
      * キーの作成
      * @return
      */
-    public static Key createKey(Spot spot) {
+    private static Key createKey(Spot spot) {
         // キーを乱数にする
         UUID uniqueKey = UUID.randomUUID();
         return createKey(spot.getKey().getId() + "_" + uniqueKey.toString());
