@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slim3.datastore.DaoBase;
 import org.slim3.datastore.Datastore;
+import org.slim3.datastore.Sort;
 
 import com.pluspow.meta.SpotMeta;
 import com.pluspow.model.Client;
@@ -35,7 +36,7 @@ public class SpotDao extends DaoBase<Spot>{
                 .filter(
                     meta.clientRef.equal(client.getKey()),
                     meta.invalid.equal(false)
-                    ).asList();
+                    ).sort(new Sort(meta.createDate)).asList();
     }
 
 }

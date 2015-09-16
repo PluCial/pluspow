@@ -20,7 +20,8 @@ public class ItemDao extends DaoBase<Item>{
         return  Datastore.query(meta)
                 .filter(
                     meta.spotRef.equal(spot.getKey()),
-                    meta.langs.in(lang)
+                    meta.langs.in(lang),
+                    meta.invalid.equal(false)
                         )
                  .sort(new Sort(meta.sortOrder))
                  .asList();

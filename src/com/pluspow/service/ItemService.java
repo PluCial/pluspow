@@ -62,7 +62,8 @@ public class ItemService {
         model.setBaseLang(spot.getBaseLang());
         model.setPrice(price);
         model.getSpotRef().setModel(spot);
-        model.setSortOrder(spot.getItemCounts().getItem() + 1);
+        model.setSpotId(spot.getSpotId());
+        model.setSortOrder(spot.getItemSortOrderIndex() + 1.0);
         
         // 言語リストに母国語を追加
         model.getLangs().add(spot.getBaseLang());
@@ -71,6 +72,7 @@ public class ItemService {
         // スポットのアイテムカウントを設定
         // ---------------------------------------------------
         spot.getItemCounts().setItem(spot.getItemCounts().getItem() + 1);
+        spot.setItemSortOrderIndex(model.getSortOrder());
         
         // ---------------------------------------------------
         // 保存処理

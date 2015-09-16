@@ -65,6 +65,12 @@ public class Spot implements Serializable {
     @Attribute(unindexed = true)
     private Lang baseLang;
     
+    /**
+     * アイテムのソート順offset
+     */
+    @Attribute(unindexed = true)
+    private double itemSortOrderIndex = 0.0;
+    
     // ----------------------------------------------------------------------
     // 関連
     // ----------------------------------------------------------------------
@@ -557,5 +563,13 @@ public class Spot implements Serializable {
 
     public void setLangs(List<Lang> langs) {
         this.langs = langs;
+    }
+
+    public double getItemSortOrderIndex() {
+        return itemSortOrderIndex;
+    }
+
+    public void setItemSortOrderIndex(double itemSortOrderIndex) {
+        this.itemSortOrderIndex = itemSortOrderIndex;
     }
 }

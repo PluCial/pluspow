@@ -57,6 +57,11 @@ public class Item implements Serializable {
     private List<Lang> langs = new ArrayList<Lang>();
     
     /**
+     * 無効フラグ
+     */
+    private boolean invalid = false;
+    
+    /**
      * 作成日時
      */
     @Attribute(listener = CreationDate.class)
@@ -71,7 +76,6 @@ public class Item implements Serializable {
     // ----------------------------------------------------------------------
     // 関連
     // ----------------------------------------------------------------------
-    
     /** Spotとの関連 */
     private ModelRef<Spot> spotRef = new ModelRef<Spot>(Spot.class);
     
@@ -80,6 +84,15 @@ public class Item implements Serializable {
      */
     @Attribute(unindexed = true)
     private String spotId;
+    
+    // ----------------------------------------------------------------------
+    // SpotLangUnit(永久かしない)
+    // ----------------------------------------------------------------------
+    /**
+     * 言語情報
+     */
+    @Attribute(persistent = false)
+    private ItemLangUnit langUnit;
     
     // ----------------------------------------------------------------------
     // TextResources
@@ -317,5 +330,21 @@ public class Item implements Serializable {
 
     public void setLangs(List<Lang> langs) {
         this.langs = langs;
+    }
+
+    public boolean isInvalid() {
+        return invalid;
+    }
+
+    public void setInvalid(boolean invalid) {
+        this.invalid = invalid;
+    }
+
+    public ItemLangUnit getLangUnit() {
+        return langUnit;
+    }
+
+    public void setLangUnit(ItemLangUnit langUnit) {
+        this.langUnit = langUnit;
     }
 }
