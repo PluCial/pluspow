@@ -90,7 +90,7 @@ public class ItemTextResService  extends TextResService{
      * @return
      * @throws ObjectNotExistException 
      */
-    protected static List<ItemTextRes> getResourcesList(Item item, Lang lang) throws ObjectNotExistException {
+    public static List<ItemTextRes> getResourcesList(Item item, Lang lang) throws ObjectNotExistException {
         
         List<ItemTextRes> list = dao.getResourcesList(item, lang);
         if(list == null) throw new ObjectNotExistException();

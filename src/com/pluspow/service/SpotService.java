@@ -21,13 +21,13 @@ import com.pluspow.enums.TextResRole;
 import com.pluspow.enums.TransStatus;
 import com.pluspow.enums.TransType;
 import com.pluspow.exception.ArgumentException;
+import com.pluspow.exception.DataMismatchException;
 import com.pluspow.exception.GeocodeStatusException;
 import com.pluspow.exception.GeocoderLocationTypeException;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.exception.TooManyException;
 import com.pluspow.exception.TransException;
-import com.pluspow.exception.UnsuitableException;
 import com.pluspow.meta.SpotMeta;
 import com.pluspow.model.Client;
 import com.pluspow.model.GeoModel;
@@ -297,10 +297,11 @@ public class SpotService {
      * @throws ArgumentException
      * @throws TransException
      * @throws IOException
+     * @throws DataMismatchException 
      */
     public static void machineTrans(
             Spot spot,
-            Lang transLang) throws ArgumentException, TransException, IOException {
+            Lang transLang) throws ArgumentException, TransException, IOException, DataMismatchException {
         
         if(spot.getBaseLang() == transLang) throw new ArgumentException();
         
@@ -400,23 +401,24 @@ public class SpotService {
     }
     
     /**
-     * リアルタイム機械翻訳
-     * @param otherLang
-     * @return
-     * @throws GeocoderLocationTypeException 
-     * @throws GeocodeStatusException 
-     * @throws IOException 
-     * @throws ArgumentException 
-     * @throws UnsuitableException 
-     * @throws TransException 
-     * @throws TooManyException 
+     * 言語の追加
+     * @param tx
+     * @param spot
+     * @param transLang
+     * @param transContentsList
+     * @param transResult
+     * @throws IOException
+     * @throws GeocodeStatusException
+     * @throws GeocoderLocationTypeException
+     * @throws ArgumentException
+     * @throws TooManyException
      */
     private static void addLang(
             Transaction tx,
             Spot spot, 
             Lang transLang,
             List<SpotTextRes> transContentsList,
-            Document transResult) throws IOException, GeocodeStatusException, ArgumentException, TooManyException, GeocoderLocationTypeException {
+            Document transResult) throws IOException, GeocodeStatusException, GeocoderLocationTypeException, ArgumentException, TooManyException {
 
         // ---------------------------------------------------
         // 住所の対象する言語で再取得
@@ -462,13 +464,14 @@ public class SpotService {
      * @param spot
      * @throws ObjectNotExistException 
      * @throws TransException
+     * @throws DataMismatchException 
      */
     private static void langReTrans(
             Transaction tx,
             Spot spot, 
             Lang transLang,
             List<SpotTextRes> transContentsList,
-            Document transResult) throws TransException {
+            Document transResult) throws TransException, DataMismatchException {
 
         // ---------------------------------------------------
         // 対象言語のテキストリソースマップを取得
@@ -478,8 +481,7 @@ public class SpotService {
             resMap = SpotTextResService.getResourcesMap(spot, transLang);
             
         } catch (ObjectNotExistException e) {
-            // ループにならないよう、TransExceptionを生成
-            throw new TransException();
+            throw new DataMismatchException();
         }
 
         // ---------------------------------------------------

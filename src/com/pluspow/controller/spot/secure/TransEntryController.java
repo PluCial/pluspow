@@ -7,7 +7,7 @@ import org.slim3.util.StringUtil;
 import com.pluspow.enums.Lang;
 import com.pluspow.enums.ObjectType;
 import com.pluspow.exception.ArgumentException;
-import com.pluspow.exception.TransException;
+import com.pluspow.exception.NoContentsException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Item;
 import com.pluspow.model.Spot;
@@ -45,11 +45,11 @@ public class TransEntryController extends BaseController {
             // アイテムの翻訳
             // --------------------------------------------------- 
             String itemId = asString("itemId");
-            if(StringUtil.isEmpty(itemId)) throw new TransException();
+            if(StringUtil.isEmpty(itemId)) throw new NoContentsException();
 
             Item item = ItemService.getByKey(spot, itemId, spot.getBaseLang());
 
-            ItemService.machineRealTrans(spot, item, transLang);
+            ItemService.machineTrans(spot, item, transLang);
 
             return redirect(PathUtils.spotRelativePath(spot, transLang));
 

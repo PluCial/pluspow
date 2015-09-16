@@ -7,6 +7,7 @@ import org.slim3.controller.validator.Validators;
 import com.pluspow.enums.GcsResRole;
 import com.pluspow.enums.Lang;
 import com.pluspow.exception.NoContentsException;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
 import com.pluspow.service.SpotGcsResService;
@@ -36,12 +37,12 @@ public class ChangeGcsResEntryController extends BaseController {
         GcsResRole role = GcsResRole.valueOf(asString("role"));
         
         if(role.isSpotRole()) {
-            
-            if(SpotGcsResService.getResources(spot, role) != null) {
+            try {
+                SpotGcsResService.getResources(spot, role);
                 // 更新
                 SpotGcsResService.updateImageRes(spot, resourcesKey, fileItem, imageX, imageY, imageWidth, imageHeight);
                 
-            }else {
+            } catch (ObjectNotExistException e) {
                 // 追加
                 SpotGcsResService.addImageRes(
                     spot, 

@@ -8,23 +8,23 @@ import org.slim3.datastore.Sort;
 
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.pluspow.enums.Lang;
-import com.pluspow.meta.SpotLangUnitMeta;
-import com.pluspow.model.Spot;
-import com.pluspow.model.SpotLangUnit;
+import com.pluspow.meta.ItemLangUnitMeta;
+import com.pluspow.model.Item;
+import com.pluspow.model.ItemLangUnit;
 
-public class SpotLangUnitDao extends DaoBase<SpotLangUnit>{
+public class ItemLangUnitDao extends DaoBase<ItemLangUnit>{
     
     /** META */
-    private static final SpotLangUnitMeta meta = SpotLangUnitMeta.get();
+    private static final ItemLangUnitMeta meta = ItemLangUnitMeta.get();
     
     /**
      * 言語ユニットを取得(無効なものも含まれる)
      * @return
      */
-    public SpotLangUnit getLangInfo(Spot spot, Lang lang) {
+    public ItemLangUnit getLangInfo(Item item, Lang lang) {
         return  Datastore.query(meta)
                 .filter(
-                    meta.spotRef.equal(spot.getKey()),
+                    meta.itemRef.equal(item.getKey()),
                     meta.lang.equal(lang)
                     ).asSingle();
     }
@@ -33,10 +33,10 @@ public class SpotLangUnitDao extends DaoBase<SpotLangUnit>{
      * 言語ユニットリストを取得(有効なもののみ)
      * @return
      */
-    public List<SpotLangUnit> getList(Spot spot) {
+    public List<ItemLangUnit> getList(Item item) {
         return  Datastore.query(meta)
                 .filter(
-                    meta.spotRef.equal(spot.getKey()),
+                    meta.itemRef.equal(item.getKey()),
                     meta.invalid.equal(false)
                     )
                 .sort(new Sort(meta.createDate, SortDirection.ASCENDING)).asList();

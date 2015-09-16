@@ -3,9 +3,10 @@ package com.pluspow.controller.client;
 import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Validators;
 
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Client;
 import com.pluspow.service.ClientService;
-import com.pluspow.validator.LoginValidator;
+import com.pluspow.validator.NGValidator;
 
 public class LoginEntryController extends BaseController {
 
@@ -20,10 +21,16 @@ public class LoginEntryController extends BaseController {
         // クライアントの取得
         String email = asString("email");
         String password = asString("password");
-        Client client = ClientService.login(email, password);
         
-        // アカウントチェック
-        if(!isClient(client)) {
+        Client client = null;
+        try {
+            client = ClientService.login(email, password);
+            
+        } catch (ObjectNotExistException e) {
+            // ログインエラー
+            Validators v = new Validators(request);
+            v.add("email", new NGValidator("メールアドレスもしくはパスワードが違います。"));
+            v.validate();
             return forward("/client/login");
         }
         
@@ -51,18 +58,6 @@ public class LoginEntryController extends BaseController {
         v.add("password", 
             v.required("パスワードを入力してください。")
              );
-
-        return v.validate();
-    }
-    
-    /**
-     * バリデーション(ログインチェック)
-     * @return
-     */
-    private boolean isClient(Client client) {
-        Validators v = new Validators(request);
-        
-        v.add("email", new LoginValidator(client, "メールアドレスもしくはパスワードが違います。"));
 
         return v.validate();
     }

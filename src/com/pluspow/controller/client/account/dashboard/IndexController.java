@@ -6,6 +6,7 @@ import java.util.List;
 import org.slim3.controller.Navigation;
 
 import com.pluspow.enums.ServicePlan;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotLangUnit;
@@ -29,8 +30,13 @@ public class IndexController extends BaseController {
         spot.setTransAcc(TransCreditService.get(spot));
         
         // プラン
-        SpotPayPlan payPlan = SpotPayPlanService.getPlan(spot);
-        spot.setPlan(payPlan == null ? ServicePlan.FREE : payPlan.getPlan());
+        try {
+            SpotPayPlan payPlan = SpotPayPlanService.getPlan(spot);
+            spot.setPlan(payPlan.getPlan());
+            
+        } catch (ObjectNotExistException e) {
+            spot.setPlan(ServicePlan.FREE);
+        }
         
         // 翻訳履歴
         List<TransHistory> transHistoryList = TransHistoryService.getHistoryList(spot);
