@@ -7,6 +7,7 @@ import org.slim3.datastore.Datastore;
 
 import com.google.appengine.api.datastore.Key;
 import com.pluspow.enums.GcsResRole;
+import com.pluspow.enums.Lang;
 import com.pluspow.meta.SpotGcsResMeta;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotGcsRes;
@@ -39,7 +40,7 @@ public class SpotGcsResDao extends DaoBase<SpotGcsRes>{
      * @param lang
      * @return
      */
-    public List<SpotGcsRes> getResourcesList(Spot spot) {
+    public List<SpotGcsRes> getResourcesList(Spot spot, Lang lang) {
         return Datastore.query(meta)
                 .filter(
                     meta.spotRef.equal(spot.getKey()),

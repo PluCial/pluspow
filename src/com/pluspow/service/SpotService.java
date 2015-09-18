@@ -259,7 +259,7 @@ public class SpotService {
         // ---------------------------------------------------
         // GCS
         // ---------------------------------------------------
-        spot.setGcsResources(SpotGcsResService.getResourcesMap(spot));
+        spot.setGcsResources(SpotGcsResService.getResourcesMap(spot, lang));
 
         // ---------------------------------------------------
         // 営業時間

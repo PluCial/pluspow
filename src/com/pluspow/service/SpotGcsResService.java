@@ -129,7 +129,7 @@ public class SpotGcsResService extends GcsResService {
     protected static void replicationOtherLangRes(Transaction tx, Spot spot, Lang lang) {
         List<SpotGcsRes> resList;
         try {
-            resList = getResourcesList(spot);
+            resList = getResourcesList(spot, spot.getBaseLang());
         } catch (ObjectNotExistException e) {
             // 更新するものがなければそのまま終了
             return;
@@ -175,8 +175,8 @@ public class SpotGcsResService extends GcsResService {
      * @return
      * @throws ObjectNotExistException 
      */
-    protected static List<SpotGcsRes> getResourcesList(Spot spot) throws ObjectNotExistException {
-        List<SpotGcsRes> list = dao.getResourcesList(spot);
+    protected static List<SpotGcsRes> getResourcesList(Spot spot, Lang lang) throws ObjectNotExistException {
+        List<SpotGcsRes> list = dao.getResourcesList(spot, lang);
         if(list == null) throw new ObjectNotExistException();
         return list;
     }
@@ -187,11 +187,11 @@ public class SpotGcsResService extends GcsResService {
      * @return
      * @throws ObjectNotExistException 
      */
-    protected static Map<String, SpotGcsRes> getResourcesMap(Spot spot) throws ObjectNotExistException {
+    protected static Map<String, SpotGcsRes> getResourcesMap(Spot spot, Lang lang) throws ObjectNotExistException {
         
         Map<String,SpotGcsRes> map = new HashMap<String,SpotGcsRes>();
         
-        List<SpotGcsRes> list = getResourcesList(spot);
+        List<SpotGcsRes> list = getResourcesList(spot, lang);
         
         for (SpotGcsRes i : list) map.put(i.getRole().toString(),i);
         
