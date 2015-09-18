@@ -5,6 +5,7 @@
 <%@ page import="com.pluspow.App" %>
 <%@ page import="com.pluspow.model.*" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.pluspow.utils.*" %>
 <%
 List<Spot> spotList =(List<Spot>) request.getAttribute("spotList");
 %>
@@ -75,7 +76,7 @@ List<Spot> spotList =(List<Spot>) request.getAttribute("spotList");
 											<p><i class="fa fa-map-marker"></i> <%=spot.getAddress() %></p>
 										</div>
 										<div class="modal-footer">
-											<a href="/+<%=spot.getSpotId() %>/l-<%=spot.getBaseLang() %>/" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i> ページの修正</a>
+											<a href="<%=PathUtils.spotRelativePath(spot, spot.getBaseLang()) %>" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i> ページの修正</a>
 											<a href="/client/account/dashboard/?spotId=<%=spot.getSpotId() %>" class="btn btn-default"><i class="fa fa-dashboard"></i> ダッシュボード</a>
 										</div>
 									</div><!-- /.modal-content -->

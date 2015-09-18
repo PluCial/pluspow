@@ -7,6 +7,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.pluspow.model.*" %>
 <%@ page import="org.slim3.controller.validator.Errors" %>
+<%@ page import="com.pluspow.utils.*" %>
 <%
 Client client =(Client) request.getAttribute("client");
 Spot spot =(Spot) request.getAttribute("spot");
@@ -84,7 +85,7 @@ Errors errors =(Errors) request.getAttribute("errors");
 			
 				<div class="content">
 					<div class="register-logo">
-						<a href="/+<%=spot.getSpotId() %>"><b><%=spot.getName() %></b></a>
+						<a href="<%=PathUtils.spotRelativePath(spot, spot.getLangUnit().getLang()) %>"><b><%=spot.getName() %></b></a>
 					</div>
 					<h3 style="text-align: center;">画像を選択してください。</h3>
 					

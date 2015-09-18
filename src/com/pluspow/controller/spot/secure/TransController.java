@@ -14,7 +14,9 @@ import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.exception.TransException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Item;
+import com.pluspow.model.ItemLangUnit;
 import com.pluspow.model.Spot;
+import com.pluspow.model.SpotLangUnit;
 import com.pluspow.model.TextRes;
 import com.pluspow.service.ItemLangUnitService;
 import com.pluspow.service.ItemService;
@@ -49,17 +51,19 @@ public class TransController extends BaseController {
                 // ------------------------------------------
                 // 無効になっている言語を復活させる
                 // ------------------------------------------
-                SpotLangUnitService.get(spot, transLang);
-                SpotService.setInvalid(spot, transLang, false);
+                SpotLangUnit unit = SpotLangUnitService.get(spot, transLang);
 
-                return redirect(PathUtils.spotRelativePath(spot, transLang));
+                if(unit.isInvalid()) {
+                    SpotService.setInvalid(spot, transLang, false);
+                    return redirect(PathUtils.spotRelativePath(spot, transLang));
+                }
             
-            } catch (ObjectNotExistException e) {
-                // ------------------------------------------
-                // 翻訳対象のテキストリソースを取得
-                // ------------------------------------------
-                transContentsList = SpotTextResService.getResourcesList(spot, spot.getBaseLang());
-            }
+            } catch (ObjectNotExistException e) {}
+            
+            // ------------------------------------------
+            // 翻訳対象のテキストリソースを取得
+            // ------------------------------------------
+            transContentsList = SpotTextResService.getResourcesList(spot, spot.getBaseLang());
 
             break;
 
@@ -84,17 +88,18 @@ public class TransController extends BaseController {
                 // ------------------------------------------
                 // 無効になっている言語を復活させる
                 // ------------------------------------------
-                ItemLangUnitService.get(item, transLang);
-                SpotService.setInvalid(spot, transLang, false);
+                ItemLangUnit unit = ItemLangUnitService.get(item, transLang);
+                if(unit.isInvalid()) {
+                    ItemService.setInvalid(item, transLang, false);
+                    return redirect(PathUtils.spotRelativePath(spot, transLang));
+                }
 
-                return redirect(PathUtils.itemRelativePath(spot, item, transLang));
-
-            } catch (ObjectNotExistException e) {
-                // ------------------------------------------
-                // 翻訳対象のテキストリソースを取得
-                // ------------------------------------------
-                transContentsList = ItemTextResService.getResourcesList(item, item.getBaseLang());
-            }
+            } catch (ObjectNotExistException e) {}
+            
+            // ------------------------------------------
+            // 翻訳対象のテキストリソースを取得
+            // ------------------------------------------
+            transContentsList = ItemTextResService.getResourcesList(item, item.getBaseLang());
 
             break;
 

@@ -5,6 +5,7 @@
 <%@ page import="org.slim3.util.StringUtil" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.pluspow.utils.*" %>
+<%@ page import="com.pluspow.utils.*" %>
 <%
 	Spot spot =(Spot) request.getAttribute("spot");
 Lang lang =(Lang) request.getAttribute("lang");
@@ -14,12 +15,12 @@ List<Lang> suppertLangList = (List<Lang>) request.getAttribute("suppertLangList"
 %>
 	<section id="spot-home" style="background-image:
                   url(<%=spot.getBackgroundImageUrl() %>)">
-<!-- <div class="parallax-overlay"></div> -->
+
 		<div id="spot-catch" class="spot-detail-inner"><!-- spot-image -->
                   
 			<div class="detail">
 				<h1>
-					<a href="/+<%=spot.getSpotId() %>/l-<%=spot.getLangUnit().getLang().toString() %>/"><%=spot.getName() %></a>
+					<a href="<%=PathUtils.spotRelativePath(spot, lang) %>"><%=spot.getName() %></a>
 				</h1>
 				<p><%=spot.getCatchCopy() %></p>
 			</div>

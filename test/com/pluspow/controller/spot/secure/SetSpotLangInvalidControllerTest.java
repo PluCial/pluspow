@@ -10,7 +10,7 @@ public class SetSpotLangInvalidControllerTest extends ControllerTestCase {
     @Test
     public void run() throws Exception {
         tester.start("/spot/secure/setSpotLangInvalid");
-        SetSpotLangInvalidController controller = tester.getController();
+        SetLangInvalidController controller = tester.getController();
         assertThat(controller, is(notNullValue()));
         assertThat(tester.isRedirect(), is(false));
         assertThat(tester.getDestinationPath(), is(nullValue()));

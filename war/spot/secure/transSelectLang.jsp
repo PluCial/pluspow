@@ -7,6 +7,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.pluspow.model.*" %>
 <%@ page import="org.slim3.controller.validator.Errors" %>
+<%@ page import="com.pluspow.utils.*" %>
 <%
 Spot spot =(Spot) request.getAttribute("spot");
 %>
@@ -32,7 +33,7 @@ Spot spot =(Spot) request.getAttribute("spot");
 			<div class="container">
 				<div class="content">
 					<div class="register-logo">
-						<a href="/+<%=spot.getSpotId() %>"><b><%=spot.getName() %></b></a>
+						<a href="<%=PathUtils.spotRelativePath(spot, spot.getLangUnit().getLang()) %>"><b><%=spot.getName() %></b></a>
 					</div>
 					<h3 style="text-align: center;">翻訳言語の選択</h3>
 					

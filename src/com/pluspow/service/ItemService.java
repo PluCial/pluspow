@@ -25,6 +25,7 @@ import com.pluspow.exception.TooManyException;
 import com.pluspow.exception.TransException;
 import com.pluspow.meta.ItemMeta;
 import com.pluspow.model.Item;
+import com.pluspow.model.ItemLangUnit;
 import com.pluspow.model.ItemTextRes;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotLangUnit;
@@ -50,7 +51,7 @@ public class ItemService {
         
         Item model = dao.get(createKey(key));
 
-        setItemInfo(spot, model, lang);
+        setItemInfo(model, lang);
         
         return model;
     }
@@ -375,7 +376,9 @@ public class ItemService {
      * @param lang
      * @throws ObjectNotExistException 
      */
-    public static void setItemInfo(Spot spot, Item item, Lang lang) throws ObjectNotExistException {
+    public static void setItemInfo(Item item, Lang lang) throws ObjectNotExistException {
+        ItemLangUnit langUnit = ItemLangUnitService.get(item, lang);
+        item.setLangUnit(langUnit);
         
         item.setTextResources(ItemTextResService.getResourcesMap(item, lang));
         
@@ -410,12 +413,58 @@ public class ItemService {
         // 詳細の追加
         for(Item item: itemList) {
             try {
-                setItemInfo(spot, item, lang);
+                setItemInfo(item, lang);
             } catch (ObjectNotExistException e) {
             }
         }
         
         return itemList;
+    }
+
+    /**
+     * 言語の有効無効切り替え
+     * @param item
+     * @param lang
+     * @param invalid
+     * @throws ObjectNotExistException
+     * @throws ArgumentException
+     */
+    public static void setInvalid(Item item, Lang lang, boolean invalid) throws ObjectNotExistException, ArgumentException {
+
+        // ベース言語の有効無効切り替えはできない。
+        if(item.getBaseLang() == lang) throw new ArgumentException();
+        
+        // 言語ユニットの取得
+        ItemLangUnit langUnit = ItemLangUnitService.get(item, lang);
+        
+        // Item内のlangs から対象の言語を追加・削除する
+        List<Lang> langsList = item.getLangs();
+        if(invalid) {
+            if(langsList.indexOf(lang) >= 0) {
+                langsList.remove(lang);
+            }
+        }else {
+            if(langsList.indexOf(lang) < 0) {
+                langsList.add(lang);
+            }
+        }
+
+        // ---------------------------------------------------
+        // 保存処理
+        // ---------------------------------------------------
+        Transaction tx = Datastore.beginTransaction();
+        try {
+            langUnit.setInvalid(invalid);
+            Datastore.put(tx, item, langUnit);
+
+            // コミット
+            tx.commit();
+
+        }finally {
+            if(tx.isActive()) {
+                tx.rollback();
+            }
+        }
     }
     
     // ----------------------------------------------------------------------

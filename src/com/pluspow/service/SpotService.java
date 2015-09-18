@@ -31,7 +31,6 @@ import com.pluspow.exception.TransException;
 import com.pluspow.meta.SpotMeta;
 import com.pluspow.model.Client;
 import com.pluspow.model.GeoModel;
-import com.pluspow.model.LangUnit;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotLangUnit;
 import com.pluspow.model.SpotTextRes;
@@ -521,7 +520,7 @@ public class SpotService {
         // ベース言語の有効無効切り替えはできない。
         if(spot.getBaseLang() == lang) throw new ArgumentException();
         
-        LangUnit langUnit = SpotLangUnitService.get(spot, lang);
+        SpotLangUnit langUnit = SpotLangUnitService.get(spot, lang);
         
         // ---------------------------------------------------
         // 保存処理

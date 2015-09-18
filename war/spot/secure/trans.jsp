@@ -120,9 +120,7 @@ Item item =(Item) request.getAttribute("item");
 											<div class="description-block border-right">
 												<h4 class="description-text "><i class="fa fa-user"></i> <%=TransType.HUMAN_STANDARD.getName()%></h4>
 												
-												<%
-																									if(Lang.valueOf(transLang).isHumanTransSupport()) {
-																								%>
+												<%if(Lang.valueOf(transLang).isHumanTransSupport()) {%>
 												<p class="">(¥<%=TransType.HUMAN_STANDARD.getPrice()%>/1文字)</p>
 												<h5 class="description-header">¥<%=(int)(transCharCount * TransType.HUMAN_STANDARD.getPrice())%></h5>
 												<div>

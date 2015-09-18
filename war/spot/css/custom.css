@@ -516,9 +516,17 @@ i.edit-mode {
 	cursor: move;
 }
 
-/* .item-box .price span {
-	font-size: 24px;
-} */
+.item-box .item-menu {
+	position: absolute;
+	right: 15px;
+	top: 15px;
+}
+
+.item-box .item-menu .dropdown-menu {
+	background-color: #fff;
+	width: auto;
+}
+
 .item-box .img-wrapper .price-label {
 	position: absolute;
 	bottom: 30px;
