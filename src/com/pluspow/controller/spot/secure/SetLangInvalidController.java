@@ -28,7 +28,7 @@ public class SetLangInvalidController extends BaseController {
             SpotService.setInvalid(spot, lang, invalid);
             
             // ベース言語ページにリダイレクト
-            return redirect(PathUtils.spotRelativePath(spot, spot.getBaseLang()));
+            return redirect(PathUtils.spotPage(spot, spot.getBaseLang()));
 
         case ITEM:
             // ------------------------------------------
@@ -39,7 +39,7 @@ public class SetLangInvalidController extends BaseController {
 
             Item item = null;
             try {
-                item = ItemService.getByKey(spot, itemId, spot.getBaseLang());
+                item = ItemService.getByKey(itemId, spot.getBaseLang());
                 requestScope("item", item);
                 
             } catch (ObjectNotExistException e) {
@@ -49,7 +49,7 @@ public class SetLangInvalidController extends BaseController {
             ItemService.setInvalid(item, lang, invalid);
             
             // 現在の言語ページにリダイレクト
-            return redirect(PathUtils.spotRelativePath(spot, lang));
+            return redirect(PathUtils.spotPage(spot, lang));
             
         default:
             // その他の場合

@@ -28,7 +28,7 @@ public class ItemController extends BaseController {
         
         // アイテムの取得
         try {
-            Item item = ItemService.getByKey(spot, itemId, lang);
+            Item item = ItemService.getByKey(itemId, lang);
             if(item.getLangs().indexOf(lang) < 0) throw new NoContentsException();
             requestScope("item", item);
             

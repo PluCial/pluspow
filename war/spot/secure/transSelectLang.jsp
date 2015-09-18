@@ -33,7 +33,7 @@ Spot spot =(Spot) request.getAttribute("spot");
 			<div class="container">
 				<div class="content">
 					<div class="register-logo">
-						<a href="<%=PathUtils.spotRelativePath(spot, spot.getLangUnit().getLang()) %>"><b><%=spot.getName() %></b></a>
+						<a href="<%=PathUtils.spotPage(spot, spot.getLangUnit().getLang()) %>"><b><%=spot.getName() %></b></a>
 					</div>
 					<h3 style="text-align: center;">翻訳言語の選択</h3>
 					

@@ -12,12 +12,16 @@ public class PathUtils {
      * @param lang
      * @return
      */
-    public static String spotRelativePath(Spot spot, Lang lang) {
+    public static String spotPage(Spot spot, Lang lang) {
         return "/+" + spot.getSpotId() + "/l-" + lang.toString() + "/";
     }
     
-    public static String itemRelativePath(Spot spot, Item item, Lang lang) {
+    public static String itemPage(Spot spot, Item item, Lang lang) {
         return "/+" + spot.getSpotId() + "/l-" + lang.toString() + "/item/" + item.getKey().getName();
+    }
+    
+    public static String selectSpotPage() {
+        return "/client/account/selectSpot";
     }
 
 }

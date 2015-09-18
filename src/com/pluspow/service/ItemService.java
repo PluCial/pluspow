@@ -44,12 +44,33 @@ public class ItemService {
      * @param lang
      * @return
      * @throws ObjectNotExistException 
+     * @throws ArgumentException 
      */
-    public static Item getByKey(Spot spot, String key, Lang lang) throws ObjectNotExistException {
+    public static Item getModelOnly(String key) throws ObjectNotExistException, ArgumentException {
         
-        if(key == null || lang == null) throw new ObjectNotExistException();
+        if(key == null) throw new ArgumentException();
         
         Item model = dao.get(createKey(key));
+        if(model == null) throw new ObjectNotExistException();
+        
+        return model;
+    }
+    
+    /**
+     * アイテムの取得
+     * @param spot
+     * @param key
+     * @param lang
+     * @return
+     * @throws ObjectNotExistException 
+     * @throws ArgumentException 
+     */
+    public static Item getByKey(String key, Lang lang) throws ObjectNotExistException, ArgumentException {
+        
+        if(key == null || lang == null) throw new ArgumentException();
+        
+        Item model = dao.getOrNull(createKey(key));
+        if(model == null) throw new ObjectNotExistException();
 
         setItemInfo(model, lang);
         
@@ -460,6 +481,34 @@ public class ItemService {
             // コミット
             tx.commit();
 
+        }finally {
+            if(tx.isActive()) {
+                tx.rollback();
+            }
+        }
+    }
+    
+    /**
+     * 削除
+     * @param spot
+     */
+    public static void delete(Spot spot, Item item) {
+        
+        Transaction tx = Datastore.beginTransaction();
+        try {
+            // アイテムを無効にする
+            item.setInvalid(true);
+            
+            // スポットのアイテム数を変更
+            if(spot.getItemCounts().getItem() > 0) {
+                spot.getItemCounts().setItem(spot.getItemCounts().getItem() - 1);
+            }
+            
+            Datastore.put(tx, spot, item);
+            
+            // コミット
+            tx.commit();
+            
         }finally {
             if(tx.isActive()) {
                 tx.rollback();

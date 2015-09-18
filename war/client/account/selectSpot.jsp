@@ -60,7 +60,7 @@ List<Spot> spotList =(List<Spot>) request.getAttribute("spotList");
 							<a href="/client/account/selectSpot"><b><%=App.APP_DISPLAY_NAME %></b></a>
 						</div>
 						<div class="add-spot">
-							<a href="/client/account/addSpotStep1" class="btn btn-danger btn-lg fa fa-plus"> スポットを追加</a>
+							<a href="/client/account/addSpotStep1" class="btn btn-primary btn-lg fa fa-plus"> スポットを追加</a>
 						</div>
 			
 						<%for(Spot spot: spotList) { %>
@@ -76,8 +76,15 @@ List<Spot> spotList =(List<Spot>) request.getAttribute("spotList");
 											<p><i class="fa fa-map-marker"></i> <%=spot.getAddress() %></p>
 										</div>
 										<div class="modal-footer">
-											<a href="<%=PathUtils.spotRelativePath(spot, spot.getBaseLang()) %>" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i> ページの修正</a>
-											<a href="/client/account/dashboard/?spotId=<%=spot.getSpotId() %>" class="btn btn-default"><i class="fa fa-dashboard"></i> ダッシュボード</a>
+											<div class="pull-left">
+												<a href="/client/account/spotDelete?spotId=<%=spot.getSpotId() %>" class="btn btn-danger btn-sm">
+													<i class="fa fa-trash"></i> 削除
+												</a>
+											</div>
+											<div class="pull-right">
+												<a href="<%=PathUtils.spotPage(spot, spot.getBaseLang()) %>" class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o"></i> ページの修正</a>
+												<a href="/client/account/dashboard/?spotId=<%=spot.getSpotId() %>" class="btn btn-default btn-sm"><i class="fa fa-dashboard"></i> ダッシュボード</a>
+											</div>
 										</div>
 									</div><!-- /.modal-content -->
 								</div><!-- /.modal-dialog -->

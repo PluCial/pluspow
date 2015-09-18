@@ -544,9 +544,7 @@ public class SpotService {
      * 削除
      * @param spot
      */
-    public static void deleteSpot(Spot spot) {
-        
-        
+    public static void delete(Spot spot) {
         
         Transaction tx = Datastore.beginTransaction();
         try {

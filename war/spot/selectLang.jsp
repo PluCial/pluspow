@@ -33,7 +33,7 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 		</div>
 		<p style="margin-bottom: 0;"><strong>元の言語:</strong> 
 			<img class="flag-image" src="/images/flag/<%=spot.getBaseLang().getLangKey().toUpperCase() %>.png" />
-			<a href="<%=PathUtils.spotRelativePath(spot, spot.getBaseLang()) %>" class="link">
+			<a href="<%=PathUtils.spotPage(spot, spot.getBaseLang()) %>" class="link">
 				<%=spot.getBaseLang().getName() %>
 			</a>
 		</p>
@@ -47,7 +47,7 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 			%>
 			<div class="col-sm-4 col-xs-6">
 				<img class="flag-image" src="/images/flag/<%=lang.getLangKey().toUpperCase() %>.png" />
-				<a href="<%=PathUtils.spotRelativePath(spot, lang) %>"><%=lang.getName() %></a>
+				<a href="<%=PathUtils.spotPage(spot, lang) %>"><%=lang.getName() %></a>
 			</div>
 			<%	} %>
 			<%} %>
@@ -58,7 +58,7 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 	<div class="modal-footer">
 		<div class="pull-right">
 			<%if(spot.getLangUnit().getLang() != spot.getBaseLang()) {%>
-			<a href="/spot/secure/trans?spotId=<%=spot.getSpotId() %>&objectType=<%=ObjectType.SPOT %>&transLang=<%=spot.getLangUnit().getLang().getLangKey() %>" class="btn btn-default btn-sm"><i class="fa fa-language"></i> 再翻訳</a>
+			<a href="/spot/secure/trans?spotId=<%=spot.getSpotId() %>&objectType=<%=ObjectType.SPOT %>&transLang=<%=spot.getLangUnit().getLang().toString() %>" class="btn btn-default btn-sm"><i class="fa fa-language"></i> 再翻訳</a>
 			<%} %>
 			
 			<a href="/spot/secure/transSelectLang?spotId=<%=spot.getSpotId() %>" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> 言語を追加</a>

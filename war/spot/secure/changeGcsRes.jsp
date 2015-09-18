@@ -85,7 +85,7 @@ Errors errors =(Errors) request.getAttribute("errors");
 			
 				<div class="content">
 					<div class="register-logo">
-						<a href="<%=PathUtils.spotRelativePath(spot, spot.getLangUnit().getLang()) %>"><b><%=spot.getName() %></b></a>
+						<a href="<%=PathUtils.spotPage(spot, spot.getLangUnit().getLang()) %>"><b><%=spot.getName() %></b></a>
 					</div>
 					<h3 style="text-align: center;">画像を選択してください。</h3>
 					
@@ -111,7 +111,7 @@ Errors errors =(Errors) request.getAttribute("errors");
 
 									</div><!-- ./box-body -->
 									<div class="box-footer">
-										<a class="pull-left btn btn-default" href="/spot/secure/changeGeoRes?spotId=bases">キャンセル</a>
+										<a class="pull-left btn btn-default" href="<%=PathUtils.spotPage(spot, spot.getLangUnit().getLang()) %>">キャンセル</a>
 										<button type="submit" class="pull-right btn btn-primary"><i class="fa fa-file-image-o"></i> 変更する</button>
 									</div><!-- /.box-footer -->
 								

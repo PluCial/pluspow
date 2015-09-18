@@ -87,6 +87,9 @@ List<Item> itemList =(List<Item>) request.getAttribute("itemList");
 	<jsp:include page="/spot/include-parts/dialog_modal.jsp">
 		<jsp:param name="modelId" value="editOfficeHoursModal" />
 	</jsp:include>
+	<jsp:include page="/spot/include-parts/dialog_modal.jsp">
+		<jsp:param name="modelId" value="itemDeleteModal" />
+	</jsp:include>
 	<script type="text/javascript" src="/plugins/waiting-dialog/waiting-dialog.js"></script>
 	<script type="text/javascript" src="/plugins/timepicker/bootstrap-timepicker.min.js"></script>
 	<!-- secure JS end -->

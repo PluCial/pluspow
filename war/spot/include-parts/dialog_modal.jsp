@@ -179,4 +179,23 @@ String modelId = (String)request.getParameter("modelId");
 			});
 		});
 	</script>
+	<%}else if(modelId.equals("itemDeleteModal")) { %>
+	<script>
+			/* ----------------------------------------------------------- */
+			/*  item delete
+			/* ----------------------------------------------------------- */
+			$('#itemDeleteModal').on('hidden.bs.modal', function () {
+				$('#itemDeleteModal').removeData('bs.modal');
+			});
+	      
+			$('#itemDeleteModal').on('loaded.bs.modal', function () {
+				var submitButton = $(this).find('#item-delete-submit-button');
+				var submitform = $(this).find('#item-delete-submit-form');
+	  		
+				// submit
+				submitButton.bind('click', function(e) {
+					submitform.submit();
+				});
+			});
+	</script>
 	<%} %>

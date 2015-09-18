@@ -8,7 +8,7 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="com.pluspow.utils.*" %>
 <%
-	Client client =(Client) request.getAttribute("client");
+Client client =(Client) request.getAttribute("client");
 Spot spot =(Spot) request.getAttribute("spot");
 boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 List<Item> itemList =(List<Item>) request.getAttribute("itemList");
@@ -32,7 +32,7 @@ boolean isEditPage = Boolean.valueOf((String) request.getParameter("isEditPage")
 						<figure data-wow-duration="500ms" data-wow-delay="0ms">
 							
 							<div class="img-wrapper" style="background-image: url(<%=item.getItemImageUrl() %>)">
-								<a href="<%=isSupport ? PathUtils.itemRelativePath(spot, item, lang) : PathUtils.itemRelativePath(spot, item, spot.getBaseLang()) %>"></a>
+								<a href="<%=isSupport ? PathUtils.itemPage(spot, item, lang) : PathUtils.itemPage(spot, item, spot.getBaseLang()) %>"></a>
 								<%if(item.getPrice() > 0) { %>
 								<div class="price-label"><i class="fa fa-jpy"></i> <span><%=item.getPriceString() %></span></div>
 								<%} %>
@@ -40,7 +40,7 @@ boolean isEditPage = Boolean.valueOf((String) request.getParameter("isEditPage")
 
 							<figcaption>
                                 <h4 class="text-ellipsis">
-                                	<a href="<%=isSupport ? PathUtils.itemRelativePath(spot, item, lang) : PathUtils.itemRelativePath(spot, item, spot.getBaseLang()) %>">
+                                	<a href="<%=isSupport ? PathUtils.itemPage(spot, item, lang) : PathUtils.itemPage(spot, item, spot.getBaseLang()) %>">
                                 		<%if(isSupport && isEditPage && !spot.getBaseLang().equals(lang) && langItemMap != null) { %>
 											<%=langItemMap.get(item.getKey().getName()) != null ? langItemMap.get(item.getKey().getName()).getName() : item.getName() %>
 										<%}else { %>
@@ -68,15 +68,23 @@ boolean isEditPage = Boolean.valueOf((String) request.getParameter("isEditPage")
 								<button class="btn btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bars"></i></button>
 								<ul class="dropdown-menu pull-right" role="menu">
 									<%if(spot.getBaseLang() != lang) { %>
-									<li><a href="/spot/secure/trans?spotId=<%=spot.getSpotId() %>&itemId=<%=item.getKey().getName() %>&objectType=<%=ObjectType.ITEM %>&transLang=<%=spot.getLangUnit().getLang().getLangKey() %>">
+									<li><a href="/spot/secure/trans?spotId=<%=spot.getSpotId() %>&itemId=<%=item.getKey().getName() %>&objectType=<%=ObjectType.ITEM %>&transLang=<%=spot.getLangUnit().getLang().toString() %>">
 										<i class="fa fa-language"></i> 再翻訳</a>
 									</li>
+									<li class="divider"></li>
 									<li><a href="/spot/secure/setLangInvalid?spotId=<%=spot.getSpotId() %>&objectType=<%=ObjectType.ITEM %>&lang=<%=spot.getLangUnit().getLang() %>&itemId=<%=item.getKey().getName() %>&invalid=true">
 										<i class="fa fa-times"></i> <%=lang.getName() %>ページから削除</a>
 									</li>
-									<li class="divider"></li>
+									<%}else { %>
+									<li>
+										<a data-toggle="modal" 
+											data-backdrop="static" 
+											data-target="#itemDeleteModal" 
+											href="/spot/secure/itemDelete?spotId=<%=spot.getSpotId() %>&lang=<%=spot.getLangUnit().getLang().toString() %>&itemId=<%=item.getKey().getName() %>">
+											<i class="fa fa-trash"></i> このアイテムを削除
+										</a>
+									</li>
 									<%} %>
-									<li><a href="#"><i class="fa fa-trash"></i> アイテムを削除</a></li>
 								</ul>
 							</div>
 							<%} %>

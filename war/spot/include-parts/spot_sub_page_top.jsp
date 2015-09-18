@@ -8,7 +8,6 @@
 <%@ page import="com.pluspow.utils.*" %>
 <%
 	Spot spot =(Spot) request.getAttribute("spot");
-Lang lang =(Lang) request.getAttribute("lang");
 boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 boolean isEditPage = Boolean.valueOf((String) request.getParameter("isEditPage"));
 List<Lang> suppertLangList = (List<Lang>) request.getAttribute("suppertLangList");
@@ -20,7 +19,7 @@ List<Lang> suppertLangList = (List<Lang>) request.getAttribute("suppertLangList"
                   
 			<div class="detail">
 				<h1>
-					<a href="<%=PathUtils.spotRelativePath(spot, lang) %>"><%=spot.getName() %></a>
+					<a href="<%=PathUtils.spotPage(spot, spot.getLangUnit().getLang()) %>"><%=spot.getName() %></a>
 				</h1>
 				<p><%=spot.getCatchCopy() %></p>
 			</div>
