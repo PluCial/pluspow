@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.datanucleus.util.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slim3.datastore.Datastore;
@@ -12,6 +13,7 @@ import org.slim3.memcache.Memcache;
 
 import com.google.appengine.api.datastore.Email;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.constants.MemcacheKey;
 import com.pluspow.dao.SpotDao;
@@ -528,6 +530,47 @@ public class SpotService {
         Transaction tx = Datastore.beginTransaction();
         try {
             langUnit.setInvalid(invalid);
+            Datastore.put(tx, langUnit);
+            
+            // コミット
+            tx.commit();
+            
+        }finally {
+            if(tx.isActive()) {
+                tx.rollback();
+            }
+        }
+    }
+    
+    /**
+     * 電話番号の設定
+     * @param spot
+     * @param lang
+     * @param isDisplayFlg
+     * @param phoneNumber
+     * @throws ObjectNotExistException
+     * @throws ArgumentException
+     */
+    public static void setPhoneNumber(
+            Spot spot, 
+            Lang lang, 
+            boolean isDisplayFlg, 
+            String phoneNumber) throws ObjectNotExistException, ArgumentException {
+        
+        SpotLangUnit langUnit = SpotLangUnitService.get(spot, lang);
+        
+        // ---------------------------------------------------
+        // 保存処理
+        // ---------------------------------------------------
+        Transaction tx = Datastore.beginTransaction();
+        try {
+            if(isDisplayFlg) {
+                if(StringUtils.isEmpty(phoneNumber)) throw new ArgumentException();
+                langUnit.setPhoneNumber(new PhoneNumber(phoneNumber));
+                
+            }
+            
+            langUnit.setPhoneDisplayFlg(isDisplayFlg);
             Datastore.put(tx, langUnit);
             
             // コミット

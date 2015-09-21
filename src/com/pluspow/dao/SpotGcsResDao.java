@@ -44,7 +44,7 @@ public class SpotGcsResDao extends DaoBase<SpotGcsRes>{
         return Datastore.query(meta)
                 .filter(
                     meta.spotRef.equal(spot.getKey()),
-                    meta.lang.equal(spot.getLangUnit().getLang()),
+                    meta.lang.equal(lang),
                     meta.invalid.equal(false)
                     ).asList();
     }

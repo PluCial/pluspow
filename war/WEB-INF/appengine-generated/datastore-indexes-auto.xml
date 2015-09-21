@@ -1,8 +1,8 @@
-<!-- Indices written at Mon, 21 Sep 2015 13:50:54 JST -->
+<!-- Indices written at Mon, 21 Sep 2015 22:42:49 JST -->
 
 <datastore-indexes>
 
-    <!-- Used 27 times in query history -->
+    <!-- Used 103 times in query history -->
     <datastore-index kind="LangUnit" ancestor="false" source="auto">
         <property name="invalid" direction="asc"/>
         <property name="slim3.classHierarchyList" direction="asc"/>
@@ -10,7 +10,7 @@
         <property name="createDate" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 18 times in query history -->
+    <!-- Used 47 times in query history -->
     <datastore-index kind="Item" ancestor="false" source="auto">
         <property name="invalid" direction="asc"/>
         <property name="langs" direction="asc"/>
@@ -18,7 +18,7 @@
         <property name="sortOrder" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 1 time in query history -->
+    <!-- Used 3 times in query history -->
     <datastore-index kind="Spot" ancestor="false" source="auto">
         <property name="clientRef" direction="asc"/>
         <property name="invalid" direction="asc"/>

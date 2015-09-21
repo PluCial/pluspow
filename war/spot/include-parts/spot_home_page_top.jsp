@@ -125,7 +125,18 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 								</a>
 								<%} %>
 							</p>
-							<p class="phone"><i class="fa fa-phone"></i> <%=spot.getPhoneNumber() %></p>
+							<p class="phone"><i class="fa fa-phone" style="<%=!isOwner && !spot.isPhoneDisplayFlg() ? "display: none;" : ""%>"></i> <span id="phone-number"><%=spot.isPhoneDisplayFlg() ? spot.getPhoneNumber() : ""%></span>
+								<%if(isOwner && isEditPage) { %>
+								<!-- 修正モード -->
+								<a data-toggle="modal" 
+									data-backdrop="static"
+									data-target="#phoneNumberModal" 
+									style="color:#333"
+									href="/spot/secure/editPhoneNumber?spotId=<%=spot.getSpotId() %>&lang=<%=spot.getLangUnit().getLang().toString() %>">
+									<i class="fa fa-pencil-square-o edit-mode"></i>
+								</a>
+								<%} %>
+							</p>
 						</div>
 
 						<div class="map" id="map"></div>

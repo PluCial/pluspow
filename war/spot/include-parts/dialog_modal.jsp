@@ -181,6 +181,7 @@ String modelId = (String)request.getParameter("modelId");
 	</script>
 	<%}else if(modelId.equals("itemDeleteModal")) { %>
 	<script>
+		jQuery(function($) {
 			/* ----------------------------------------------------------- */
 			/*  item delete
 			/* ----------------------------------------------------------- */
@@ -197,5 +198,80 @@ String modelId = (String)request.getParameter("modelId");
 					submitform.submit();
 				});
 			});
+		});
+	</script>
+	<%}else if(modelId.equals("phoneNumberModal")) { %>
+	<script>
+		jQuery(function($) {
+			/* ----------------------------------------------------------- */
+			/*  Edit Phone Number
+			/* ----------------------------------------------------------- */
+			$('#phoneNumberModal').on('hidden.bs.modal', function () {
+				$('#phoneNumberModal').removeData('bs.modal');
+			});
+	      
+			$('#phoneNumberModal').on('loaded.bs.modal', function () {
+				var submitButton = $(this).find('#phone-number-submit-button');
+				var submitform = $(this).find('#phone-number-submit-form');
+				
+				// display flg radio
+				var phoneNumberArea = $('#phone-number-area');
+				
+				var displayFlgRadio = $('input[name="isDisplayFlg"]:radio' );
+				
+				displayFlgRadio.change(function() {
+					
+					if($( this ).val() == 'true') {
+						console.log('is true');
+						phoneNumberArea.show();
+						
+					}else {
+						console.log('is false');
+						phoneNumberArea.hide();
+						
+					}
+				});
+	  		
+				// submit
+				submitButton.bind('click', function(e) {
+					
+					var formData = submitform.serialize();
+					var newPhoneNumber = submitform.find('[name=phoneNumber]').val();
+				
+					$.ajax({
+						type: "POST",
+						url: "/spot/secure/editPhoneNumberEntry",
+						data: formData,
+						dataType: "json",
+						success: function(data) {
+							if(data.status == "OK") {
+  						
+								var phoneNumberSpan = $('#phone-number');
+  						
+								$('#phoneNumberModal').modal('hide');
+  						
+								phoneNumberSpan.html(newPhoneNumber);
+								phoneNumberSpan.css({"display":"none"});
+								
+								if($('input[name="isDisplayFlg"]:checked' ).val() == 'true') {
+									phoneNumberSpan.animate({ opacity: 'show'},{ duration: 1500, easing: 'swing'});
+								}else {
+									phoneNumberSpan.hide();
+								}
+								
+							}else {
+								$('#errorMsg').show();
+								$('.form-group').addClass("has-error");
+							}
+						},
+						complete: function(data) {
+							console.log(data);
+							button.attr("disabled", false);
+						}
+					});
+				});
+				
+			});
+		});
 	</script>
 	<%} %>
