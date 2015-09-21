@@ -9,9 +9,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slim3.controller.upload.FileItem;
 import org.slim3.datastore.Datastore;
+import org.slim3.datastore.S3QueryResultList;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Transaction;
+import com.pluspow.App;
 import com.pluspow.dao.ItemDao;
 import com.pluspow.enums.ItemType;
 import com.pluspow.enums.Lang;
@@ -426,17 +428,46 @@ public class ItemService {
      * @return
      * @throws ObjectNotExistException 
      */
-    public static List<Item> getItemList(Spot spot, Lang lang) throws ObjectNotExistException {
+    public static S3QueryResultList<Item> getItemList(Spot spot, Lang lang, String cursor) throws ObjectNotExistException {
         
-        List<Item> itemList = dao.getItemList(spot, lang);
+        S3QueryResultList<Item> itemList = dao.getItemList(spot, lang, App.SPOT_ITEM_LIST_LIMIT, cursor);
         if(itemList == null) throw new ObjectNotExistException();
         
         // 詳細の追加
         for(Item item: itemList) {
             try {
                 setItemInfo(item, lang);
-            } catch (ObjectNotExistException e) {
-            }
+            } catch (ObjectNotExistException e) {}
+        }
+        
+        return itemList;
+    }
+    
+    /**
+     * スポットのアイテムリストを取得
+     * @param spot
+     * @param lang
+     * @return
+     * @throws ObjectNotExistException 
+     */
+    public static S3QueryResultList<Item> getEditModeItemList(Spot spot, Lang lang, String cursor) throws ObjectNotExistException {
+        
+        S3QueryResultList<Item> itemList = dao.getItemList(spot, spot.getBaseLang(), App.SPOT_ITEM_LIST_LIMIT, cursor);
+        if(itemList == null) throw new ObjectNotExistException();
+        
+        // 詳細の追加
+        for(Item item: itemList) {
+            try {
+                if(item.getLangs().indexOf(lang) >= 0) {
+                    // 対象の言語をサポートしている場合対象の言語を取得
+                    setItemInfo(item, lang);
+                    
+                }else {
+                    // 対象の言語をサポートしていない場合、base言語を取得
+                    setItemInfo(item, item.getBaseLang());
+                    
+                }
+            } catch (ObjectNotExistException e) {}
         }
         
         return itemList;

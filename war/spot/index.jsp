@@ -12,6 +12,13 @@
 Spot spot = (Spot) request.getAttribute("spot");
 boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 List<Item> itemList =(List<Item>) request.getAttribute("itemList");
+
+String cursor = null;
+boolean hasNext = false;
+if (request.getAttribute("cursor") != null && request.getAttribute("hasNext") != null) {
+	cursor = (String) request.getAttribute("cursor");
+	hasNext = Boolean.valueOf((String) request.getAttribute("hasNext"));
+}
 %>
 <!DOCTYPE html>
 <html lang="<%=spot.getLangUnit().getLang() %>">
@@ -57,9 +64,21 @@ List<Item> itemList =(List<Item>) request.getAttribute("itemList");
 					</div>
 				</div> <!-- Title row end -->
 			</div>
-			<jsp:include page="/spot/include-parts/spot_item_list.jsp">
-				<jsp:param name="isEditPage" value="true" />
-			</jsp:include>
+			
+			<div class="container">
+				<div class="row item-list-row <%=isOwner && spot.getLangUnit().getLang() == spot.getBaseLang() ? "connectedSortable" :""  %>">
+					<jsp:include page="/spot/include-parts/spot_item_list.jsp">
+						<jsp:param name="isEditPage" value="true" />
+					</jsp:include>
+				</div>
+				
+				<%if(hasNext) { %>
+				<div class="col-md-12 col-xs-12 text-center listHasNext">
+					<a class="btn btn-default nextLink" href="/spot/itemListNext?spotId=<%=spot.getSpotId() %>&lang=<%=spot.getLangUnit().getLang().toString() %>&cursor=<%=cursor %>">もっと見る</a>
+				</div>
+				<%} %>
+			</div>
+			
 		</section>
 		<%} %>
 		<!-- item-list end -->
@@ -95,6 +114,8 @@ List<Item> itemList =(List<Item>) request.getAttribute("itemList");
 	<!-- secure JS end -->
 	<%} %>
 	
+	<!-- waiting dialog -->
+	<script type="text/javascript" src="/plugins/waiting-dialog/waiting-dialog.js"></script>
 	
 	<!-- javaScript Map start -->
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?language=<%=spot.getLangUnit().getLang() %>"></script>

@@ -100,7 +100,11 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 		
 		<!-- item-list start -->
 		<section id="service" class="portfolio portfolio-box">
-			<jsp:include page="/spot/include-parts/spot_item_list.jsp" />
+			<div class="container">
+				<div class="row">
+					<jsp:include page="/spot/include-parts/spot_item_list.jsp" />
+				</div>
+			</div>
 		</section>
 		<!-- item-list end -->
 	

@@ -42,7 +42,7 @@ public class ItemController extends BaseController {
         
         
         // アイテムリストの取得
-        List<Item> itemList = ItemService.getItemList(spot, lang);
+        List<Item> itemList = ItemService.getItemList(spot, lang, null);
         requestScope("itemList", itemList != null ? itemList : new ArrayList<Item>());
         
         return forward("/spot/item.jsp");

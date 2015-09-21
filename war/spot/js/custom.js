@@ -338,6 +338,35 @@ jQuery(function($) {
       $(".connectedSortable .effect-oscar").css("cursor", "move");
       
       /* ----------------------------------------------------------- */
+      /*  read more
+      /* ----------------------------------------------------------- */
+      function nextLinkHandler(event) {
+
+    	  var nextUrl = $(this).attr('href');
+    	  waitingDialog.show();
+    	  
+    	  $.ajax({
+    		  type: 'GET',
+    		  url: nextUrl,
+    		  dataType: 'html',
+    		  success: function(data) {
+    			  $('.listHasNext').remove();
+    			  $('.item-list-row').append(data);
+    			  
+    			  $('a.nextLink').bind('click', nextLinkHandler);
+    		  },
+			  complete: function(data) {
+				  waitingDialog.hide();
+        		  return false;
+			  }
+    	  });
+    	  
+    	  return false;
+      }
+
+      $('a.nextLink').bind('click', nextLinkHandler);
+      
+      /* ----------------------------------------------------------- */
       /*  langs select
       /* ----------------------------------------------------------- */
       $("#langs-select").change(function() {
