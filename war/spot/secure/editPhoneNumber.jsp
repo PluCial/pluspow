@@ -25,7 +25,7 @@ Spot spot = (Spot) request.getAttribute("spot");
 		<div class="pull-right">
 			<button class="btn btn-box-tool btn-sm" data-dismiss="modal"><i class="fa fa-times"></i></button>
 		</div>
-		<h4 class="modal-title"><i class="fa fa-phone"></i> 電話番号</h4>
+		<h4 class="modal-title"><i class="fa fa-phone"></i> 電話番号の設定</h4>
 	</div><!-- /modal-header -->
     <form id="phone-number-submit-form">
 		<div class="modal-body">

@@ -274,4 +274,55 @@ String modelId = (String)request.getParameter("modelId");
 			});
 		});
 	</script>
+	<%}else if(modelId.equals("itemPriceModal")) { %>
+	<script>
+		jQuery(function($) {
+			/* ----------------------------------------------------------- */
+			/*  Edit Phone Number
+			/* ----------------------------------------------------------- */
+			$('#itemPriceModal').on('hidden.bs.modal', function () {
+				$('#itemPriceModal').removeData('bs.modal');
+			});
+	      
+			$('#itemPriceModal').on('loaded.bs.modal', function () {
+				var submitButton = $(this).find('#item-price-submit-button');
+				var submitform = $(this).find('#item-price-submit-form');
+	  		
+				// submit
+				submitButton.bind('click', function(e) {
+					
+					var formData = submitform.serialize();
+					var newPrice = submitform.find('[name=price]').val();
+				
+					$.ajax({
+						type: "POST",
+						url: "/spot/secure/editItemPriceEntry",
+						data: formData,
+						dataType: "json",
+						success: function(data) {
+							if(data.status == "OK") {
+  						
+								var priceSpan = $('#item-price');
+  						
+								$('#itemPriceModal').modal('hide');
+  						
+								priceSpan.css({"display":"none"});
+								priceSpan.html(String(newPrice).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,' ));
+								priceSpan.animate({ opacity: 'show'},{ duration: 1500, easing: 'swing'});
+								
+							}else {
+								$('#errorMsg').show();
+								$('.form-group').addClass("has-error");
+							}
+						},
+						complete: function(data) {
+							console.log(data);
+							button.attr("disabled", false);
+						}
+					});
+				});
+				
+			});
+		});
+	</script>
 	<%} %>

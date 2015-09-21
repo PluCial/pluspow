@@ -520,6 +520,31 @@ public class ItemService {
     }
     
     /**
+     * 金額の変更
+     * @param item
+     * @param price
+     */
+    public static void setPrice(Item item, double price) {
+        item.setPrice(price);
+        
+        // ---------------------------------------------------
+        // 保存処理
+        // ---------------------------------------------------
+        Transaction tx = Datastore.beginTransaction();
+        try {
+            Datastore.put(tx, item);
+
+            // コミット
+            tx.commit();
+
+        }finally {
+            if(tx.isActive()) {
+                tx.rollback();
+            }
+        }
+    }
+    
+    /**
      * 削除
      * @param spot
      */

@@ -70,8 +70,20 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 								<%} %>
 							</h2>
 							
-							<%if(item.getPrice() > 0) { %>
-							<div class="price-label"><i class="fa fa-jpy"></i> <span><%=item.getPriceString() %></span></div>
+							<%if(item.getPrice() > 0 || isOwner) { %>
+							<div class="price-label">
+								<i class="fa fa-jpy"></i> <span id="item-price"><%=item.getPriceString() %></span>
+								<%if(isOwner) { %>
+								<!-- 修正モード -->
+								<a data-toggle="modal" 
+									data-backdrop="static"
+									data-target="#itemPriceModal" 
+									style="color:#333"
+									href="/spot/secure/editItemPrice?spotId=<%=spot.getSpotId() %>&itemId=<%=item.getKey().getName() %>">
+									<i class="fa fa-pencil-square-o edit-mode"></i>
+								</a>
+								<%} %>
+							</div>
 							<%} %>
 							
 							<p>
@@ -127,6 +139,9 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 	<!-- secure JS start -->
 	<jsp:include page="/spot/include-parts/dialog_modal.jsp">
 		<jsp:param name="modelId" value="textResModal" />
+	</jsp:include>
+	<jsp:include page="/spot/include-parts/dialog_modal.jsp">
+		<jsp:param name="modelId" value="itemPriceModal" />
 	</jsp:include>
 	<!-- secure JS end -->
 	<%} %>
