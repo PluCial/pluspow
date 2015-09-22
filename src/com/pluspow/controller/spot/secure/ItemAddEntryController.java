@@ -9,6 +9,7 @@ import com.pluspow.enums.ItemType;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
 import com.pluspow.service.ItemService;
+import com.pluspow.utils.PathUtils;
 
 public class ItemAddEntryController extends BaseController {
 
@@ -46,7 +47,7 @@ public class ItemAddEntryController extends BaseController {
             imageX, imageY, imageWidth, imageHeight);
         
         
-        return redirect("/+" + spot.getSpotId() + "/l-" + spot.getBaseLang().toString() + "/");
+        return redirect(PathUtils.spotPage(spot, spot.getBaseLang()));
     }
     
     /**

@@ -5,6 +5,7 @@
 <%@ page import="com.pluspow.App" %>
 <%@ page import="com.pluspow.enums.*" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.pluspow.utils.*" %>
 <%@ page import="com.pluspow.model.*" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="org.slim3.controller.validator.Errors" %>
@@ -75,9 +76,7 @@ Errors errors =(Errors) request.getAttribute("errors");
 							<li class="active"><i class="fa fa-map-marker"></i> <%=baseSpot.getName() %></li>
 						</ol>
 					</section>
- 					
-
-
+ 
 					<div class="content">
 
 						<div class="row">
@@ -94,9 +93,7 @@ Errors errors =(Errors) request.getAttribute("errors");
 										</div>
 									</div>
 									<!-- /.box-header-->
-									
-										
-                
+
 									<div class="box-body chat" id="chat-box">
 										<table class="table table-hover table-striped">
 											<%
@@ -133,7 +130,7 @@ Errors errors =(Errors) request.getAttribute("errors");
 									<div class="icon">
 										<i class="fa fa-paper-plane"></i>
 									</div>
-									<a href="#" class="small-box-footer">他のプランは今準備中です。
+									<a href="<%=PathUtils.changePlanPage(baseSpot, false) %>" class="small-box-footer">プランの変更 <i class="fa fa-arrow-circle-right"></i>
 										 <!-- <i class="fa fa-arrow-circle-right"></i> -->
 									</a>
 								</section>
@@ -151,7 +148,7 @@ Errors errors =(Errors) request.getAttribute("errors");
 									</div><!-- /.info-box-content -->
 								</section><!-- /.info-box -->
               
-								<section class="info-box ">
+<%-- 								<section class="info-box ">
 									<span class="info-box-icon bg-green"><i class="fa fa-th"></i></span>
 									<div class="info-box-content">
 										<span class="info-box-text">登録したアイテム数</span>
@@ -161,7 +158,7 @@ Errors errors =(Errors) request.getAttribute("errors");
 										</div>
 										<span class="progress-description">フリープランでは<%=baseSpot.getPlan().getCreateItemMaxCount() %>アイテムまで登録できます。</span>
 									</div><!-- /.info-box-content -->
-								</section><!-- /.info-box -->
+								</section><!-- /.info-box --> --%>
 							
 							</div>
 

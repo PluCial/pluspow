@@ -19,6 +19,8 @@ import com.pluspow.constants.MemcacheKey;
 import com.pluspow.dao.SpotDao;
 import com.pluspow.enums.DayOfWeek;
 import com.pluspow.enums.Lang;
+import com.pluspow.enums.PlanLimitType;
+import com.pluspow.enums.ServicePlan;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.enums.TransStatus;
 import com.pluspow.enums.TransType;
@@ -28,6 +30,7 @@ import com.pluspow.exception.GeocodeStatusException;
 import com.pluspow.exception.GeocoderLocationTypeException;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.exception.ObjectNotExistException;
+import com.pluspow.exception.PlanLimitException;
 import com.pluspow.exception.TooManyException;
 import com.pluspow.exception.TransException;
 import com.pluspow.meta.SpotMeta;
@@ -35,6 +38,7 @@ import com.pluspow.model.Client;
 import com.pluspow.model.GeoModel;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotLangUnit;
+import com.pluspow.model.SpotPayPlan;
 import com.pluspow.model.SpotTextRes;
 import com.pluspow.model.TransCredit;
 import com.pluspow.utils.Utils;
@@ -212,6 +216,7 @@ public class SpotService {
      * スポットを取得
      * @param keyString
      * @return
+     * @throws ArgumentException 
      * @throws NoContentsException 
      */
     public static Spot getSpot(String spotId, Lang lang) throws ObjectNotExistException {
@@ -222,7 +227,14 @@ public class SpotService {
         model = getSpotModelOnly(spotId);
         
         // 付属情報の追加
-        setSpotInfo(model, lang);
+        try {
+            setSpotInfo(model, lang);
+            
+        } catch (ArgumentException e) {
+            // langUnitListを取得する時に引数のSpotにプランオブジェクトが存在しない場合に発生するが、
+            // setSpotInfo() 内でプランを設定しているため、発生することがありません。
+            // 呼び出し側に対してこのExceptionを隠します。
+        }
 
         return model;
     }
@@ -232,8 +244,14 @@ public class SpotService {
      * @param spot
      * @param lang
      * @throws ObjectNotExistException 
+     * @throws ArgumentException 
      */
-    private static void setSpotInfo(Spot spot, Lang lang) throws ObjectNotExistException {
+    private static void setSpotInfo(Spot spot, Lang lang) throws ObjectNotExistException, ArgumentException {
+        
+        // ---------------------------------------------------
+        // プランの設定
+        // ---------------------------------------------------
+        spot.setPlan(SpotService.getSpotPlan(spot));
         
         // ---------------------------------------------------
         // 言語情報の設定
@@ -251,6 +269,12 @@ public class SpotService {
             if(langUnit.getLang() == lang) {
                 spot.setLangUnit(langUnit);
             }
+        }
+        
+        // フリープランに切り替わった場合に一つ目の言語以外はlangUnitList から除外されるため、
+        // langUnitが取得できない。
+        if(spot.getLangUnit() == null) {
+            throw new ObjectNotExistException();
         }
         
         // ---------------------------------------------------
@@ -299,12 +323,24 @@ public class SpotService {
      * @throws TransException
      * @throws IOException
      * @throws DataMismatchException 
+     * @throws PlanLimitException 
      */
     public static void machineTrans(
             Spot spot,
-            Lang transLang) throws ArgumentException, TransException, IOException, DataMismatchException {
+            Lang transLang) throws ArgumentException, TransException, IOException, DataMismatchException, PlanLimitException {
         
         if(spot.getBaseLang() == transLang) throw new ArgumentException();
+        
+        ServicePlan plan = SpotService.getSpotPlan(spot);
+        
+        // ---------------------------------------------------
+        // 言語数のプラン制限確認
+        // プランによって表示されてない言語は再翻訳させないために、
+        // 言語の追加と再翻訳両方に言語数の制限チェックを実施する
+        // ---------------------------------------------------
+        if(spot.getLangs().size() >= plan.getTransLangMaxCount()) {
+            throw new PlanLimitException(PlanLimitType.TRANS_LANG_MAX_COUNT);
+        }
         
         // ---------------------------------------------------
         // 翻訳するコンテンツリスト
@@ -326,6 +362,15 @@ public class SpotService {
             if(transcontents.getRole().isTransTarget()) {
                 transCharCount = transCharCount + transcontents.getContentString().length();
             }
+        }
+        
+        // ---------------------------------------------------
+        // 言語文字数のプラン制限確認
+        // ---------------------------------------------------
+        TransCredit credit = TransCreditService.get(spot);
+        if(plan.getTransCharMaxCount() > 0 
+                && (credit.getTransCharCount() + transCharCount) >= plan.getTransCharMaxCount()) {
+            throw new PlanLimitException(PlanLimitType.TRANS_CHAR_MAX_COUNT);
         }
         
         // ---------------------------------------------------
@@ -420,7 +465,7 @@ public class SpotService {
             Lang transLang,
             List<SpotTextRes> transContentsList,
             Document transResult) throws IOException, GeocodeStatusException, GeocoderLocationTypeException, ArgumentException, TooManyException {
-
+        
         // ---------------------------------------------------
         // 住所の対象する言語で再取得
         // ---------------------------------------------------
@@ -516,11 +561,22 @@ public class SpotService {
      * @param invalid
      * @throws ObjectNotExistException 
      * @throws ArgumentException 
+     * @throws PlanLimitException 
      */
-    public static void setInvalid(Spot spot, Lang lang, boolean invalid) throws ObjectNotExistException, ArgumentException {
+    public static void setInvalid(Spot spot, Lang lang, boolean invalid) throws ObjectNotExistException, ArgumentException, PlanLimitException {
         
         // ベース言語の有効無効切り替えはできない。
         if(spot.getBaseLang() == lang) throw new ArgumentException();
+        
+        if(!invalid) {
+            // ---------------------------------------------------
+            // 言語数のプラン制限確認
+            // ---------------------------------------------------
+            ServicePlan plan = SpotService.getSpotPlan(spot);
+            if(spot.getLangs().size() >= plan.getTransLangMaxCount()) {
+                throw new PlanLimitException(PlanLimitType.TRANS_LANG_MAX_COUNT);
+            }
+        }
         
         SpotLangUnit langUnit = SpotLangUnitService.get(spot, lang);
         
@@ -580,6 +636,22 @@ public class SpotService {
             if(tx.isActive()) {
                 tx.rollback();
             }
+        }
+    }
+    
+    /**
+     * 利用プランの取得
+     * @param spot
+     * @return
+     */
+    public static ServicePlan getSpotPlan(Spot spot) {
+        // プラン
+        try {
+            SpotPayPlan payPlan = SpotPayPlanService.getPlan(spot);
+            return payPlan.getPlan();
+            
+        } catch (ObjectNotExistException e) {
+            return ServicePlan.FREE;
         }
     }
     

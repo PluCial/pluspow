@@ -54,11 +54,11 @@ public class SpotGcsResDao extends DaoBase<SpotGcsRes>{
      * @param spotId
      * @return
      */
-    public List<Key> getResourcesKeyList(Spot spot) {
+    public List<Key> getResourcesKeyList(Spot spot, Lang lang) {
         return Datastore.query(meta)
                 .filter(
                     meta.spotRef.equal(spot.getKey()),
-                    meta.lang.equal(spot.getLangUnit().getLang())
+                    meta.lang.equal(lang)
                     ).asKeyList();
     }
 

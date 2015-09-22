@@ -45,7 +45,16 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 						<div class="portfolio-slider">
 							<div class="flexportfolio flexslider">
 								<ul class="slides">
-									<li><img src="<%=item.getItemImageUrl() + "=s800" %>" alt=""></li>
+									<li>
+										<img src="<%=item.getItemImageUrl() + "=s800" %>" alt="">
+										<%if(isOwner) { %>
+										<a id="background-image-btn" 
+											style="top:30px" 
+											class="btn btn-default" 
+											href="/spot/secure/changeGcsRes?spotId=<%=spot.getSpotId() %>&lang=<%=spot.getLangUnit().getLang() %>&role=<%=GcsResRole.ITEM_IMAGE %>&itemId=<%=item.getKey().getName() %>&resourcesKey=<%=item.getItemImageResKey() %>">
+												<i class="fa fa-file-image-o"></i> 背景画像</a>
+										<%} %>
+									</li>
 								</ul>
 							</div>
 						</div>

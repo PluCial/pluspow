@@ -13,10 +13,6 @@ public enum SpotActivity {
     /**
      * コンストラクタ
      * @param name
-     * @param monthlyAmount
-     * @param transCharMaxCount
-     * @param createItemMaxCount
-     * @param createHowtoMaxCount
      */
     private SpotActivity(String name) {
         this.name = name;

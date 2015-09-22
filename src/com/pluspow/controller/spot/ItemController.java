@@ -8,10 +8,13 @@ import org.slim3.util.StringUtil;
 
 import com.pluspow.enums.Lang;
 import com.pluspow.exception.NoContentsException;
+import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Item;
 import com.pluspow.model.Spot;
+import com.pluspow.model.SpotLangUnit;
 import com.pluspow.service.ItemService;
+import com.pluspow.service.SpotLangUnitService;
 
 public class ItemController extends BaseController {
 
@@ -28,11 +31,26 @@ public class ItemController extends BaseController {
         
         // アイテムの取得
         try {
-            Item item = ItemService.getByKey(itemId, lang);
-            if(item.getLangs().indexOf(lang) < 0) throw new NoContentsException();
+            Item item = null;
+            try {
+                item = ItemService.getByKey(itemId, lang);
+            }catch(ObjectNotExistException e) {
+                throw new NoContentsException();
+            }
             requestScope("item", item);
             
-            List<Lang> suppertLangList = item.getLangs();
+            List<Lang> itemLangs = item.getLangs();
+            List<Lang> suppertLangList = new ArrayList<Lang>();
+            
+            // スポットとItem 両方でサポートしている言語のみを抽出
+            // ※スポットのプラン制限でサポート言語が増減するため。
+            List<SpotLangUnit> spotLangUnitList = SpotLangUnitService.getList(spot);
+            for(SpotLangUnit spotLangUnit: spotLangUnitList) {
+                if(itemLangs.indexOf(spotLangUnit.getLang()) >= 0) {
+                    suppertLangList.add(spotLangUnit.getLang());
+                }
+            }
+            
             requestScope("suppertLangList", suppertLangList != null ? suppertLangList : new ArrayList<Lang>());
             
         }catch (Exception e){

@@ -1,6 +1,5 @@
 package com.pluspow.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slim3.datastore.Datastore;
@@ -26,7 +25,7 @@ public class SpotLangUnitService extends LangUnitService {
     private static final SpotLangUnitDao dao = new SpotLangUnitDao();
     
     /**
-     * 取得
+     * 取得(無効なものも含まれる)
      * @param spot
      * @param lang
      * @return
@@ -45,33 +44,36 @@ public class SpotLangUnitService extends LangUnitService {
      * @param spot
      * @return
      * @throws ObjectNotExistException 
+     * @throws ArgumentException 
      */
-    public static List<SpotLangUnit> getList(Spot spot) throws ObjectNotExistException {
-        List<SpotLangUnit> list = dao.getList(spot);
+    public static List<SpotLangUnit> getList(Spot spot) throws ObjectNotExistException, ArgumentException {
+        if(spot.getPlan() == null) throw new ArgumentException();
+        
+        List<SpotLangUnit> list = dao.getList(spot, spot.getPlan().getTransLangMaxCount());
         
         if(list == null) throw new ObjectNotExistException();
         
         return list;
     }
     
-    /**
-     * リストの取得
-     * @param spot
-     * @param invalid
-     * @return
-     * @throws ObjectNotExistException 
-     */
-    public static List<SpotLangUnit> getList(Spot spot, boolean invalid) throws ObjectNotExistException {
-
-        List<SpotLangUnit> allUnitList = getList(spot);
-        
-        List<SpotLangUnit> unitList = new ArrayList<SpotLangUnit>();
-        for(SpotLangUnit unit: allUnitList) {
-            if(unit.isInvalid() == invalid) unitList.add(unit);
-        }
-        
-        return unitList;
-    }
+//    /**
+//     * リストの取得
+//     * @param spot
+//     * @param invalid
+//     * @return
+//     * @throws ObjectNotExistException 
+//     */
+//    public static List<SpotLangUnit> getList(Spot spot, boolean invalid) throws ObjectNotExistException {
+//
+//        List<SpotLangUnit> allUnitList = getList(spot);
+//        
+//        List<SpotLangUnit> unitList = new ArrayList<SpotLangUnit>();
+//        for(SpotLangUnit unit: allUnitList) {
+//            if(unit.isInvalid() == invalid) unitList.add(unit);
+//        }
+//        
+//        return unitList;
+//    }
     
     /**
      * 新しいモデルの取得(未永久化)

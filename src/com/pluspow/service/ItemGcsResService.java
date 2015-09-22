@@ -42,10 +42,11 @@ public class ItemGcsResService extends GcsResService {
      * @return
      * @throws IOException
      */
-    protected static ItemGcsRes addImageResources(
+    protected static ItemGcsRes addImageRes(
             Transaction tx, 
             Spot spot, 
             Item item,
+            Lang lang,
             FileItem fileItem,
             int leftX, 
             int topY, 
@@ -77,12 +78,51 @@ public class ItemGcsResService extends GcsResService {
         model.getSpotRef().setModel(spot);
         model.getItemRef().setModel(item);
         model.setRole(GcsResRole.ITEM_IMAGE);
-        model.setLang(spot.getLangUnit().getLang());
+        model.setLang(lang);
 
         // 保存
         Datastore.put(tx, model);
         
         return model;
+    }
+    
+    /**
+     * 画像の追加
+     * @param spot
+     * @param item
+     * @param fileItem
+     * @param leftX
+     * @param topY
+     * @param rightX
+     * @param bottomY
+     * @return
+     * @throws IOException
+     */
+    public static ItemGcsRes addImageRes(
+            Spot spot, 
+            Item item,
+            Lang lang,
+            FileItem fileItem,
+            int leftX, 
+            int topY, 
+            int rightX,
+            int bottomY) throws IOException {
+        
+        Transaction tx = Datastore.beginTransaction();
+        
+        try {
+            ItemGcsRes model = addImageRes(tx, spot, item, lang, fileItem, leftX, topY, rightX, bottomY);
+            
+            tx.commit();
+            
+            return model;
+
+        }finally {
+            if(tx.isActive()) {
+                tx.rollback();
+            }
+        }
+
     }
     
     /**
@@ -100,8 +140,7 @@ public class ItemGcsResService extends GcsResService {
      * @throws IOException
      * @throws ObjectNotExistException 
      */
-    protected static ItemGcsRes updateImageResources(
-            Transaction tx, 
+    public static ItemGcsRes updateImageRes(
             Spot spot,
             Item item, 
             String resourcesKey,
@@ -115,11 +154,25 @@ public class ItemGcsResService extends GcsResService {
         
         ItemGcsRes oldModel = getResources(resourcesKey);
         
-        // 古いモデルを無効にする
-        oldModel.setInvalid(true);
-        dao.put(oldModel);
+        ItemGcsRes newModel = null;
+        Transaction tx = Datastore.beginTransaction();
+        try {
+            // 古いモデルを無効にする
+            oldModel.setInvalid(true);
+            Datastore.put(tx, oldModel);
+            
+            // 新しいモデルを作成
+            newModel = addImageRes(tx, spot, item, oldModel.getLang(), fileItem, leftX, topY, rightX, bottomY);
+
+            tx.commit();
+            
+        }finally {
+            if(tx.isActive()) {
+                tx.rollback();
+            }
+        }
         
-        return addImageResources(tx, spot, item, fileItem, leftX, topY, rightX, bottomY);
+        return newModel;
     }
     
     /**
@@ -132,7 +185,7 @@ public class ItemGcsResService extends GcsResService {
     protected static void replicationOtherLangRes(Transaction tx, Spot spot, Item item, Lang lang) {
         List<ItemGcsRes> resList;
         try {
-            resList = getResourcesList(item);
+            resList = getResourcesList(item, lang);
             
         } catch (ObjectNotExistException e) {
             // 複製するものがない場合は何も処理せずに終了
@@ -153,11 +206,9 @@ public class ItemGcsResService extends GcsResService {
      * @return
      * @throws ObjectNotExistException 
      */
-    private static ItemGcsRes getResources(String resourcesKey) throws ObjectNotExistException {
-        ItemGcsRes model =  dao.get(createKey(resourcesKey));
-        
+    public static ItemGcsRes getResources(String resourcesKey) throws ObjectNotExistException {
+        ItemGcsRes model =  dao.getOrNull(createKey(resourcesKey));
         if(model == null) throw new ObjectNotExistException();
-
         return model;
     }
     
@@ -167,11 +218,9 @@ public class ItemGcsResService extends GcsResService {
      * @return
      * @throws ObjectNotExistException 
      */
-    protected static List<ItemGcsRes> getResourcesList(Item item) throws ObjectNotExistException {
-        List<ItemGcsRes> list = dao.getResourcesList(item);
-        
+    protected static List<ItemGcsRes> getResourcesList(Item item, Lang lang) throws ObjectNotExistException {
+        List<ItemGcsRes> list = dao.getResourcesList(item, lang);
         if(list == null) throw new ObjectNotExistException();
-        
         return list;
     }
 

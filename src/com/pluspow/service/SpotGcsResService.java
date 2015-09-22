@@ -15,8 +15,8 @@ import com.google.appengine.api.images.Image;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.tools.cloudstorage.GcsFilename;
 import com.pluspow.dao.SpotGcsResDao;
-import com.pluspow.enums.Lang;
 import com.pluspow.enums.GcsResRole;
+import com.pluspow.enums.Lang;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Spot;
@@ -45,6 +45,7 @@ public class SpotGcsResService extends GcsResService {
      * @throws IOException
      */
     public static SpotGcsRes addImageRes(
+            Transaction tx, 
             Spot spot, 
             Lang lang, 
             GcsResRole role,
@@ -81,9 +82,47 @@ public class SpotGcsResService extends GcsResService {
         model.setLang(lang);
         
         // 保存
-        Datastore.put(model);
+        Datastore.put(tx, model);
         
         return model;
+    }
+    
+    /**
+     * 画像追加
+     * @param spot
+     * @param lang
+     * @param role
+     * @param fileItem
+     * @param leftX
+     * @param topY
+     * @param rightX
+     * @param bottomY
+     * @return
+     * @throws IOException
+     */
+    public static SpotGcsRes addImageRes(
+            Spot spot, 
+            Lang lang, 
+            GcsResRole role,
+            FileItem fileItem,
+            int leftX, 
+            int topY, 
+            int rightX,
+            int bottomY) throws IOException {
+        
+        Transaction tx = Datastore.beginTransaction();
+        try {
+            SpotGcsRes model = addImageRes(tx, spot, lang, role, fileItem, leftX, topY, rightX, bottomY);
+            
+            tx.commit();
+            
+            return model;
+
+        }finally {
+            if(tx.isActive()) {
+                tx.rollback();
+            }
+        }
     }
     
     /**
@@ -129,7 +168,7 @@ public class SpotGcsResService extends GcsResService {
     protected static void replicationOtherLangRes(Transaction tx, Spot spot, Lang lang) {
         List<SpotGcsRes> resList;
         try {
-            resList = getResourcesList(spot, spot.getBaseLang());
+            resList = getResourcesList(spot, lang);
         } catch (ObjectNotExistException e) {
             // 更新するものがなければそのまま終了
             return;

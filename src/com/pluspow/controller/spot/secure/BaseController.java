@@ -7,39 +7,46 @@ import com.pluspow.enums.Lang;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.exception.NoLoginException;
 import com.pluspow.exception.ObjectNotExistException;
-import com.pluspow.exception.PermissionException;
+import com.pluspow.exception.PlanLimitException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
 import com.pluspow.service.SpotService;
+import com.pluspow.utils.PathUtils;
 
 public abstract class BaseController extends com.pluspow.controller.BaseController {
 
     @Override
     protected Navigation run() throws Exception {
-        
-        try {
-            Client client = getLoginClient();
-            Spot spot = getSpot();
-            
-            // オーナーチェック
-            boolean isOwner = spot.getClientRef().getKey().equals(client.getKey());
-            if(!isOwner) {
-                throw new PermissionException();
-            }
 
-            requestScope("isSmartPhone", String.valueOf(isSmartPhone()));
-            requestScope("isLocal", String.valueOf(isLocal()));
-            requestScope("isClientLogged", String.valueOf(client != null));
-            requestScope("client", client);
-            
-            requestScope("spot", spot);
-            
+        Client client = null;
+        try {
+            client = getLoginClient();
+        }catch(NoLoginException e) {
+            return redirect("/client/login");
+        }
+
+        // スポットの取得
+        Spot spot = getSpot();
+        requestScope("spot", spot);
+
+        // オーナーチェック
+        boolean isOwner = spot.getClientRef().getKey().equals(client.getKey());
+        if(!isOwner) {
+            throw new NoContentsException();
+        }
+
+        requestScope("isSmartPhone", String.valueOf(isSmartPhone()));
+        requestScope("isLocal", String.valueOf(isLocal()));
+        requestScope("isClientLogged", String.valueOf(client != null));
+        requestScope("client", client);
+
+        
+        try {    
             // ログインしている場合
             return execute(client, spot);
 
-        }catch(NoLoginException e) {
-            return redirect("/client/login");
-            
+        }catch(PlanLimitException e) {
+            return redirect(PathUtils.changePlanPage(spot, true));
         }
     }
     

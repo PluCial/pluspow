@@ -57,34 +57,6 @@ public class SpotPayPlanService {
     }
     
     /**
-     * プレミアムスタート
-     * @param spot
-     * @return
-     * @throws ChangePlanException
-     */
-    public static SpotPayPlan startPremiumPlan(Spot spot) throws ChangePlanException {
-        
-
-        SpotPayPlan plan = null;
-        try {
-            plan = getPlan(spot);
-            // 有効なものが既に存在している場合はエラー
-            throw new ChangePlanException();
-            
-        } catch (ObjectNotExistException e) {}
-        
-        plan = new SpotPayPlan();
-        plan.setPlan(ServicePlan.PREMIUM);
-        plan.setMonthlyAmount(ServicePlan.PREMIUM.getMonthlyAmount());
-        plan.setStartDate(new Date());
-        plan.setEndDate(getEndDate());
-        
-        dao.put(plan);
-        
-        return plan;
-    }
-    
-    /**
      * 終了日の取得(1年縛り)
      * @return
      */

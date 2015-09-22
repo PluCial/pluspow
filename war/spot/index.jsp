@@ -10,6 +10,7 @@
 <%@ page import="org.slim3.util.StringUtil" %>
 <%
 Spot spot = (Spot) request.getAttribute("spot");
+System.out.println(spot.getSpotId());
 boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 List<Item> itemList =(List<Item>) request.getAttribute("itemList");
 

@@ -10,6 +10,7 @@ import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
 import com.pluspow.service.SpotService;
+import com.pluspow.utils.PathUtils;
 
 public abstract class BaseController extends com.pluspow.controller.BaseController {
 
@@ -30,8 +31,8 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
                 // -------------------------------------
                 // 言語の指定がない場合はベース言語にリダイレクトする
                 // -------------------------------------
-                spot = SpotService.getSpotBaseLang(spotId);
-                return redirect("/+" + spot.getSpotId() + "/l-" + spot.getBaseLang().getLangKey() + "/");
+                spot = SpotService.getSpotModelOnly(spotId);
+                return redirect(PathUtils.spotPage(spot, spot.getBaseLang()));
 
             }else {
                 // -------------------------------------

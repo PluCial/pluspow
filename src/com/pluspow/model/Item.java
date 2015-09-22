@@ -163,6 +163,10 @@ public class Item implements Serializable {
         return itemImageRes == null ? "" : itemImageRes.getServingUrl();
     }
     
+    public String getItemImageResKey() {
+        return itemImageRes == null ? null : itemImageRes.getKey().getName();
+    }
+    
     // ----------------------------------------------------------------------
     // ゲッター＆セッター
     // ----------------------------------------------------------------------

@@ -20,10 +20,7 @@ public enum ItemType {
     /**
      * コンストラクタ
      * @param name
-     * @param monthlyAmount
-     * @param transCharMaxCount
-     * @param createItemMaxCount
-     * @param createHowtoMaxCount
+     * @param activity
      */
     private ItemType(String name, SpotActivity activity) {
         this.name = name;

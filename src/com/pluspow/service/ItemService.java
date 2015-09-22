@@ -17,12 +17,15 @@ import com.pluspow.App;
 import com.pluspow.dao.ItemDao;
 import com.pluspow.enums.ItemType;
 import com.pluspow.enums.Lang;
+import com.pluspow.enums.PlanLimitType;
+import com.pluspow.enums.ServicePlan;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.enums.TransStatus;
 import com.pluspow.enums.TransType;
 import com.pluspow.exception.ArgumentException;
 import com.pluspow.exception.DataMismatchException;
 import com.pluspow.exception.ObjectNotExistException;
+import com.pluspow.exception.PlanLimitException;
 import com.pluspow.exception.TooManyException;
 import com.pluspow.exception.TransException;
 import com.pluspow.meta.ItemMeta;
@@ -32,6 +35,7 @@ import com.pluspow.model.ItemTextRes;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotLangUnit;
 import com.pluspow.model.TextRes;
+import com.pluspow.model.TransCredit;
 import com.pluspow.utils.Utils;
 
 public class ItemService {
@@ -145,10 +149,11 @@ public class ItemService {
             ItemTextResService.add(tx, spot, model, spot.getBaseLang(), TextResRole.ITEM_DETAIL, detail);
             
             // アイテム画像の保存
-            ItemGcsResService.addImageResources(
+            ItemGcsResService.addImageRes(
                 tx, 
                 spot, 
                 model, 
+                spot.getBaseLang(),
                 fileItem, 
                 leftX, 
                 topY, 
@@ -174,12 +179,14 @@ public class ItemService {
      * @throws ArgumentException
      * @throws TransException
      * @throws DataMismatchException
+     * @throws PlanLimitException 
      */
-    public static void machineTrans(Spot spot, 
+    public static void machineTrans(
+            Spot spot, 
             Item item,
-            Lang transLang) throws ArgumentException, TransException, DataMismatchException {
+            Lang transLang) throws ArgumentException, TransException, DataMismatchException, PlanLimitException {
 
-        if(spot.getBaseLang() == transLang) throw new ArgumentException();
+        if(item.getBaseLang() == transLang) throw new ArgumentException();
 
         // ---------------------------------------------------
         // 翻訳するコンテンツリスト
@@ -198,6 +205,16 @@ public class ItemService {
         int transCharCount = 0;
         for(TextRes transcontents: transContentsList) {
             transCharCount = transCharCount + transcontents.getContentString().length();
+        }
+        
+        // ---------------------------------------------------
+        // 言語文字数のプラン制限確認
+        // ---------------------------------------------------
+        ServicePlan plan = SpotService.getSpotPlan(spot);
+        TransCredit credit = TransCreditService.get(spot);
+        if(plan.getTransCharMaxCount() > 0 
+                && (credit.getTransCharCount() + transCharCount) >= plan.getTransCharMaxCount()) {
+            throw new PlanLimitException(PlanLimitType.TRANS_CHAR_MAX_COUNT);
         }
 
         // ---------------------------------------------------
@@ -405,7 +422,7 @@ public class ItemService {
         
         item.setTextResources(ItemTextResService.getResourcesMap(item, lang));
         
-        item.setGcsResources(ItemGcsResService.getResourcesList(item));
+        item.setGcsResources(ItemGcsResService.getResourcesList(item, lang));
     }
     
     /**

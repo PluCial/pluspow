@@ -2,33 +2,34 @@ package com.pluspow.enums;
 
 /**
  * サービスプラン
+ * <pre>
+ * Freeプラン：
+ *      フリープランはベース言語を含めて2か国語に設定
+ *      
+ * Standardプラン：
+ *      検索条件から言語を絞っているので、無制限でも言語の数を登録する必要がある。
+ * </pre>
  * @author takahara
  */
 public enum ServicePlan {
-    FREE("フリー", 0, 3000, 10, 3),
-    STANDARD("スタンダード", 980, -1, 50, 10),
-    PREMIUM("プレミアム", 9800, -1, -1, -1);
+    FREE("フリー", 0, 2, 3000),
+    STANDARD("スタンダード", 380, Lang.values().length, -1);
     
     /** 名前 */
     private String planName;
     
     /** 毎月の請求額 */
-    private double monthlyAmount = 0; 
+    private double monthlyAmount = 0;
+    
+    /**
+     * 翻訳可能言語数上限
+     */
+    private int transLangMaxCount = 0;
     
     /**
      * 翻訳可能文字数上限(マイナスは無制限)
      */
     private int transCharMaxCount = -1;
-    
-    /**
-     * 作成可能アイテム上限数(マイナスは無制限)
-     */
-    private int createItemMaxCount = -1;
-    
-    /**
-     * 作成可能ハウツー上限数(マイナスは無制限)
-     */
-    private int createHowtoMaxCount = -1;
     
     /**
      * コンストラクタ
@@ -41,15 +42,12 @@ public enum ServicePlan {
     private ServicePlan(
             String planName,
             double monthlyAmount,
-            int transCharMaxCount, 
-            int createItemMaxCount, 
-            int createHowtoMaxCount) {
+            int transLangMaxCount,
+            int transCharMaxCount) {
         this.planName = planName;
         this.monthlyAmount = monthlyAmount;
         this.transCharMaxCount = transCharMaxCount;
-        this.createItemMaxCount = createItemMaxCount;
-        this.createHowtoMaxCount = createHowtoMaxCount;
-        
+        this.transLangMaxCount = transLangMaxCount;
     }
 
     public String getPlanName() {
@@ -64,11 +62,11 @@ public enum ServicePlan {
         return transCharMaxCount;
     }
 
-    public int getCreateItemMaxCount() {
-        return createItemMaxCount;
+    public int getTransLangMaxCount() {
+        return transLangMaxCount;
     }
 
-    public int getCreateHowtoMaxCount() {
-        return createHowtoMaxCount;
+    public void setTransLangMaxCount(int transLangMaxCount) {
+        this.transLangMaxCount = transLangMaxCount;
     }
 }

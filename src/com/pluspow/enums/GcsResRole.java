@@ -11,10 +11,6 @@ public enum GcsResRole {
     /**
      * コンストラクタ
      * @param name
-     * @param monthlyAmount
-     * @param transCharMaxCount
-     * @param createItemMaxCount
-     * @param createHowtoMaxCount
      */
     private GcsResRole(String name) {
         this.name = name;

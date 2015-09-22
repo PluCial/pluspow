@@ -6,6 +6,7 @@ import org.slim3.datastore.DaoBase;
 import org.slim3.datastore.Datastore;
 
 import com.google.appengine.api.datastore.Key;
+import com.pluspow.enums.Lang;
 import com.pluspow.meta.ItemGcsResMeta;
 import com.pluspow.model.Item;
 import com.pluspow.model.ItemGcsRes;
@@ -20,10 +21,11 @@ public class ItemGcsResDao extends DaoBase<ItemGcsRes>{
      * @param spotId
      * @return
      */
-    public List<ItemGcsRes> getResourcesList(Item item) {
+    public List<ItemGcsRes> getResourcesList(Item item, Lang lang) {
         return Datastore.query(meta)
                 .filter(
                     meta.itemRef.equal(item.getKey()),
+                    meta.lang.equal(lang),
                     meta.invalid.equal(false)
                     ).asList();
     }
@@ -33,10 +35,11 @@ public class ItemGcsResDao extends DaoBase<ItemGcsRes>{
      * @param spotId
      * @return
      */
-    public List<Key> getResourcesKeyList(Item item) {
+    public List<Key> getResourcesKeyList(Item item, Lang lang) {
         return Datastore.query(meta)
                 .filter(
-                    meta.itemRef.equal(item.getKey())
+                    meta.itemRef.equal(item.getKey()),
+                    meta.lang.equal(lang)
                     ).asKeyList();
     }
 

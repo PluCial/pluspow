@@ -1,10 +1,14 @@
 package com.pluspow;
 
+import com.pluspow.enums.Lang;
+
 
 public class App {
     
     /** アプリケーション名 */
     public static final String APP_DISPLAY_NAME = "Pluspow";
+    
+    public static final Lang APP_BASE_LANG = Lang.en;
     
     /** メール送信元アドレス */
     public static final String EMAIL_FROM_ADDRESS = "info@pluspow.com";
