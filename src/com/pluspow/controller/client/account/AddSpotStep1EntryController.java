@@ -3,6 +3,7 @@ package com.pluspow.controller.client.account;
 import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Validators;
 
+import com.pluspow.enums.Country;
 import com.pluspow.exception.GeocoderLocationTypeException;
 import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Client;
@@ -71,9 +72,30 @@ public class AddSpotStep1EntryController extends BaseController {
         }
         
         // ------------------------------------------
+        // 国のサポートチェック
+        // ------------------------------------------
+        Country country = null;
+        try {
+            country = Country.valueOf(geoModel.getCountryShortName());
+            
+            if(!country.isSupport()) {
+                throw new IllegalArgumentException();
+            }
+            
+        }catch(IllegalArgumentException e) {
+            Validators v = new Validators(request);
+            v.add("address",
+                new NGValidator(geoModel.getCountryLongName() + "のスポットは現在サポートしていません。"));
+            v.validate();
+
+            return forward("/client/account/addSpotStep1.jsp");
+
+        }
+        
+        // ------------------------------------------
         // スポットエントリーの設定
         // ------------------------------------------
-        spot = SpotService.setStep1(client, spotId, client.getLang(), address, phoneNumber, email, geoModel);
+        spot = SpotService.setStep1(client, spotId, client.getLang(), country, address, phoneNumber, email, geoModel);
         // セッションへ保存
         sessionScope("spotEntryInfo", spot);
 

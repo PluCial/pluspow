@@ -15,10 +15,11 @@ import org.slim3.datastore.ModificationDate;
 import com.google.appengine.api.datastore.Email;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PostalAddress;
-import com.pluspow.enums.ServicePlan;
-import com.pluspow.enums.SpotActivity;
+import com.pluspow.enums.Country;
 import com.pluspow.enums.GcsResRole;
 import com.pluspow.enums.Lang;
+import com.pluspow.enums.ServicePlan;
+import com.pluspow.enums.SpotActivity;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.service.SpotGcsResService;
 import com.pluspow.service.SpotTextResService;
@@ -46,6 +47,24 @@ public class Spot implements Serializable {
      * スポットID
      */
     private String spotId;
+    
+    /**
+     * GEO lat
+     */
+    @Attribute(unindexed = true)
+    private float lat;
+    
+    /**
+     * GEO lng
+     */
+    @Attribute(unindexed = true)
+    private float lng;
+    
+    /**
+     * country
+     */
+    @Attribute(unindexed = true)
+    private Country country;
     
     /**
      * メールアドレス(ログインとは別に連絡用としてのメールアドレス)
@@ -137,14 +156,6 @@ public class Spot implements Serializable {
     
     public String getGeoFormattedAddress() {
         return langUnit.getGeoFormattedAddress();
-    }
-
-    public float getGeoLat() {
-        return langUnit.getGeoLat();
-    }
-
-    public float getGeoLng() {
-        return langUnit.getGeoLng();
     }
     
     public String getGeoCountry() {
@@ -571,5 +582,29 @@ public class Spot implements Serializable {
 
     public void setItemSortOrderIndex(double itemSortOrderIndex) {
         this.itemSortOrderIndex = itemSortOrderIndex;
+    }
+
+    public float getLat() {
+        return lat;
+    }
+
+    public void setLat(float lat) {
+        this.lat = lat;
+    }
+
+    public float getLng() {
+        return lng;
+    }
+
+    public void setLng(float lng) {
+        this.lng = lng;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
     }
 }

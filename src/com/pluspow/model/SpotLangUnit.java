@@ -48,18 +48,7 @@ public class SpotLangUnit extends LangUnit implements Serializable {
      */
     @Attribute(unindexed = true)
     private String geoFormattedAddress;
-    
-    /**
-     * GEO lat
-     */
-    @Attribute(unindexed = true)
-    private float geoLat;
-    
-    /**
-     * GEO lng
-     */
-    @Attribute(unindexed = true)
-    private float geoLng;
+
     
     /**
      * country
@@ -117,22 +106,6 @@ public class SpotLangUnit extends LangUnit implements Serializable {
 
     public void setGeoFormattedAddress(String geoFormattedAddress) {
         this.geoFormattedAddress = geoFormattedAddress;
-    }
-
-    public float getGeoLat() {
-        return geoLat;
-    }
-
-    public void setGeoLat(float geoLat) {
-        this.geoLat = geoLat;
-    }
-
-    public float getGeoLng() {
-        return geoLng;
-    }
-
-    public void setGeoLng(float geoLng) {
-        this.geoLng = geoLng;
     }
 
     public String getGeoCountry() {

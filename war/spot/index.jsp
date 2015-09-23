@@ -130,7 +130,7 @@ if (request.getAttribute("cursor") != null && request.getAttribute("hasNext") !=
 		  $("#map").gmap3({
 		        map:{
 		            options:{
-		               center:[<%=spot.getGeoLat() %>,<%=spot.getGeoLng() %>],
+		               center:[<%=spot.getLat() %>,<%=spot.getLng() %>],
 		               zoom: 14,
 		               scrollwheel: false
 		            }

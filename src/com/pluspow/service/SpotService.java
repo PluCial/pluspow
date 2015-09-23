@@ -17,6 +17,7 @@ import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.constants.MemcacheKey;
 import com.pluspow.dao.SpotDao;
+import com.pluspow.enums.Country;
 import com.pluspow.enums.DayOfWeek;
 import com.pluspow.enums.Lang;
 import com.pluspow.enums.PlanLimitType;
@@ -63,6 +64,7 @@ public class SpotService {
             Client client,
             String spotId, 
             Lang lang,
+            Country country,
             String address, 
             String phoneNumber, 
             String email,
@@ -73,10 +75,17 @@ public class SpotService {
         model.setBaseLang(lang);
         model.setEmail(new Email(email));
         
+        // 座標の設定
+        model.setLat(geoModel.getLat().floatValue());
+        model.setLng(geoModel.getLng().floatValue());
+        
+        // 国の設定
+        model.setCountry(country);
+        
         // クライアントとの関連
         model.getClientRef().setModel(client);
         
-        // 言語情報の設定
+        // 言語ユニットの設定
         model.setLangUnit(SpotLangUnitService.getNewModel(model, lang, phoneNumber, geoModel));
         
         // テキストリソースの設定
