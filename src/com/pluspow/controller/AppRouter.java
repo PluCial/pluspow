@@ -33,7 +33,7 @@ public class AppRouter extends RouterImpl {
 //            "/pub/bl/index");
 	    
 	    // infoの設定
-	    setInfo();
+//	    setInfo();
 	    
 	    setSpot();
 	    
@@ -80,62 +80,6 @@ public class AppRouter extends RouterImpl {
         addRouting(
             "/\\+{spotId}/l-{lang}/howto/{howtoId}",
             "/spot/howto?spotId={spotId}&howtoId={howtoId}&lang={lang}");
-	}
-	
-	/**
-	 * INFO
-	 */
-	private void setInfo() {
-	    // ABOUT
-        addRouting(
-                "/info/about",
-                "/pub/info/about");
-        
-        // 利用規約
-        addRouting(
-                "/info/agreement",
-                "/pub/info/agreement");
-        
-        // お問い合わせ
-        addRouting(
-                "/info/contact",
-                "/pub/info/contact");
-        addRouting(
-            "/info/contactMsgSend",
-            "/pub/info/contactMsgSend");
-        addRouting(
-            "/info/contactEnd",
-            "/pub/info/contactEnd");
-        
-        // 報道関係者各位へ
-        addRouting(
-                "/info/coverage",
-                "/pub/info/coverage");
-        
-        // サービス特徴
-        addRouting(
-                "/info/features",
-                "/pub/info/features");
-        
-        // パートナーシップ
-        addRouting(
-                "/info/partnership",
-                "/pub/info/partnership");
-        
-        // 利用料金とプラン
-        addRouting(
-                "/info/price",
-                "/pub/info/price");
-        
-        // プライバシーポリシー
-        addRouting(
-                "/info/privacy",
-                "/pub/info/privacy");
-        
-        // プライバシーポリシー
-        addRouting(
-                "/info/langs",
-                "/pub/info/langs");
 	}
 
 }

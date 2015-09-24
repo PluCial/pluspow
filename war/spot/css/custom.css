@@ -573,3 +573,21 @@ i.edit-mode {
 /*     color: #f16358; */
     font-weight: 700;
 }
+
+/* INFO
+================================================== */
+body.info {
+	background: #d2d6de;
+}
+
+article.container {
+	background-color: #fff;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+    padding: 64px;
+}
+
+article.container header {
+	margin-bottom: 30px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #eee;
+}

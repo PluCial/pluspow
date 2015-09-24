@@ -66,7 +66,7 @@ int floor = StringUtil.isEmpty(floorString) ? 1 : Integer.valueOf(floorString);
 										<%} %>
 										<div class="input-group">
 											<span class="input-group-addon" style="color: #333;"><b>https://pluspow.com/+</b></span>
-											<input type="text" ${f:text("spotId")} class="form-control" placeholder="スポットID">
+											<input type="text" ${f:text("spotId")} class="form-control" placeholder="スポットID" required>
 										</div>
 									</div>
 									
@@ -78,7 +78,7 @@ int floor = StringUtil.isEmpty(floorString) ? 1 : Integer.valueOf(floorString);
 										<%} %>
 										<div class="input-group">
 											<span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-											<input type="text" ${f:text("address")} class="form-control" placeholder="例：福岡県福岡市博多区博多駅東1-12-17">
+											<input type="text" ${f:text("address")} class="form-control" placeholder="例：福岡県福岡市博多区博多駅東1-12-17" required>
 										</div>
 									</div>
 									
@@ -104,7 +104,7 @@ int floor = StringUtil.isEmpty(floorString) ? 1 : Integer.valueOf(floorString);
 										<%} %>
 										<div class="input-group">
 											<span class="input-group-addon"><i class="fa fa-phone"></i></span>
-											<input type="text" ${f:text("phoneNumber")} class="form-control" placeholder="092-1111-1111">
+											<input type="text" ${f:text("phoneNumber")} class="form-control" placeholder="092-1111-1111" required>
 										</div>
 									</div>
                     

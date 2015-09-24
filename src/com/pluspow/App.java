@@ -8,10 +8,31 @@ public class App {
     /** アプリケーション名 */
     public static final String APP_DISPLAY_NAME = "Pluspow";
     
+    /**
+     * 本番ドメイン
+     */
+    public static final String APP_PRODUCTION_DOMAIN = "pluspow.com";
+    
+    /**
+     * 運用会社名
+     */
+    public static final String MANAGEMENT_COMPANY_NAME = "Plucial,Inc.";
+    
+    /**
+     * 運用会社名
+     */
+    public static final String MANAGEMENT_COMPANY_NAME_JP = "株式会社プラシャル";
+    
+    /**
+     * サービスのベース言語
+     */
     public static final Lang APP_BASE_LANG = Lang.en;
     
     /** メール送信元アドレス */
     public static final String EMAIL_FROM_ADDRESS = "info@pluspow.com";
+    
+    /** コンタクトメール送信先アドレス */
+    public static final String EMAIL_CONTACT_TO_ADDRESS = "info@pluspow.com";
     
     // ---------------------------------------------------------------------------
     // GOOGLE PROJECT 定数

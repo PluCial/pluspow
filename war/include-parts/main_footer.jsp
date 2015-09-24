@@ -2,15 +2,9 @@
 <%@ page import="com.pluspow.App" %>
 <%@ page import="com.pluspow.model.*" %>
 <%@ page import="com.pluspow.enums.*" %>
-<%
-	Spot spot =(Spot) request.getAttribute("spot");
-boolean isClientLogged = Boolean.valueOf((String) request.getAttribute("isClientLogged"));
-boolean adFlg = (spot.getLangUnit().getLang() == Lang.ja);
-%>
 	<section id="footer" class="footer service-footer">
 		<div class="container">
 		
-			<%if(adFlg) { %>
 			<div class="row">
 				<div class="col-md-3 col-sm-12 footer-widget">
 					<h3 class="widget-title"><%=App.APP_DISPLAY_NAME %></h3>
@@ -50,12 +44,11 @@ boolean adFlg = (spot.getLangUnit().getLang() == Lang.ja);
 				</div>
 
 			</div><!--/ Row end -->
-			<%} %>
 			
 			<div class="row">
 				<div class="col-md-12 text-center">
 							
-					<div class="copyright-info <%=adFlg ? "" : "onle" %>">
+					<div class="copyright-info">
          			&copy; Copyright PluCial, Inc. <span>All Rights Reserved</span>
         			</div>
 				</div>

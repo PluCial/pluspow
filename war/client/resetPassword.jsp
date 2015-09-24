@@ -43,7 +43,7 @@ Errors errors =(Errors) request.getAttribute("errors");
         <p>パスワードリセットメールをお送りします。<br />メールの指示に従ってパスワードのリセットを行ってください。</p>
       </div>
       <div class='text-center'>
-        <a href="/user/account/login">ログインページに戻る</a>
+        <a href="/client/login">ログインページに戻る</a>
       </div>
 			
 		</div><!-- /.login-box -->

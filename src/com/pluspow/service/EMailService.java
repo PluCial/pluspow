@@ -98,6 +98,45 @@ public class EMailService {
     }
     
     /**
+     * 問い合わせ完了メール
+     * @param recipientAddress
+     * @param recipientName
+     * @throws MessagingException 
+     * @throws UnsupportedEncodingException 
+     */
+    public static void contact(
+            String recipientAddress, 
+            String recipientName, 
+            String phoneNumber,
+            String recipientSubject, 
+            String recipientMessage, 
+            boolean isLocal) throws UnsupportedEncodingException, MessagingException {
+        
+        // タイトル
+        String subject = "[" + App.APP_DISPLAY_NAME + "] へのお問い合わせ(" + recipientName + " 様)";
+        
+        // メッセージ
+        StringBuilder message = new StringBuilder();
+        message.append("◆ お問い合わせ情報");
+        message.append("\n");
+        message.append("-------------------------------------------------");
+        message.append("\n");
+        message.append("◇ 名前 --- " + recipientName);
+        message.append("\n");
+        message.append("◇ メールアドレス --- " + recipientAddress);
+        message.append("\n");
+        message.append("◇ 電話番号 --- " + phoneNumber);
+        message.append("\n");
+        message.append("◇ 件名 --- " + recipientSubject);
+        message.append("\n");
+        message.append("-------------------------------------------------");
+        message.append("\n");
+        message.append("◆ お問い合わせ本文 --- \n" + recipientMessage);
+
+        send(App.EMAIL_CONTACT_TO_ADDRESS, recipientName, subject, message.toString(), isLocal);
+    }
+    
+    /**
      * メール送信
      * @param recipientAddress
      * @param recipientName
@@ -114,6 +153,7 @@ public class EMailService {
             boolean isLocal) throws UnsupportedEncodingException, MessagingException {
         
         if(isLocal) {
+            System.out.println(subject);
             System.out.println(message.toString());
             return;
         }

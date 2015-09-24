@@ -17,33 +17,36 @@ Errors errors =(Errors) request.getAttribute("errors");
 			<jsp:include page="/client/include-parts/main_header.jsp" />
 
 			<div class="register-box-body">
-				<p class="login-box-msg">アカウント登録</p>
+				<h4 class="login-box-msg">アカウント登録</h4>
 				
 				<form action="/client/registerEntry" method="post">
-					<div class="form-group ${f:errorClass('name','has-error')}">
+					<div class="form-group has-feedback ${f:errorClass('name','has-error')}">
 						<%if (errors.containsKey("name")){ %>
 						<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> ${errors.name}</label>
 						<%} %>
-						<input type="text" class="form-control" ${f:text("name")} placeholder="ユーザー名(会社名、組織名、担当者名)"/>
-						
+						<input type="text" class="form-control" ${f:text("name")} placeholder="ユーザー名(会社名、組織名、担当者名)" required />
+						<span class="glyphicon glyphicon-user form-control-feedback"></span>
 					</div>
-					<div class="form-group ${f:errorClass('email','has-error')}">
+					<div class="form-group has-feedback ${f:errorClass('email','has-error')}">
 						<%if (errors.containsKey("email")){ %>
 						<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> ${errors.email}</label>
 						<%} %>
-						<input type="email" ${f:text("email")} class="form-control" placeholder="メールアドレス" />
+						<input type="email" ${f:text("email")} class="form-control" placeholder="メールアドレス" required />
+						<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
 					</div>
-					<div class="form-group ${f:errorClass('password','has-error')}">
+					<div class="form-group has-feedback ${f:errorClass('password','has-error')}">
 						<%if (errors.containsKey("password")){ %>
 						<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> ${errors.password}</label>
 						<%} %>
-						<input type="password" ${f:text("password")} class="form-control" placeholder="パスワード" />
+						<input type="password" ${f:text("password")} class="form-control" placeholder="パスワード" required />
+						<span class="glyphicon glyphicon-lock form-control-feedback"></span>
 					</div>
-					<div class="form-group ${f:errorClass('passwordConfirmation','has-error')}">
+					<div class="form-group has-feedback ${f:errorClass('passwordConfirmation','has-error')}">
 						<%if (errors.containsKey("passwordConfirmation")){ %>
 						<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> ${errors.passwordConfirmation}</label>
 						<%} %>
-						<input type="password" name="passwordConfirmation" class="form-control" placeholder="パスワード確認"/>
+						<input type="password" name="passwordConfirmation" class="form-control" placeholder="パスワード確認" required />
+						<span class="glyphicon glyphicon-log-in form-control-feedback"></span>
 					</div>
 					<div class="checkbox icheck">
 						<label>

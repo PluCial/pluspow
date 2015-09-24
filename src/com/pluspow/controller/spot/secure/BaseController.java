@@ -46,7 +46,7 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
             return execute(client, spot);
 
         }catch(PlanLimitException e) {
-            return redirect(PathUtils.changePlanPage(spot, true));
+            return redirect(PathUtils.changePlanPage(spot, e.getLimittype()));
         }
     }
     

@@ -14,8 +14,16 @@ Spot spot =(Spot) request.getAttribute("spot");
 NumberFormat fPrice = NumberFormat.getNumberInstance();
 
 boolean isAlert = false;
+PlanLimitType limitType = null;
 if (request.getAttribute("isAlert") != null) {
 	isAlert = Boolean.valueOf((String) request.getAttribute("isAlert"));
+}
+if (request.getAttribute("limitType") != null) {
+	String limitTypeString = (String) request.getAttribute("limitType");
+	
+	try {
+	limitType = PlanLimitType.valueOf(limitTypeString);
+	}catch(Exception e) {}
 }
 %>
 <!DOCTYPE html>
@@ -142,10 +150,10 @@ if (request.getAttribute("isAlert") != null) {
 			<div class="container">
 				<div class="content">
 				
-					<%if(isAlert) { %>
+					<%if(isAlert && limitType != null) {%>
 					<div class="alert alert-info alert-dismissable">
-                    	<h4><i class="icon fa fa-info"></i> ご利用しているプランの上限に足しました!</h4>
-                    	以下からご希望のプランを選択してください。
+                    	<h4><i class="icon fa fa-info"></i> <%=limitType.getTitle() %></h4>
+                    	<%=limitType.getMessage() %>
 					</div>
 					<%} %>
                   
@@ -181,7 +189,7 @@ if (request.getAttribute("isAlert") != null) {
 									<strong>¥<%=(int)ServicePlan.STANDARD.getMonthlyAmount() %></strong>
 									<sub> / 月</sub></p>
 								<ul class="list-unstyled">
-									<li><span>利用可能言語数:</span><strong><%=Lang.values().length %>か国語</strong></li>
+									<li><span>利用可能言語数:</span><strong><%=spot.getBaseLang().getName() %> + <%=Lang.values().length - 1 %>か国語</strong></li>
 									<li><span>機械翻訳:</span><strong>無料(<%=Lang.values().length %>か国語)</strong></li>
 									<li><span>人力翻訳:</span><strong>利用可能(6か国語)</strong></li>
 									<li><span>翻訳文字数上限:</span><strong>無制限</strong></li>

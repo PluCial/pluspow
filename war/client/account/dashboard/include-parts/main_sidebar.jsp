@@ -41,9 +41,9 @@ String activeMenu =(String) request.getAttribute("activeMenu");
             <li><a href="#"><i class="fa fa-paper-plane"></i> <span>プランの変更</span></a></li> --%>
             
 <!--             <li class="header">ドキュメント</li> -->
-            <li><a href="#"><i class="fa fa-file-text-o"></i> <span>利用規約</span></a></li>
-            <li><a href="#"><i class="fa fa-file-text-o"></i> <span>プライバシーポリシー</span></a></li>
-            <li><a href="#"><i class="fa fa-file-text-o"></i> <span>翻訳プランと費用</span></a></li>
+            <li><a href="/info/agreement"><i class="fa fa-file-text-o"></i> <span>利用規約</span></a></li>
+            <li><a href="/info/privacy"><i class="fa fa-file-text-o"></i> <span>プライバシーポリシー</span></a></li>
+            <li><a href="/info/contact"><i class="fa fa-file-text-o"></i> <span>お問い合わせ</span></a></li>
           </ul>
         </section>
         <!-- /.sidebar -->

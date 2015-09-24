@@ -1,12 +1,15 @@
 package com.pluspow.controller.info;
 
-import org.slim3.controller.Controller;
 import org.slim3.controller.Navigation;
 
-public class AgreementController extends Controller {
+import com.pluspow.enums.Lang;
+import com.pluspow.model.Client;
+
+public class AgreementController extends BaseController {
 
     @Override
-    public Navigation run() throws Exception {
+    protected Navigation execute(Lang lang, Client client,
+            boolean isClientLogged) throws Exception {
         return forward("agreement.jsp");
     }
 }

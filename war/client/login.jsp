@@ -17,19 +17,21 @@ Errors errors =(Errors) request.getAttribute("errors");
 			<jsp:include page="/client/include-parts/main_header.jsp" />
 			
 			<div class="login-box-body">
-				<p class="login-box-msg">ログイン</p>
+				<h4 class="login-box-msg">ログイン</h4>
 				<form action="/client/loginEntry" method="post">
-					<div class="form-group ${f:errorClass('email','has-error')}">
+					<div class="form-group has-feedback ${f:errorClass('email','has-error')}">
 						<%if (errors.containsKey("email")){ %>
 						<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> ${errors.email}</label>
 						<%} %>
-						<input type="email" ${f:text("email")} class="form-control" placeholder="メールアドレス" />
+						<input type="email" ${f:text("email")} class="form-control" placeholder="メールアドレス" required />
+						<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
 					</div>
-					<div class="form-group ${f:errorClass('password','has-error')}">
+					<div class="form-group has-feedback ${f:errorClass('password','has-error')}">
 						<%if (errors.containsKey("password")){ %>
 						<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> ${errors.password}</label>
 						<%} %>
-						<input type="password" ${f:text("password")} class="form-control" placeholder="パスワード" />
+						<input type="password" ${f:text("password")} class="form-control" placeholder="パスワード" required />
+						<span class="glyphicon glyphicon-lock form-control-feedback"></span>
 					</div>
 					
 					<div>

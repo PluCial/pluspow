@@ -126,7 +126,7 @@ Errors errors =(Errors) request.getAttribute("errors");
 									<div class="icon">
 										<i class="fa fa-paper-plane"></i>
 									</div>
-									<a href="<%=PathUtils.changePlanPage(spot, false) %>" class="small-box-footer">プランの変更 <i class="fa fa-arrow-circle-right"></i>
+									<a href="<%=PathUtils.changePlanPage(spot) %>" class="small-box-footer">プランの変更 <i class="fa fa-arrow-circle-right"></i>
 										 <!-- <i class="fa fa-arrow-circle-right"></i> -->
 									</a>
 								</section>

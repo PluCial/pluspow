@@ -127,7 +127,7 @@ Item item =(Item) request.getAttribute("item");
 												<p class="">(¥<%=TransType.HUMAN_STANDARD.getPrice()%>/1文字)</p>
 												<h5 class="description-header">¥<%=(int)(transCharCount * TransType.HUMAN_STANDARD.getPrice())%></h5>
 												<div>
-													<a href="#" class="btn btn-success"><i class="fa fa-language"></i> 翻訳する</a>
+													<a href="<%=PathUtils.changePlanPage(spot, PlanLimitType.HUMAN_TRANS) %>" class="btn btn-success"><i class="fa fa-language"></i> 翻訳する</a>
 												</div>
 												<%
 													}else {
@@ -148,7 +148,7 @@ Item item =(Item) request.getAttribute("item");
 												<p class="">(¥<%=TransType.HUMAN_BUSINESS.getPrice()%>/1文字)</p>
 												<h5 class="description-header">¥<%=(int)(transCharCount * TransType.HUMAN_BUSINESS.getPrice())%></h5>
 												<div>
-													<a href="#" class="btn btn-primary"><i class="fa fa-language"></i> 翻訳する</a>
+													<a href="<%=PathUtils.changePlanPage(spot, PlanLimitType.HUMAN_TRANS) %>" class="btn btn-primary"><i class="fa fa-language"></i> 翻訳する</a>
 												</div>
 												<%
 													}else {
@@ -170,7 +170,7 @@ Item item =(Item) request.getAttribute("item");
 												<p class="">(¥<%=TransType.HUMAN_ULTRA.getPrice() %>/1文字)</p>
 												<h5 class="description-header">¥<%=(int)(transCharCount * TransType.HUMAN_ULTRA.getPrice()) %></h5>
 												<div>
-													<a href="#" class="btn btn-danger"><i class="fa fa-language"></i> 翻訳する</a>
+													<a href="<%=PathUtils.changePlanPage(spot, PlanLimitType.HUMAN_TRANS) %>" class="btn btn-danger"><i class="fa fa-language"></i> 翻訳する</a>
 												</div>
 												<%}else { %>
 												<p class="nosupport">対応していません。</p>

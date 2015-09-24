@@ -19,14 +19,16 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
         Lang lang = null;
         String langString = asString("lang");
         // 指定してない場合はサービスデフォルト言語に設定
-        if(StringUtils.isEmpty(langString)) {
-            lang = App.APP_BASE_LANG;
-        }
-        
         try {
-            lang = Lang.valueOf(langString);
+            if(StringUtils.isEmpty(langString)) {
+                lang = App.APP_BASE_LANG;
 
-        }catch(IllegalArgumentException e) {
+            }else {
+                lang = Lang.valueOf(langString);
+                
+            }
+
+        }catch(Exception e) {
             lang = App.APP_BASE_LANG;
         }
         requestScope("lang", lang);

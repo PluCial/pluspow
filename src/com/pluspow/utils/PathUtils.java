@@ -1,6 +1,7 @@
 package com.pluspow.utils;
 
 import com.pluspow.enums.Lang;
+import com.pluspow.enums.PlanLimitType;
 import com.pluspow.model.Item;
 import com.pluspow.model.Spot;
 
@@ -46,8 +47,12 @@ public class PathUtils {
         return "/client/account/selectSpot";
     }
     
-    public static String changePlanPage(Spot spot, boolean isAlert) {
-        return "/spot/secure/changePlan?spotId=" + spot.getSpotId() + "&isAlert=" + isAlert;
+    public static String changePlanPage(Spot spot) {
+        return "/spot/secure/changePlan?spotId=" + spot.getSpotId() + "&isAlert=" + false;
+    }
+    
+    public static String changePlanPage(Spot spot, PlanLimitType limitType) {
+        return "/spot/secure/changePlan?spotId=" + spot.getSpotId() + "&isAlert=" + true + "&limitType=" + limitType.toString();
     }
 
 }
