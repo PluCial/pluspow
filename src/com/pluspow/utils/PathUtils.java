@@ -28,6 +28,17 @@ public class PathUtils {
     }
     
     /**
+     * アイテムページの相対パス
+     * @param spot
+     * @param item
+     * @param lang
+     * @return
+     */
+    public static String itemPage(Spot spot, String itemId, Lang lang) {
+        return "/+" + spot.getSpotId() + "/l-" + lang.toString() + "/item/" + itemId;
+    }
+    
+    /**
      * スポット選択画面パス
      * @return
      */

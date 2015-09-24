@@ -166,7 +166,7 @@ public class SpotGcsResService extends GcsResService {
     protected static void replicationOtherLangRes(Transaction tx, Spot spot, Lang lang) {
         List<SpotGcsRes> resList;
         try {
-            resList = getResourcesList(spot, lang);
+            resList = getResourcesList(spot, spot.getBaseLang());
         } catch (ObjectNotExistException e) {
             // 更新するものがなければそのまま終了
             return;

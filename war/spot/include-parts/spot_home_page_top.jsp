@@ -114,16 +114,6 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 					
 							<p>
 								<span id="address"><%=spot.getDisplayAddress() %> <%=spot.getFloor() %>F</span>
-								<%if(isOwner && isEditPage) { %>
-								<!-- 修正モード -->
-								<a data-toggle="modal" 
-									data-backdrop="static"
-									data-target="#textResModal" 
-									style="color:#333"
-									href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>">
-									<i class="fa fa-pencil-square-o edit-mode"></i>
-								</a>
-								<%} %>
 							</p>
 							<p class="phone"><i class="fa fa-phone" style="<%=!isOwner && !spot.isPhoneDisplayFlg() ? "display: none;" : ""%>"></i> <span id="phone-number"><%=spot.isPhoneDisplayFlg() ? spot.getPhoneNumber() : ""%></span>
 								<%if(isOwner && isEditPage) { %>

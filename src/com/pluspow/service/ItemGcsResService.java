@@ -185,7 +185,7 @@ public class ItemGcsResService extends GcsResService {
     protected static void replicationOtherLangRes(Transaction tx, Spot spot, Item item, Lang lang) {
         List<ItemGcsRes> resList;
         try {
-            resList = getResourcesList(item, lang);
+            resList = getResourcesList(item, item.getBaseLang());
             
         } catch (ObjectNotExistException e) {
             // 複製するものがない場合は何も処理せずに終了

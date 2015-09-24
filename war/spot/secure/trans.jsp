@@ -7,9 +7,10 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.pluspow.model.*" %>
 <%@ page import="org.slim3.controller.validator.Errors" %>
+<%@ page import="com.pluspow.utils.*" %>
 <%
 	Client client =(Client) request.getAttribute("client");
-Spot baseSpot =(Spot) request.getAttribute("spot");
+Spot spot =(Spot) request.getAttribute("spot");
 String transLang = (String) request.getAttribute("transLang");
 int transCharCount = Integer.parseInt((String)request.getAttribute("transCharCount"));
 ObjectType objectType = (ObjectType) request.getAttribute("objectType");
@@ -62,11 +63,13 @@ Item item =(Item) request.getAttribute("item");
 			
 				<div class="content">
 					<div class="register-logo">
-						<a href="/+<%=baseSpot.getSpotId() %>"><b><%=baseSpot.getName() %></b></a>
+						<i class="fa fa-language"></i> 翻訳する言語の選択
 					</div>
-					<h3 style="text-align: center;">翻訳プランの選択</h3>
+					<h3 style="text-align: center;">
+						<a href="<%=PathUtils.spotPage(spot, spot.getLangUnit().getLang()) %>"><b><%=spot.getName() %></b></a>
+					</h3>
 					
-					<div class="row">
+					<div class="row" style="margin-top: 3em;">
 						<div class="col-md-8 col-md-offset-2">
 
 							<div class="box">
@@ -77,9 +80,9 @@ Item item =(Item) request.getAttribute("item");
 												<tbody>
 													<tr>
 														<td class="flag">
-															<span style="background-image: url(/images/flag/<%=baseSpot.getBaseLang().getLangKey().toUpperCase() %>.png);background-repeat:no-repeat;background-position: center left;background-size: 34px;padding-left:50px;"></span>
+															<span style="background-image: url(/images/flag/<%=spot.getBaseLang().getLangKey().toUpperCase() %>.png);background-repeat:no-repeat;background-position: center left;background-size: 34px;padding-left:50px;"></span>
 														</td>
-														<td class="lang"><%=baseSpot.getBaseLang().getName() %></td>
+														<td class="lang"><%=spot.getBaseLang().getName() %></td>
 														<td><i class="fa fa-arrow-right"></i></td>
 														<td class="flag">
 															<span style="background-image: url(/images/flag/<%=transLang.toUpperCase() %>.png);background-repeat:no-repeat;background-position: center left;background-size: 34px;padding-left:50px;"></span>
@@ -111,7 +114,7 @@ Item item =(Item) request.getAttribute("item");
 												<p>(¥<%=TransType.MACHINE.getPrice()%>/1文字)</p>
 												<h5 class="description-header">¥<%=(int)(transCharCount * TransType.MACHINE.getPrice())%></h5>
 												<div>
-													<a href="/spot/secure/transEntry?spotId=<%=baseSpot.getSpotId()%>&transLang=<%=transLang%>&objectType=<%=objectType.toString()%>&itemId=<%=item == null ? "" : item.getKey().getName()%>" class="btn btn-default"><i class="fa fa-language"></i> 翻訳する</a>
+													<a href="/spot/secure/transEntry?spotId=<%=spot.getSpotId()%>&transLang=<%=transLang%>&objectType=<%=objectType.toString()%>&itemId=<%=item == null ? "" : item.getKey().getName()%>" class="btn btn-default"><i class="fa fa-language"></i> 翻訳する</a>
 												</div>
 												
 											</div><!-- /.description-block -->

@@ -11,6 +11,7 @@ import org.slim3.datastore.ModificationDate;
 
 import com.google.appengine.api.datastore.Key;
 import com.pluspow.enums.Lang;
+import com.pluspow.enums.ObjectType;
 import com.pluspow.enums.TransStatus;
 import com.pluspow.enums.TransType;
 
@@ -24,6 +25,11 @@ public class TransHistory implements Serializable {
 
     @Attribute(version = true)
     private Long version;
+    
+    /**
+     * オブジェクトタイプ
+     */
+    private ObjectType objectType;
     
     /**
      * 翻訳元の言語
@@ -73,6 +79,9 @@ public class TransHistory implements Serializable {
     
     /** Spotとの関連 */
     private ModelRef<Spot> spotRef = new ModelRef<Spot>(Spot.class);
+    
+    /** Itemとの関連 */
+    private ModelRef<Item> itemRef = new ModelRef<Item>(Item.class);
     
     /**
      * 作成日時
@@ -228,5 +237,17 @@ public class TransHistory implements Serializable {
 
     public void setTransStatus(TransStatus transStatus) {
         this.transStatus = transStatus;
+    }
+
+    public ObjectType getObjectType() {
+        return objectType;
+    }
+
+    public void setObjectType(ObjectType objectType) {
+        this.objectType = objectType;
+    }
+
+    public ModelRef<Item> getItemRef() {
+        return itemRef;
     }
 }

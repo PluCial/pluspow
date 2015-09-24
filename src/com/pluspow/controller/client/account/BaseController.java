@@ -9,21 +9,20 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
 
     @Override
     protected Navigation run() throws Exception {
-        
+
+        Client client = null;
         try {
-            Client client = getLoginClient();
-
-            requestScope("isSmartPhone", String.valueOf(isSmartPhone()));
-            requestScope("isLocal", String.valueOf(isLocal()));
-            requestScope("isClientLogged", String.valueOf(client != null));
-            requestScope("client", client);
-            
-            // ログインしている場合
-            return execute(client);
-
+            client = getLoginClient();
         }catch(NoLoginException e) {
             return redirect("/client/login");
         }
+
+        requestScope("isSmartPhone", String.valueOf(isSmartPhone()));
+        requestScope("isLocal", String.valueOf(isLocal()));
+        requestScope("isClientLogged", String.valueOf(client != null));
+        requestScope("client", client);
+
+        return execute(client);
     }
 
     /**

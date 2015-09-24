@@ -9,7 +9,7 @@ public enum ItemType {
     DRINK("ドリンク(お酒)", SpotActivity.FOOD_AND_DRINK),
     LODGING_FACILITY("宿泊施設", SpotActivity.LODGING),
     GOODS("店頭販売品", SpotActivity.SHOPPING),
-    EQUIPMENT("設備", SpotActivity.ETC),
+    RECREATION_SERVICE("娯楽サービス", SpotActivity.RECREATION),
     ETC("その他", SpotActivity.ETC);
     
     /** 名前 */

@@ -8,6 +8,10 @@
 <%@ page import="com.pluspow.utils.*" %>
 <%
 List<Spot> spotList =(List<Spot>) request.getAttribute("spotList");
+boolean limitOver = false;
+if (request.getAttribute("limitOver") != null) {
+	limitOver = Boolean.valueOf((String) request.getAttribute("limitOver"));
+}
 %>
 <!DOCTYPE html>
 <html>
@@ -62,6 +66,13 @@ List<Spot> spotList =(List<Spot>) request.getAttribute("spotList");
 						<div class="add-spot">
 							<a href="/client/account/addSpotStep1" class="btn btn-primary btn-lg fa fa-plus"> スポットを追加</a>
 						</div>
+						<%if (limitOver){ %>
+						<div class="alert alert-info alert-dismissable" style="margin-top:2em;">
+							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    		<h4><i class="icon fa fa-info"></i> 新しいスポットを作成することができません。</h4>
+                    		新しいスポットを作成するには、既に作成したすべてのスポットがスタンダードプラン以上になっている必要があります。
+						</div>
+						<%} %>
 			
 						<%for(Spot spot: spotList) { %>
 						<div class="spot-modal">

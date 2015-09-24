@@ -261,10 +261,11 @@ public class ItemService {
                 transCharCount * TransType.MACHINE.getPrice());
 
             // 翻訳履歴の追加
-            TransHistoryService.add(
+            TransHistoryService.addItemHistory(
                 tx, 
                 spot, 
-                spot.getBaseLang(), 
+                item,
+                item.getBaseLang(), 
                 transLang, 
                 TransType.MACHINE, 
                 TransStatus.TRANSLATED, 

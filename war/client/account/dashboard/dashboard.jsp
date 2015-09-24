@@ -6,12 +6,13 @@
 <%@ page import="com.pluspow.enums.*" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.pluspow.utils.*" %>
+<%@ page import="com.pluspow.enums.*" %>
 <%@ page import="com.pluspow.model.*" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="org.slim3.controller.validator.Errors" %>
 <%
 	Client client =(Client) request.getAttribute("client");
-Spot baseSpot =(Spot) request.getAttribute("spot");
+Spot spot =(Spot) request.getAttribute("spot");
 List<SpotLangUnit> spotLangUnitList =(List<SpotLangUnit>) request.getAttribute("spotLangUnitList");
 List<TransHistory> transHistoryList =(List<TransHistory>) request.getAttribute("transHistoryList");
 NumberFormat fPrice = NumberFormat.getNumberInstance();
@@ -68,12 +69,12 @@ Errors errors =(Errors) request.getAttribute("errors");
 					<!-- Content Header (Page header) -->
 					<section class="content-header">
 						<h1>
-							<%=baseSpot.getName() %>
+							<%=spot.getName() %>
 							<small>ダッシュボード</small>
 						</h1>
 						<ol class="breadcrumb">
 							<li><a href="/client/account/selectSpot"><i class="fa fa-home"></i> ホーム</a></li>
-							<li class="active"><i class="fa fa-map-marker"></i> <%=baseSpot.getName() %></li>
+							<li class="active"><i class="fa fa-map-marker"></i> <%=spot.getName() %></li>
 						</ol>
 					</section>
  
@@ -87,9 +88,9 @@ Errors errors =(Errors) request.getAttribute("errors");
  									<div class="box-header">
 										<i class="fa fa-globe"></i>
 										<h3 class="box-title">グローバル化</h3>
-										<div style="text-align: right;"><b><span style="font-size:1.4em;color:red"><%=baseSpot.getLangs().size() %></span> / <%=Lang.values().length%></b> 国語</div>
+										<div style="text-align: right;"><b><span style="font-size:1.4em;color:red"><%=spot.getLangs().size() %></span> / <%=Lang.values().length%></b> 国語</div>
 										<div class="progress progress-xs">
-											<div class="progress-bar" style="width: <%=((float)baseSpot.getLangs().size() / (float)Lang.values().length) * 100%>%"></div>
+											<div class="progress-bar" style="width: <%=((float)spot.getLangs().size() / (float)Lang.values().length) * 100%>%"></div>
 										</div>
 									</div>
 									<!-- /.box-header-->
@@ -97,19 +98,14 @@ Errors errors =(Errors) request.getAttribute("errors");
 									<div class="box-body chat" id="chat-box">
 										<table class="table table-hover table-striped">
 											<%
-												for(Lang langInfo: baseSpot.getLangs()) {
+												for(Lang langInfo: spot.getLangs()) {
 											%>
 											<tr>
 												<td class="action">
 													<span style="background-image: url(/images/flag/<%=langInfo.getLangKey().toUpperCase() %>.png);background-repeat:no-repeat;background-position: center left;background-size: 34px;padding-left:50px;"></span>
 												</td>
 												<td><%=langInfo.getName() %></td>
-												<td class="action"><a href="/+<%=baseSpot.getSpotId() %>/l-<%=langInfo.toString() %>/" class="btn btn-box-tool"><i class="fa fa-external-link"></i></a></td>
-												<td class="action">
-													<%if(baseSpot.getBaseLang() != langInfo) { %>
-													<a class="btn btn-box-tool" data-widget="remove"><i class="fa fa-trash-o"></i></a>
-													<%} %>
-												</td>
+												<td class="action"><a href="/+<%=spot.getSpotId() %>/l-<%=langInfo.toString() %>/" class="btn btn-box-tool"><i class="fa fa-external-link"></i></a></td>
 											</tr>
 											<%} %>
 										</table>
@@ -121,16 +117,16 @@ Errors errors =(Errors) request.getAttribute("errors");
 							
 							<div id="" class="col-md-4 col-xs-12">
 							
-								<%if(baseSpot.getPlan() == ServicePlan.FREE) { %>
+								<%if(spot.getPlan() == ServicePlan.FREE) { %>
 								<section class="small-box bg-yellow">
 									<div class="inner">
-										<h3><%=baseSpot.getPlan().getPlanName() %></h3>
-										<p><%=fPrice.format((int)baseSpot.getPlan().getMonthlyAmount()) %> / 月</p>
+										<h3><%=spot.getPlan().getPlanName() %></h3>
+										<p><%=fPrice.format((int)spot.getPlan().getMonthlyAmount()) %> / 月</p>
 									</div>
 									<div class="icon">
 										<i class="fa fa-paper-plane"></i>
 									</div>
-									<a href="<%=PathUtils.changePlanPage(baseSpot, false) %>" class="small-box-footer">プランの変更 <i class="fa fa-arrow-circle-right"></i>
+									<a href="<%=PathUtils.changePlanPage(spot, false) %>" class="small-box-footer">プランの変更 <i class="fa fa-arrow-circle-right"></i>
 										 <!-- <i class="fa fa-arrow-circle-right"></i> -->
 									</a>
 								</section>
@@ -140,25 +136,13 @@ Errors errors =(Errors) request.getAttribute("errors");
 									<span class="info-box-icon"><i class="fa fa-language"></i></span>
 									<div class="info-box-content">
 										<span class="info-box-text">翻訳した文字数</span>
-										<span class="info-box-number"><%=baseSpot.getTransAcc().getTransCharCount() %> 文字</span>
+										<span class="info-box-number"><%=spot.getTransAcc().getTransCharCount() %> 文字</span>
 										<div class="progress">
-											<div class="progress-bar" style="width: <%=((float)baseSpot.getTransAcc().getTransCharCount() / (float)baseSpot.getPlan().getTransCharMaxCount()) * 100 %>%"></div>
+											<div class="progress-bar" style="width: <%=((float)spot.getTransAcc().getTransCharCount() / (float)spot.getPlan().getTransCharMaxCount()) * 100 %>%"></div>
 										</div>
-										<span class="progress-description">フリープランでは<%=baseSpot.getPlan().getTransCharMaxCount() %>文字まで翻訳できます。</span>
+										<span class="progress-description">フリープランでは<%=spot.getPlan().getTransCharMaxCount() %>文字まで翻訳できます。</span>
 									</div><!-- /.info-box-content -->
 								</section><!-- /.info-box -->
-              
-<%-- 								<section class="info-box ">
-									<span class="info-box-icon bg-green"><i class="fa fa-th"></i></span>
-									<div class="info-box-content">
-										<span class="info-box-text">登録したアイテム数</span>
-										<span class="info-box-number"><%=baseSpot.getItemCounts().getItem() %> 個</span>
-										<div class="progress">
-											<div class="progress-bar" style="width: <%=((float)baseSpot.getItemCounts().getItem() / (float)baseSpot.getPlan().getCreateItemMaxCount()) * 100 %>%"></div>
-										</div>
-										<span class="progress-description">フリープランでは<%=baseSpot.getPlan().getCreateItemMaxCount() %>アイテムまで登録できます。</span>
-									</div><!-- /.info-box-content -->
-								</section><!-- /.info-box --> --%>
 							
 							</div>
 
@@ -176,27 +160,42 @@ Errors errors =(Errors) request.getAttribute("errors");
 										<thead>
 											<tr>
 												<th>翻訳日時</th>
+												<td>翻訳対象</td>
 												<th>翻訳言語</th>
-												<th>翻訳プラン</th>
+												<th>翻訳方法</th>
 												<th>翻訳文字数</th>
-												<%if(baseSpot.getPlan() != ServicePlan.FREE) { %>
 												<th>コスト</th>
-												<%} %>
-												<th>ステータス</th>
-												
+												<th>ステータス</th>	
 											</tr>
 										</thead>
 										<tbody>
 											<%for(TransHistory history: transHistoryList) { 
 											%>
 											<tr>
-												<td><a href="pages/examples/invoice.html">2015/11/13 18:30</a></td>
-												<td><%=history.getBaseLang().getName() %> → <%=history.getTransLang().getName() %></td>
+												<td><%=DateUtils.dateToString(history.getCreateDate(), "yyyy/MM/dd HH:mm:ss") %></td>
+												<td><%=history.getObjectType().getName() %></td>
+												<%if(history.getObjectType() == ObjectType.SPOT) { %>
+												<td>
+													<a href="<%=PathUtils.spotPage(spot, history.getBaseLang())  %>">
+														<%=history.getBaseLang().getName() %>
+													</a> → 
+													<a href="<%=PathUtils.spotPage(spot, history.getTransLang())  %>">
+														<%=history.getTransLang().getName() %>
+													</a>
+												</td>
+												<%}else if(history.getObjectType() == ObjectType.ITEM) { %>
+												<td>
+													<a href="<%=PathUtils.itemPage(spot, history.getItemRef().getKey().getName(), history.getBaseLang()) %>">
+														<%=history.getBaseLang().getName() %>
+													</a> → 
+													<a href="<%=PathUtils.itemPage(spot, history.getItemRef().getKey().getName(), history.getTransLang()) %>">
+														<%=history.getTransLang().getName() %>
+													</a>
+												</td>
+												<%} %>
 												<td><%=history.getTransType().getName() %>(¥ <%=history.getCharUnitPrice() %>/1文字)</td>
 												<td><%=history.getTransCharCount() %></td>
-												<%if(baseSpot.getPlan() != ServicePlan.FREE) { %>
 												<td>¥<%=(int)history.getTransCost() %></td>
-												<%} %>
 												<td><span class="label label-success"><%=history.getTransStatus().getName() %></span></td>
 											</tr>
 											<%} %>

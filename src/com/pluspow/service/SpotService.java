@@ -310,7 +310,7 @@ public class SpotService {
         for(Spot spot: modelOnlylist) {
             Spot spotModel;
             try {
-                spotModel = getSpotBaseLang(spot.getSpotId());
+                spotModel = getSpot(spot.getSpotId(), spot.getBaseLang());
                 list.add(spotModel);
             } catch (ObjectNotExistException e) {}
         }
@@ -420,7 +420,7 @@ public class SpotService {
                 transCharCount * TransType.MACHINE.getPrice());
 
             // 翻訳履歴の追加
-            TransHistoryService.add(
+            TransHistoryService.addSpotHistory(
                 tx, 
                 spot, 
                 spot.getBaseLang(), 

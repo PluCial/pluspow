@@ -33,11 +33,13 @@ Spot spot =(Spot) request.getAttribute("spot");
 			<div class="container">
 				<div class="content">
 					<div class="register-logo">
-						<a href="<%=PathUtils.spotPage(spot, spot.getLangUnit().getLang()) %>"><b><%=spot.getName() %></b></a>
+						<i class="fa fa-language"></i> 翻訳する言語の選択
 					</div>
-					<h3 style="text-align: center;">翻訳言語の選択</h3>
+					<h3 style="text-align: center;">
+						<a href="<%=PathUtils.spotPage(spot, spot.getLangUnit().getLang()) %>"><b><%=spot.getName() %></b></a>
+					</h3>
 					
-					<div class="box">
+					<div class="box" style="margin-top: 3em;">
 						<div class="box-header with-border">
 							<h3 class="box-title">64カ国語</h3>
 						</div><!-- /.box-header -->
