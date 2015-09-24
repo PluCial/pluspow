@@ -113,14 +113,14 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 							</h1>
 					
 							<p>
-								<span id="<%=spot.getAddressResKey() %>"><%=spot.getAddress() %></span>
+								<span id="address"><%=spot.getDisplayAddress() %> <%=spot.getFloor() %>F</span>
 								<%if(isOwner && isEditPage) { %>
 								<!-- 修正モード -->
 								<a data-toggle="modal" 
 									data-backdrop="static"
 									data-target="#textResModal" 
 									style="color:#333"
-									href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resourcesKey=<%=spot.getAddressResKey() %>">
+									href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>">
 									<i class="fa fa-pencil-square-o edit-mode"></i>
 								</a>
 								<%} %>

@@ -5,13 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.datanucleus.util.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slim3.datastore.Datastore;
 import org.slim3.memcache.Memcache;
+import org.slim3.util.StringUtil;
 
-import com.google.appengine.api.datastore.Email;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.datastore.Transaction;
@@ -66,14 +65,18 @@ public class SpotService {
             Lang lang,
             Country country,
             String address, 
+            int floor,
             String phoneNumber, 
-            String email,
             GeoModel geoModel) {
         
         Spot model = new Spot();
         model.setSpotId(spotId);
         model.setBaseLang(lang);
-        model.setEmail(new Email(email));
+        model.setEmail(client.getEmail());
+        
+        // 住所情報の設定
+        model.setAddress(address);
+        model.setFloor(floor);
         
         // 座標の設定
         model.setLat(geoModel.getLat().floatValue());
@@ -87,12 +90,6 @@ public class SpotService {
         
         // 言語ユニットの設定
         model.setLangUnit(SpotLangUnitService.getNewModel(model, lang, phoneNumber, geoModel));
-        
-        // テキストリソースの設定
-        SpotTextRes addressRes = new SpotTextRes();
-        addressRes.setStringToContent(address);
-        addressRes.setRole(TextResRole.SPOT_ADDRESS);
-        model.setAddressRes(addressRes);
         
         return model;
     }
@@ -171,9 +168,6 @@ public class SpotService {
             
             SpotTextRes detailRes = spot.getDetailRes();
             SpotTextResService.add(tx, spot, spot.getBaseLang(), TextResRole.SPOT_DETAIL, detailRes.getContentString());
-            
-            SpotTextRes addressRes = spot.getAddressRes();
-            SpotTextResService.add(tx, spot, spot.getBaseLang(), TextResRole.SPOT_ADDRESS, addressRes.getContentString());
             
             // 営業時間の追加
             OfficeHoursService.addDefault(tx, spot, DayOfWeek.MON);
@@ -348,7 +342,9 @@ public class SpotService {
         // 言語の追加と再翻訳両方に言語数の制限チェックを実施する
         // ---------------------------------------------------
         if(spot.getLangs().size() >= plan.getTransLangMaxCount()) {
-            throw new PlanLimitException(PlanLimitType.TRANS_LANG_MAX_COUNT);
+            if(spot.getLangs().indexOf(transLang) < 0) { // 再翻訳ではないの場合
+                throw new PlanLimitException(PlanLimitType.TRANS_LANG_MAX_COUNT);
+            }
         }
         
         // ---------------------------------------------------
@@ -368,9 +364,7 @@ public class SpotService {
         // ---------------------------------------------------
         int transCharCount = 0;
         for(SpotTextRes transcontents: transContentsList) {
-            if(transcontents.getRole().isTransTarget()) {
-                transCharCount = transCharCount + transcontents.getContentString().length();
-            }
+            transCharCount = transCharCount + transcontents.getContentString().length();
         }
         
         // ---------------------------------------------------
@@ -484,24 +478,15 @@ public class SpotService {
         // 翻訳したテキストリソースを追加
         // ---------------------------------------------------
         for(SpotTextRes textRes: transContentsList) {
+            // 改行が含まれるため、text()ではなくhtml()で取得する
+            String tcText = transResult.getElementById(textRes.getKey().getName()).html();
 
-            // 翻訳対象の場合
-            if(textRes.getRole().isTransTarget()) {
-                // 改行が含まれるため、text()ではなくhtml()で取得する
-                String tcText = transResult.getElementById(textRes.getKey().getName()).html();
+            // getElementById から取得した値に余計な改行が含まれるため、一度手動で除去してからhtml改行をtext改行に置き換える
+            String strTmp = Utils.clearTextIndention(tcText);
+            String content = Utils.changeBrToTextIndention(strTmp);
 
-                // getElementById から取得した値に余計な改行が含まれるため、一度手動で除去してからhtml改行をtext改行に置き換える
-                String strTmp = Utils.clearTextIndention(tcText);
-                String content = Utils.changeBrToTextIndention(strTmp);
-
-                SpotTextResService.add(tx, spot, transLang, textRes.getRole(), content);
-            }
+            SpotTextResService.add(tx, spot, transLang, textRes.getRole(), content);
         }
-
-        // ---------------------------------------------------
-        // 住所のテキストリソースはGMOのフォーマットアドレスを使用
-        // ---------------------------------------------------
-        SpotTextResService.add(tx, spot, transLang, TextResRole.SPOT_ADDRESS, geoModel.getFormattedAddress());
 
         // ---------------------------------------------------
         // 言語情報の追加
@@ -545,21 +530,19 @@ public class SpotService {
         for(SpotTextRes textRes: transContentsList) {
 
             // 翻訳対象の場合
-            if(textRes.getRole().isTransTarget()) {
-                // 改行が含まれるため、text()ではなくhtml()で取得する
-                String tcText = transResult.getElementById(textRes.getKey().getName()).html();
+            // 改行が含まれるため、text()ではなくhtml()で取得する
+            String tcText = transResult.getElementById(textRes.getKey().getName()).html();
 
-                // getElementById から取得した値に余計な改行が含まれるため、一度手動で除去してからhtml改行をtext改行に置き換える
-                String strTmp = Utils.clearTextIndention(tcText);
-                String content = Utils.changeBrToTextIndention(strTmp);
+            // getElementById から取得した値に余計な改行が含まれるため、一度手動で除去してからhtml改行をtext改行に置き換える
+            String strTmp = Utils.clearTextIndention(tcText);
+            String content = Utils.changeBrToTextIndention(strTmp);
 
-                // 対象のリソースをリソースマップから取得し、内容を差し替える
-                SpotTextRes spotTextRes = resMap.get(textRes.getRole().toString());
-                spotTextRes.setStringToContent(content);
+            // 対象のリソースをリソースマップから取得し、内容を差し替える
+            SpotTextRes spotTextRes = resMap.get(textRes.getRole().toString());
+            spotTextRes.setStringToContent(content);
 
-                // リソースを更新
-                Datastore.put(tx, spotTextRes);
-            }
+            // リソースを更新
+            Datastore.put(tx, spotTextRes);
         }
     }
     
@@ -630,7 +613,7 @@ public class SpotService {
         Transaction tx = Datastore.beginTransaction();
         try {
             if(isDisplayFlg) {
-                if(StringUtils.isEmpty(phoneNumber)) throw new ArgumentException();
+                if(StringUtil.isEmpty(phoneNumber)) throw new ArgumentException();
                 langUnit.setPhoneNumber(new PhoneNumber(phoneNumber));
                 
             }

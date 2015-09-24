@@ -28,8 +28,8 @@ public class AddSpotStep1EntryController extends BaseController {
         // ------------------------------------------
         String spotId = asString("spotId");
         String address = asString("address");
+        int floor = asInteger("floor");
         String phoneNumber = asString("phoneNumber");
-        String email = asString("email");
         
         // ------------------------------------------
         // spotId重複チェック
@@ -95,7 +95,16 @@ public class AddSpotStep1EntryController extends BaseController {
         // ------------------------------------------
         // スポットエントリーの設定
         // ------------------------------------------
-        spot = SpotService.setStep1(client, spotId, client.getLang(), country, address, phoneNumber, email, geoModel);
+        spot = SpotService.setStep1(
+            client, 
+            spotId, 
+            client.getLang(), 
+            country, 
+            address, 
+            floor, 
+            phoneNumber, 
+            geoModel);
+        
         // セッションへ保存
         sessionScope("spotEntryInfo", spot);
 
@@ -120,19 +129,18 @@ public class AddSpotStep1EntryController extends BaseController {
             v.required("住所を入力してください。")
                 );
         
+        // フロアー
+        v.add("floor", 
+            v.required("フロアーを入力してください。"),
+            v.integerType("半角数字を入力してください。")
+                );
+        
         // 電話番号
         v.add("phoneNumber", 
             v.required("電話番号を入力してください。"),
             v.minlength(10, "電話番号は正しくありません。"),
             v.regexp("^[0-9-]+$", "電話番号は正しくありません。")
                 );
-        
-        // メール
-        v.add("email", 
-            v.required("メールアドレスを入力してください。"),
-            v.maxlength(256, "メールアドレスが長すぎます。"), 
-            v.minlength(6, "メールアドレスが短すぎます。"),
-            v.regexp("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*([,;]\\s*\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*)*", "メールアドレスが正しくありません。"));
         
         // オーナー
         v.add("owner", 

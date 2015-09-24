@@ -17,7 +17,6 @@ import com.google.appengine.tools.cloudstorage.GcsFilename;
 import com.pluspow.dao.SpotGcsResDao;
 import com.pluspow.enums.GcsResRole;
 import com.pluspow.enums.Lang;
-import com.pluspow.exception.NoContentsException;
 import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotGcsRes;
@@ -136,7 +135,6 @@ public class SpotGcsResService extends GcsResService {
      * @param bottomY
      * @return
      * @throws IOException
-     * @throws NoContentsException
      * @throws ObjectNotExistException 
      */
     public static SpotGcsRes updateImageRes(
@@ -146,9 +144,9 @@ public class SpotGcsResService extends GcsResService {
             int leftX, 
             int topY, 
             int rightX,
-            int bottomY) throws IOException, NoContentsException, ObjectNotExistException {
+            int bottomY) throws IOException, ObjectNotExistException {
         
-        if(StringUtil.isEmpty(resourcesKey)) throw new NoContentsException("更新するコンテンツはありません");
+        if(StringUtil.isEmpty(resourcesKey)) throw new ObjectNotExistException("更新するコンテンツはありません");
         
         SpotGcsRes oldModel = getResources(resourcesKey);
         

@@ -17,6 +17,15 @@ public class SpotLangUnit extends LangUnit implements Serializable {
     private static final long serialVersionUID = 1L;
     
     /**
+     * 表示用住所
+     * <pre>
+     * Geo情報を元に自動登録し、各言語ページからユーザーによる修正を可能とする
+     * </pre>
+     */
+    @Attribute(unindexed = true)
+    private String displayAddress;
+    
+    /**
      * 電話番号
      */
     @Attribute(unindexed = true)
@@ -186,5 +195,13 @@ public class SpotLangUnit extends LangUnit implements Serializable {
 
     public void setPhoneNumber(PhoneNumber phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getDisplayAddress() {
+        return displayAddress;
+    }
+
+    public void setDisplayAddress(String displayAddress) {
+        this.displayAddress = displayAddress;
     }
 }

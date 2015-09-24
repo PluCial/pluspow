@@ -3,17 +3,17 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@taglib prefix="f" uri="http://www.slim3.org/functions"%>
 <%@ page import="org.slim3.controller.validator.Errors" %>
+<%@ page import="org.slim3.util.StringUtil" %>
 <%
 Errors errors =(Errors) request.getAttribute("errors");
+String floorString = (String)request.getAttribute("floor");
+int floor = StringUtil.isEmpty(floorString) ? 1 : Integer.valueOf(floorString);
 %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<jsp:include page="/client/account/include-parts/html_head.jsp" />
 		<style>
-			.content-wrapper {
-/* 				background-color: #d2d6de; */
-			}
 			h3 {
 				  text-align: center;
 				  margin-bottom: 2em;
@@ -78,8 +78,22 @@ Errors errors =(Errors) request.getAttribute("errors");
 										<%} %>
 										<div class="input-group">
 											<span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-											<input type="text" ${f:text("address")} class="form-control" placeholder="東京都杉並区・・・">
+											<input type="text" ${f:text("address")} class="form-control" placeholder="例：福岡県福岡市博多区博多駅東1-12-17">
 										</div>
+									</div>
+									
+ 									<div class="row">
+ 										<div class="col-xs-5 col-xs-offset-7">
+									<div class="form-group ${f:errorClass('floor','has-error')}">
+										<%if (errors.containsKey("floor")){ %>
+										<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> ${errors.floor}</label>
+										<%} %>
+										<div class="input-group">
+											<input type="number" name="floor" class="form-control" min="1" value="<%=floor %>" style="text-align: right;">
+											<span class="input-group-addon">階</span>
+										</div>
+									</div>
+									</div>
 									</div>
 									
 									<div class="form-group ${f:errorClass('phoneNumber','has-error')}">
@@ -91,18 +105,6 @@ Errors errors =(Errors) request.getAttribute("errors");
 										<div class="input-group">
 											<span class="input-group-addon"><i class="fa fa-phone"></i></span>
 											<input type="text" ${f:text("phoneNumber")} class="form-control" placeholder="092-1111-1111">
-										</div>
-									</div>
-								
-									<div class="form-group ${f:errorClass('email','has-error')}">
-										<%if (errors.containsKey("phoneNumber")){ %>
-										<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> ${errors.email}</label>
-										<%}else { %>
-										<label for="exampleInputEmail1">メールアドレス(お問い合わせ用)</label>
-										<%} %>
-										<div class="input-group">
-											<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-											<input type="email" ${f:text("email")} class="form-control" placeholder="メールアドレス">
 										</div>
 									</div>
                     
@@ -135,6 +137,15 @@ Errors errors =(Errors) request.getAttribute("errors");
 		</div><!-- ./wrapper -->
 
 		<jsp:include page="/client/account/include-parts/html_script.jsp" />
+		<script>
+			$(function () {
+				$('input').iCheck({
+					checkboxClass: 'icheckbox_square-blue',
+					radioClass: 'iradio_square-blue',
+					increaseArea: '20%' // optional
+				});
+			});
+		</script>
 
 	</body>
 </html>

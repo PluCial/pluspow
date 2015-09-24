@@ -1,25 +1,33 @@
-<!-- Indices written at Thu, 24 Sep 2015 04:49:44 JST -->
+<!-- Indices written at Thu, 24 Sep 2015 14:43:50 JST -->
 
 <datastore-indexes>
 
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="Spot" ancestor="false" source="auto">
-        <property name="clientRef" direction="asc"/>
-        <property name="invalid" direction="asc"/>
-        <property name="createDate" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 3 times in query history -->
+    <!-- Used 20 times in query history -->
     <datastore-index kind="SpotPayPlan" ancestor="false" source="auto">
         <property name="spotRef" direction="asc"/>
         <property name="endDate" direction="desc"/>
     </datastore-index>
 
-    <!-- Used 3 times in query history -->
+    <!-- Used 24 times in query history -->
     <datastore-index kind="LangUnit" ancestor="false" source="auto">
         <property name="invalid" direction="asc"/>
         <property name="slim3.classHierarchyList" direction="asc"/>
         <property name="spotRef" direction="asc"/>
+        <property name="createDate" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 7 times in query history -->
+    <datastore-index kind="Item" ancestor="false" source="auto">
+        <property name="invalid" direction="asc"/>
+        <property name="langs" direction="asc"/>
+        <property name="spotRef" direction="asc"/>
+        <property name="sortOrder" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Spot" ancestor="false" source="auto">
+        <property name="clientRef" direction="asc"/>
+        <property name="invalid" direction="asc"/>
         <property name="createDate" direction="asc"/>
     </datastore-index>
 

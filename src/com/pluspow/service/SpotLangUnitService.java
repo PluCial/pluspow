@@ -202,6 +202,7 @@ public class SpotLangUnitService extends LangUnitService {
      */
     private static void setSpotGeo(SpotLangUnit info, GeoModel geoModel) {
         info.setGeoPostalAddress(new PostalAddress(geoModel.getPostalCodeLongName()));
+        info.setDisplayAddress(geoModel.getFormattedAddress());
         info.setGeoCountry(geoModel.getCountryLongName());
         info.setGeoFormattedAddress(geoModel.getFormattedAddress());
         info.setGeoAreaLevel1(geoModel.getAdministrativeAreaLevel1LongName());

@@ -162,7 +162,7 @@ public enum Country {
     NU("NIU",570,"ニウエ",false),
     NI("NIC",558,"ニカラグア",false),
     NE("NER",562,"ニジェール",false),
-    JP("JPN",392,"日本",false),
+    JP("JPN",392,"日本",true),
     EH("ESH",732,"西サハラ",false),
     NC("NCL",540,"ニューカレドニア",false),
     NZ("NZL",554,"ニュージーランド",false),

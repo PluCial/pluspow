@@ -20,7 +20,7 @@ String pageTitle = (String) request.getAttribute("pageTitle");
          folder instead of downloading all of them to reduce the load. -->
          <link href="/client/dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
          <!-- iCheck -->
-         <link href="/plugins/iCheck/flat/blue.css" rel="stylesheet" type="text/css" />
+         <link href="/plugins/iCheck/square/blue.css" rel="stylesheet" type="text/css" />
          <!-- Morris chart -->
          <link href="/plugins/morris/morris.css" rel="stylesheet" type="text/css" />
          <!-- jvectormap -->

@@ -390,23 +390,19 @@ public class ItemService {
         // 再翻訳対象のリソースMAPを取得
         // ---------------------------------------------------
         for(ItemTextRes textRes: transContentsList) {
+            // 改行が含まれるため、text()ではなくhtml()で取得する
+            String tcText = transResult.getElementById(textRes.getKey().getName()).html();
 
-            // 翻訳対象の場合
-            if(textRes.getRole().isTransTarget()) {
-                // 改行が含まれるため、text()ではなくhtml()で取得する
-                String tcText = transResult.getElementById(textRes.getKey().getName()).html();
+            // getElementById から取得した値に余計な改行が含まれるため、一度手動で除去してからhtml改行をtext改行に置き換える
+            String strTmp = Utils.clearTextIndention(tcText);
+            String content = Utils.changeBrToTextIndention(strTmp);
 
-                // getElementById から取得した値に余計な改行が含まれるため、一度手動で除去してからhtml改行をtext改行に置き換える
-                String strTmp = Utils.clearTextIndention(tcText);
-                String content = Utils.changeBrToTextIndention(strTmp);
+            // 対象のリソースをリソースマップから取得し、内容を差し替える
+            ItemTextRes itemTextRes = resMap.get(textRes.getRole().toString());
+            itemTextRes.setStringToContent(content);
 
-                // 対象のリソースをリソースマップから取得し、内容を差し替える
-                ItemTextRes itemTextRes = resMap.get(textRes.getRole().toString());
-                itemTextRes.setStringToContent(content);
-
-                // リソースを更新
-                Datastore.put(tx, itemTextRes);
-            }
+            // リソースを更新
+            Datastore.put(tx, itemTextRes);
         }
     }
     

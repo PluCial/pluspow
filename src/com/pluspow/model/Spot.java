@@ -49,6 +49,18 @@ public class Spot implements Serializable {
     private String spotId;
     
     /**
+     * ユーザーが入力した住所
+     */
+    @Attribute(unindexed = true)
+    private String address;
+    
+    /**
+     * フロアー
+     */
+    @Attribute(unindexed = true)
+    private int floor;
+    
+    /**
      * GEO lat
      */
     @Attribute(unindexed = true)
@@ -150,6 +162,10 @@ public class Spot implements Serializable {
         return "+81 " + sb1.toString();
     }
     
+    public String getDisplayAddress() {
+        return langUnit.getDisplayAddress();
+    }
+    
     public boolean isPhoneDisplayFlg() {
         return langUnit.isPhoneDisplayFlg();
     }
@@ -210,12 +226,6 @@ public class Spot implements Serializable {
      */
     @Attribute(persistent = false)
     private SpotTextRes detailRes;
-    
-    /**
-     * 詳細リソース(永久かしない)
-     */
-    @Attribute(persistent = false)
-    private SpotTextRes addressRes;
 
     /**
      * Resourcesの設定
@@ -232,10 +242,6 @@ public class Spot implements Serializable {
         
         this.setDetailRes(
             SpotTextResService.getResourcesByMap(resourcesMap, TextResRole.SPOT_DETAIL)
-                );
-        
-        this.setAddressRes(
-            SpotTextResService.getResourcesByMap(resourcesMap, TextResRole.SPOT_ADDRESS)
                 );
     }
     
@@ -263,13 +269,13 @@ public class Spot implements Serializable {
         return detailRes == null ? null : detailRes.getKey().getName();
     }
     
-    public String getAddress() {
-        return addressRes == null ? null : addressRes.getContentString();
-    }
-    
-    public String getAddressResKey() {
-        return addressRes == null ? null : addressRes.getKey().getName();
-    }
+//    public String getAddress() {
+//        return addressRes == null ? null : addressRes.getContentString();
+//    }
+//    
+//    public String getAddressResKey() {
+//        return addressRes == null ? null : addressRes.getKey().getName();
+//    }
     
     // ----------------------------------------------------------------------
     // GCSリソース
@@ -539,14 +545,6 @@ public class Spot implements Serializable {
     public void setDetailRes(SpotTextRes detailRes) {
         this.detailRes = detailRes;
     }
-
-    public SpotTextRes getAddressRes() {
-        return addressRes;
-    }
-
-    public void setAddressRes(SpotTextRes addressRes) {
-        this.addressRes = addressRes;
-    }
     
     public SpotGcsRes getIconImageRes() {
         return iconImageRes;
@@ -606,5 +604,21 @@ public class Spot implements Serializable {
 
     public void setCountry(Country country) {
         this.country = country;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public int getFloor() {
+        return floor;
+    }
+
+    public void setFloor(int floor) {
+        this.floor = floor;
     }
 }
