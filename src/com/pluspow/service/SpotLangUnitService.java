@@ -48,8 +48,24 @@ public class SpotLangUnitService extends LangUnitService {
      */
     public static List<SpotLangUnit> getList(Spot spot) throws ObjectNotExistException, ArgumentException {
         if(spot.getPlan() == null) throw new ArgumentException();
+        int limitCount = spot.getPlan().getTransLangMaxCount();
         
-        List<SpotLangUnit> list = dao.getList(spot, spot.getPlan().getTransLangMaxCount());
+        List<SpotLangUnit> list = dao.getList(spot, limitCount);
+        
+        if(list == null) throw new ObjectNotExistException();
+        
+        return list;
+    }
+    
+    /**
+     * 言語ユニットリストを取得(無効なものも含む)
+     * @param spot
+     * @return
+     * @throws ObjectNotExistException 
+     */
+    public static List<SpotLangUnit> getAllList(Spot spot) throws ObjectNotExistException {
+        
+        List<SpotLangUnit> list = dao.getAllList(spot);
         
         if(list == null) throw new ObjectNotExistException();
         
@@ -193,6 +209,17 @@ public class SpotLangUnitService extends LangUnitService {
         
         info.setPhoneDisplayFlg(displayFlg);
         dao.put(info);
+    }
+    
+    /**
+     * 更新
+     * @param spot
+     * @param lang
+     * @param displayFlg
+     * @throws ObjectNotExistException 
+     */
+    public static void update(SpotLangUnit unit) throws ObjectNotExistException {
+        dao.put(unit);
     }
     
     /**

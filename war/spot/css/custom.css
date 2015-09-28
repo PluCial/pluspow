@@ -37,11 +37,15 @@ ul.navbar-nav > li > a {
 	padding: 15px;
 }
 
+.align-middle {
+	vertical-align:middle;
+}
+
 /* Spot Top
 ================================================== */
 #spot-home {
 	margin-top: 50px;
-	background-size: cover !important;
+	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: 50% 0;
 	background-attachment: fixed !important;

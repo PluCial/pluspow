@@ -15,10 +15,10 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.App;
 import com.pluspow.dao.ItemDao;
-import com.pluspow.enums.ItemType;
 import com.pluspow.enums.Lang;
 import com.pluspow.enums.PlanLimitType;
 import com.pluspow.enums.ServicePlan;
+import com.pluspow.enums.SpotActivity;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.enums.TransStatus;
 import com.pluspow.enums.TransType;
@@ -96,7 +96,7 @@ public class ItemService {
      */
     public static Item add(
             Spot spot, 
-            ItemType itemType, 
+            SpotActivity activity, 
             double price, 
             boolean dutyFree,
             String name, 
@@ -108,7 +108,7 @@ public class ItemService {
         // ---------------------------------------------------
         Item model = new Item();
         model.setKey(createKey(spot));
-        model.setItemType(itemType);
+        model.setActivity(activity);
         model.setBaseLang(spot.getBaseLang());
         model.setPrice(price);
         model.getSpotRef().setModel(spot);
@@ -134,8 +134,8 @@ public class ItemService {
             
             // スポット言語情報の設定(アクティビティの追加)
             SpotLangUnit langInfo = SpotLangUnitService.get(spot, spot.getBaseLang());
-            if(langInfo.getActivitys().indexOf(itemType.getActivity()) < 0) {
-                langInfo.getActivitys().add(itemType.getActivity());
+            if(langInfo.getActivitys().indexOf(activity) < 0) {
+                langInfo.getActivitys().add(activity);
                 Datastore.put(tx, langInfo);
             }
             
@@ -322,8 +322,8 @@ public class ItemService {
         try {
             langInfo = SpotLangUnitService.get(spot, transLang);
 
-            if(langInfo.getActivitys().indexOf(item.getItemType().getActivity()) < 0) {
-                langInfo.getActivitys().add(item.getItemType().getActivity());
+            if(langInfo.getActivitys().indexOf(item.getActivity()) < 0) {
+                langInfo.getActivitys().add(item.getActivity());
                 Datastore.put(tx, langInfo);
             }
         } catch (ObjectNotExistException e) {
@@ -534,6 +534,20 @@ public class ItemService {
     }
     
     /**
+     * 指定したアクティビティには他のアイテムが存在するかをチェック
+     * @param spot
+     * @param lang
+     * @param activity
+     * @return
+     */
+    public static boolean checkActivityHasOtherItem(Spot spot, Lang lang, SpotActivity activity) {
+        List<Item> itemList =  dao.checkActivityHasOtherItem(spot, lang, activity);
+        if(itemList !=null && itemList.size() > 0) return true;
+        
+        return false;
+    }
+    
+    /**
      * 金額の変更
      * @param item
      * @param price
@@ -560,9 +574,13 @@ public class ItemService {
     
     /**
      * 削除
+     * <pre>
+     * 言語ユニットのアクティビティや検索ドキュメントの更新はスポットを表示したタイミングで行う。
+     * </pre>
      * @param spot
+     * @throws ObjectNotExistException 
      */
-    public static void delete(Spot spot, Item item) {
+    public static void delete(Spot spot, Item item) throws ObjectNotExistException {
         
         Transaction tx = Datastore.beginTransaction();
         try {

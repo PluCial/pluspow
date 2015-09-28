@@ -1,6 +1,8 @@
 package com.pluspow.controller.info;
 
 
+import java.util.Properties;
+
 import org.datanucleus.util.StringUtils;
 import org.slim3.controller.Navigation;
 
@@ -31,7 +33,9 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
         }catch(Exception e) {
             lang = App.APP_BASE_LANG;
         }
-        requestScope("lang", lang);
+        requestScope("localeLang", lang);
+        Properties appProp = getAppProp(lang);
+        requestScope("appProp", appProp);
         
         // -------------------------------------
         // リクエストスコープの基本設定

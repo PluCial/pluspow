@@ -7,17 +7,19 @@
 <%@ page import="com.pluspow.utils.*" %>
 <%@ page import="java.text.DecimalFormat" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="java.util.Properties" %>
 <%
-	Spot spot =(Spot) request.getAttribute("spot");
+Spot spot =(Spot) request.getAttribute("spot");
 Lang lang =(Lang) request.getAttribute("lang");
 boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 boolean isEditPage = Boolean.valueOf((String) request.getParameter("isEditPage"));
 List<Lang> suppertLangList = (List<Lang>) request.getAttribute("suppertLangList");
 Map<String, OfficeHours> officeHoursMap = (Map<String, OfficeHours>) request.getAttribute("officeHoursMap");
 DecimalFormat officeTimeformat = new DecimalFormat("00");
+Properties appProp = (Properties) request.getAttribute("appProp");
 %>
 	<section id="spot-home" class="no-padding" style="background-image:
-                  url(<%=spot.getBackgroundImageUrl() %>)">
+                  url(<%=PathUtils.getSpotBackgroundImageUrl(spot) %>)">
         
 		<div class="row">
 			<div id="spot-catch" class="col-md-8 spot-detail-inner"><!-- spot-image -->
@@ -42,23 +44,10 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 					data-backdrop="static"
 					data-target="#selectLangModel" 
 					style="color:#fff"
-					href="/spot/selectLang?spotId=<%=spot.getSpotId() %>&lang=<%=lang.toString() %>">
-					<img style="width:25px;vertical-align: middle;" class="flag-image" src="/images/flag/<%=lang.getLangKey().toUpperCase() %>.png" />
-					<%=spot.getLangUnit().getLang().getName() %> <i class="fa fa-chevron-down"></i>
+					href="/spot/selectLang?spotId=<%=spot.getSpotId() %> %>">
+					<img class="align-middle" style="width:32px;vertical-align:middle;" src="<%=PathUtils.getCountryFlagUrl(spot.getLangUnit().getLang()) %>"> 
+					<span class="align-middle"><%=spot.getLangUnit().getLang().getName() %> <i class="fa fa-chevron-down"></i></span>
 				</a>
-				
-				<!-- <div class="cd-slider-nav">
-					<nav>
-						<ul>
-							<li class="selected"><a href="#0"><i class="fa fa-cutlery"></i> 飲食</a></li>
-							<li class="selected"><a href="#0"><i class="fa fa-hotel"></i> 宿泊</a></li>
-							<li class=""><a href="#0"><i class="fa fa-shopping-cart"></i> 買い物</a></li>
-							<li class=""><a href="#0"><i class="fa fa-bicycle"></i> 娯楽</a></li>
-							<li class=""><a href="#0"><i class="fa fa-heart-o"></i> 癒し</a></li>
-							<li class="selected"><a href="#0"><i class="fa fa-ellipsis-h"></i> その他</a></li>
-						</ul>
-					</nav> 
-				</div> -->
 
 			</div><!-- spot-catch end-->
 			
@@ -154,11 +143,10 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 					<div id="spot-office-hours" class="spot-detail-inner tab-pane">
 						<%for(DayOfWeek dayOfWeek: DayOfWeek.values()) {
 							OfficeHours officeHours = officeHoursMap.get(dayOfWeek.toString());
-							if(isOwner || officeHours.isOpen()) {
 						%>
 						<div id="<%=officeHours.getKey().getName() %>" class="plan text-center row">
 							<div class="plan-name col-md-4">
-								<%=officeHours.getDayOfWeek().getName() %>
+								<%=appProp.getProperty("dayOfWeek." + officeHours.getDayOfWeek().toString()) %>
 								<%if(isOwner && isEditPage) { %>
 								<a data-toggle="modal" 
 									data-backdrop="static"
@@ -169,7 +157,7 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 								</a>
 								<%} %>
 							</div>
-							<div class="plan-price col-md-8 spot-office-hours-area" style="<%=officeHours.isOpen() ? "" : "    display: none;" %>">
+							<div class="plan-price col-md-8 spot-office-hours-area" style="<%=officeHours.isOpen() ? "" : "display:none" %>">
 								<sup class="currency">
 									<i class="fa fa-sun-o"></i>
 								</sup>
@@ -177,7 +165,6 @@ DecimalFormat officeTimeformat = new DecimalFormat("00");
 								<sub><i class="fa fa-moon-o"></i><span class="office-close-hour"><%=officeTimeformat.format(officeHours.getCloseHour()) %></span>:<span class="office-close-minute"><%=officeTimeformat.format(officeHours.getCloseMinute()) %></span></sub>
 							</div>
 						</div>
-						<%	} %>
 						<%} %>
 					</div>
 			

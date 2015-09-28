@@ -11,7 +11,7 @@
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="org.slim3.controller.validator.Errors" %>
 <%
-	Client client =(Client) request.getAttribute("client");
+Client client =(Client) request.getAttribute("client");
 Spot spot =(Spot) request.getAttribute("spot");
 List<SpotLangUnit> spotLangUnitList =(List<SpotLangUnit>) request.getAttribute("spotLangUnitList");
 List<TransHistory> transHistoryList =(List<TransHistory>) request.getAttribute("transHistoryList");
@@ -30,9 +30,9 @@ Errors errors =(Errors) request.getAttribute("errors");
   				vertical-align: middle;
 			}
 			
-			#chat-box tr td:first-child {
+/* 			#chat-box tr td:first-child {
 				width: 50px;
-			}
+			} */
 			
 			#chat-box tr td:first-child img {
 				width: 40px;
@@ -98,20 +98,44 @@ Errors errors =(Errors) request.getAttribute("errors");
 									<div class="box-body chat" id="chat-box">
 										<table class="table table-hover table-striped">
 											<%
-												for(Lang langInfo: spot.getLangs()) {
+												for(SpotLangUnit langUnit: spotLangUnitList) {
 											%>
 											<tr>
-												<td class="action">
-													<span style="background-image: url(/images/flag/<%=langInfo.getLangKey().toUpperCase() %>.png);background-repeat:no-repeat;background-position: center left;background-size: 34px;padding-left:50px;"></span>
+												<td>
+													<%if(langUnit.isInvalid()) { %>
+													<%=langUnit.getLang().getName() %>
+													<%}else { %>
+													<a href="<%=PathUtils.spotPage(spot, langUnit.getLang()) %>"><%=langUnit.getLang().getName() %></a>
+													<%} %>
 												</td>
-												<td><%=langInfo.getName() %></td>
-												<td class="action"><a href="/+<%=spot.getSpotId() %>/l-<%=langInfo.toString() %>/" class="btn btn-box-tool"><i class="fa fa-external-link"></i></a></td>
+												<td>
+													<%if(langUnit.getLang() != spot.getBaseLang()) { %>
+													<span class="label label-success"><%=langUnit.getTransStatus().getName() %></span>
+													<%} %>
+												</td>
+												<td>
+													<%if(langUnit.getLang() != spot.getBaseLang()) { %>
+													<%=langUnit.isInvalid() ? "無効" : "" %>
+													<%} %>
+												</td>
+												<td class="action">
+													<%if(langUnit.getLang() != spot.getBaseLang() && !langUnit.isInvalid()) { %>
+													<a href="/spot/secure/trans?spotId=<%=spot.getSpotId() %>&objectType=<%=ObjectType.SPOT %>&transLang=<%=langUnit.getLang().toString() %>" class="btn btn-box-tool"><i class="fa fa-language"></i></a>
+													<%} %>
+												</td>
+												<td class="action">
+													<%if(langUnit.getLang() != spot.getBaseLang() && !langUnit.isInvalid()) { %>
+													<a href="/spot/secure/setLangInvalid?spotId=<%=spot.getSpotId() %>&objectType=<%=ObjectType.SPOT %>&lang=<%=langUnit.getLang().toString() %>&invalid=true" class="btn btn-box-tool" rel="tooltip" data-original-title="Collapse"><i class="fa fa-trash"></i></a>
+													<%} %>
+												</td>
 											</tr>
 											<%} %>
 										</table>
 										
 									</div><!-- /.box-body -->
-									
+									<div class="box-footer">
+										<a href="/spot/secure/transSelectLang?spotId=<%=spot.getSpotId() %>" class="btn btn-primary btn-sm pull-right"><i class="fa fa-plus"></i> 言語を追加</a>
+									</div>
 								</section>
 							</div>
 							
@@ -165,7 +189,6 @@ Errors errors =(Errors) request.getAttribute("errors");
 												<th>翻訳方法</th>
 												<th>翻訳文字数</th>
 												<th>コスト</th>
-												<th>ステータス</th>	
 											</tr>
 										</thead>
 										<tbody>
@@ -196,7 +219,6 @@ Errors errors =(Errors) request.getAttribute("errors");
 												<td><%=history.getTransType().getName() %>(¥ <%=history.getCharUnitPrice() %>/1文字)</td>
 												<td><%=history.getTransCharCount() %></td>
 												<td>¥<%=(int)history.getTransCost() %></td>
-												<td><span class="label label-success"><%=history.getTransStatus().getName() %></span></td>
 											</tr>
 											<%} %>
 										</tbody>

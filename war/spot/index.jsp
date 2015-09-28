@@ -2,6 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@taglib prefix="f" uri="http://www.slim3.org/functions"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="com.pluspow.App" %>
 <%@ page import="com.pluspow.enums.*" %>
 <%@ page import="java.util.List" %>
@@ -10,7 +11,6 @@
 <%@ page import="org.slim3.util.StringUtil" %>
 <%
 Spot spot = (Spot) request.getAttribute("spot");
-System.out.println(spot.getSpotId());
 boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 List<Item> itemList =(List<Item>) request.getAttribute("itemList");
 
@@ -20,7 +20,9 @@ if (request.getAttribute("cursor") != null && request.getAttribute("hasNext") !=
 	cursor = (String) request.getAttribute("cursor");
 	hasNext = Boolean.valueOf((String) request.getAttribute("hasNext"));
 }
+Lang localeLang =(Lang) request.getAttribute("localeLang");
 %>
+<fmt:setLocale value="<%=localeLang.toString() %>" />
 <!DOCTYPE html>
 <html lang="<%=spot.getLangUnit().getLang() %>">
 <head>
@@ -35,16 +37,9 @@ if (request.getAttribute("cursor") != null && request.getAttribute("hasNext") !=
 		<!-- Header start -->
 		<jsp:include page="/spot/include-parts/main_header.jsp" />
 		<!-- Header end -->
-		
-		<%if(isOwner) { %>
-		<a id="background-image-btn" 
-			class="btn btn-default" 
-			href="/spot/secure/changeGcsRes?spotId=<%=spot.getSpotId() %>&lang=<%=spot.getLangUnit().getLang() %>&role=<%=GcsResRole.SPOT_BACKGROUND_IMAGE %>&resourcesKey=<%=spot.getBackgroundImageResKey() == null ? "" : spot.getBackgroundImageResKey() %>">
-			<i class="fa fa-file-image-o"></i> 背景画像</a>
-		<%} %>
 
 		<!-- Slider start -->
-		<jsp:include page="/spot/include-parts/spot_home_page_top.jsp">
+		<jsp:include page="/spot/include-parts/spot_home_page_top2.jsp">
 			<jsp:param name="isEditPage" value="true" />
 		</jsp:include>
     	<!--/ Slider end -->
@@ -55,8 +50,7 @@ if (request.getAttribute("cursor") != null && request.getAttribute("hasNext") !=
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12 heading">
-						<span class="title-icon classic pull-left"><i class="fa fa-suitcase"></i></span>
-						<h2 class="title classic">Service</h2>
+						<h2 class="title classic"><fmt:message key="page.spot.index.h2.service" /></h2>
 						<%if(isOwner && spot.getLangUnit().getLang() == spot.getBaseLang()) { %>
 						<a class="pull-right btn btn-primary" href="/spot/secure/itemAdd?spotId=<%=spot.getSpotId() %>">
 							<i class="fa fa-plus"></i> アイテムを追加
@@ -86,7 +80,7 @@ if (request.getAttribute("cursor") != null && request.getAttribute("hasNext") !=
 	
 
 		<!-- Footer start -->
-		<jsp:include page="/spot/include-parts/main_footer.jsp" />
+		<jsp:include page="/include-parts/main_footer.jsp" />
 		<!--/ Footer end -->
 	
 	</div><!-- Body inner end -->
@@ -138,7 +132,7 @@ if (request.getAttribute("cursor") != null && request.getAttribute("hasNext") !=
 		        marker:{
 		          values:[
 		            {address:"<%=spot.getGeoFormattedAddress() %>", data:" Welcome To <%=spot.getName() %> ! ! ", 
-		             options:{icon: "http://themewinter.com/html/marker.png"}}
+		             options:{icon: "/images/marker.png"}}
 		          ],
 		          options:{
 		            draggable: false

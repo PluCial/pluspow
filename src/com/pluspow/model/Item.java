@@ -14,8 +14,8 @@ import org.slim3.datastore.ModelRef;
 import org.slim3.datastore.ModificationDate;
 
 import com.google.appengine.api.datastore.Key;
-import com.pluspow.enums.ItemType;
 import com.pluspow.enums.Lang;
+import com.pluspow.enums.SpotActivity;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.service.ItemTextResService;
 
@@ -31,13 +31,14 @@ public class Item implements Serializable {
     private Long version;
     
     /**
-     * アイテムタイプ
+     * アイテムタイプ(関連するアクティビティ)
      */
-    private ItemType itemType;
+    private SpotActivity activity;
     
     /**
      * 値段
      */
+    @Attribute(unindexed = true)
     private double price;
     
     /**
@@ -275,14 +276,6 @@ public class Item implements Serializable {
         this.sortOrder = sortOrder;
     }
 
-    public ItemType getItemType() {
-        return itemType;
-    }
-
-    public void setItemType(ItemType itemType) {
-        this.itemType = itemType;
-    }
-
     public double getPrice() {
         return price;
     }
@@ -350,5 +343,13 @@ public class Item implements Serializable {
 
     public void setLangUnit(ItemLangUnit langUnit) {
         this.langUnit = langUnit;
+    }
+
+    public SpotActivity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(SpotActivity activity) {
+        this.activity = activity;
     }
 }

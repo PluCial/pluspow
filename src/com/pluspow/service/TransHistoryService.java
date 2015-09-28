@@ -30,7 +30,7 @@ public class TransHistoryService {
      * @return
      */
     public static List<TransHistory> getHistoryList(Spot spot) {
-        return dao.getHistoryList(spot, App.SPOT_HOWTO_LIST_LIMIT);
+        return dao.getHistoryList(spot, App.TRANS_HISTORY_LIST_LIMIT);
     }
     
     /**

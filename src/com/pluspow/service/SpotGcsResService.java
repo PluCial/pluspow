@@ -76,6 +76,7 @@ public class SpotGcsResService extends GcsResService {
         model.setWidth(image.getWidth());
         model.setHeight(image.getHeight());
         model.setContentType(fileItem.getContentType());
+        model.setSize(image.getImageData().length);
 
         model.getSpotRef().setModel(spot);
         model.setLang(lang);

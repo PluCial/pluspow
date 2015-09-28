@@ -2,9 +2,11 @@ package com.pluspow.controller.client.account;
 
 import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Validators;
+
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
 import com.pluspow.service.SpotService;
+import com.pluspow.utils.PathUtils;
 
 public class AddSpotStep2EntryController extends BaseController {
 
@@ -35,7 +37,7 @@ public class AddSpotStep2EntryController extends BaseController {
         // セッション変更
         removeSessionScope("spotEntryInfo");
 
-        return redirect("/client/account/dashboard/?spotId=" + spot.getSpotId());
+        return redirect(PathUtils.selectSpotPage());
     }
     
     /**

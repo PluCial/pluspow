@@ -44,5 +44,21 @@ public class SpotLangUnitDao extends DaoBase<SpotLangUnit>{
                 .limit(limit)
                 .sort(new Sort(meta.createDate, SortDirection.ASCENDING)).asList();
     }
+    
+    /**
+     * 言語ユニットリストを取得(無効なものも含む)
+     * @param spot
+     * @param limit
+     * @return
+     */
+    public List<SpotLangUnit> getAllList(Spot spot) {
+        return  Datastore.query(meta)
+                .filter(
+                    meta.spotRef.equal(spot.getKey())
+                    )
+                .sort(
+                    new Sort(meta.invalid, SortDirection.ASCENDING),
+                    new Sort(meta.createDate, SortDirection.ASCENDING)).asList();
+    }
 
 }

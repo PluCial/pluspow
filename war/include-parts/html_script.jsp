@@ -25,7 +25,7 @@
 	<!-- Wow Animation -->
 	<script type="text/javascript" src="/plugins/wow/wow.min.js"></script>
 	<!-- SmoothScroll -->
-	<script type="text/javascript" src="/plugins/smoothScroll/smoothscroll.js"></script>
+<!-- 	<script type="text/javascript" src="/plugins/smoothScroll/smoothscroll.js"></script> -->
 	<!-- Eeasing -->
 	<script type="text/javascript" src="/plugins/jQuery/jquery.easing.1.3.js"></script>
 	<!-- Counter -->

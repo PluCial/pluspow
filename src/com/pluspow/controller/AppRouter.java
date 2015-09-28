@@ -11,39 +11,22 @@ import org.slim3.controller.router.RouterImpl;
 public class AppRouter extends RouterImpl {
 
 	public AppRouter() {
-
-	    //--------------------------------------------
-	    // トップ
-	    //--------------------------------------------
-	    addRouting(
-            "/",
-            "/pub/info/features");
 	    
-	    addRouting(
-            "/index",
-            "/pub/info/features");
-	  
-// OPEN時に切り替え
-//	    addRouting(
-//            "/",
-//            "/pub/bl/index");
-//        
-//        addRouting(
-//            "/index",
-//            "/pub/bl/index");
+	    // SPOT TOP
+        addRouting(
+                "/l-{lang}/",
+                "/?lang={lang}");
 	    
-	    // infoの設定
-//	    setInfo();
-	    
+//	    setSpotEdit();
 	    setSpot();
 	    
 	}
 	
 	/**
-	 * スポット
-	 */
-	private void setSpot() {
-	    // SPOT TOP
+     * スポット
+     */
+    private void setSpot() {
+        // SPOT TOP
         addRouting(
                 "/\\+{spotId}",
                 "/spot/index?spotId={spotId}");
@@ -80,6 +63,6 @@ public class AppRouter extends RouterImpl {
         addRouting(
             "/\\+{spotId}/l-{lang}/howto/{howtoId}",
             "/spot/howto?spotId={spotId}&howtoId={howtoId}&lang={lang}");
-	}
+    }
 
 }

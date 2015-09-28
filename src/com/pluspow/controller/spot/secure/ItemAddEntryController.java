@@ -5,7 +5,7 @@ import org.slim3.controller.upload.FileItem;
 import org.slim3.controller.validator.Validators;
 import org.slim3.util.StringUtil;
 
-import com.pluspow.enums.ItemType;
+import com.pluspow.enums.SpotActivity;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
 import com.pluspow.service.ItemService;
@@ -25,7 +25,7 @@ public class ItemAddEntryController extends BaseController {
         // リクエストパラメーターの取得
         String itemName = asString("itemName");
         String price = asString("price");
-        String itemType = asString("itemType");
+        String activity = asString("activity");
         String detail = asString("detail");
         boolean dutyFree = StringUtil.isEmpty(asString("dutyFree")) ? false : true;
         
@@ -38,7 +38,7 @@ public class ItemAddEntryController extends BaseController {
         // アイテムの追加
         ItemService.add(
             spot, 
-            ItemType.valueOf(itemType), 
+            SpotActivity.valueOf(activity), 
             Double.valueOf(price), 
             dutyFree, 
             itemName, 
@@ -63,7 +63,7 @@ public class ItemAddEntryController extends BaseController {
         );
         
         // アイテムタイプ
-        v.add("itemType", 
+        v.add("activity", 
             v.required("アイテムの種類を選択してください。")
         );
         

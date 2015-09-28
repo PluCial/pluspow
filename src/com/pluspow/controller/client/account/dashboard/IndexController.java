@@ -22,7 +22,7 @@ public class IndexController extends BaseController {
         spot.setTransAcc(TransCreditService.get(spot));
         
         // サポートしている言語リスト
-        List<SpotLangUnit> spotLangUnitList = SpotLangUnitService.getList(spot);
+        List<SpotLangUnit> spotLangUnitList = SpotLangUnitService.getAllList(spot);
         requestScope("spotLangUnitList", spotLangUnitList == null ? new ArrayList<SpotLangUnit>() : spotLangUnitList);
         
         // 翻訳履歴

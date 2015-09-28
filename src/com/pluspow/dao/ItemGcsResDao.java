@@ -5,7 +5,6 @@ import java.util.List;
 import org.slim3.datastore.DaoBase;
 import org.slim3.datastore.Datastore;
 
-import com.google.appengine.api.datastore.Key;
 import com.pluspow.enums.Lang;
 import com.pluspow.meta.ItemGcsResMeta;
 import com.pluspow.model.Item;
@@ -28,19 +27,6 @@ public class ItemGcsResDao extends DaoBase<ItemGcsRes>{
                     meta.lang.equal(lang),
                     meta.invalid.equal(false)
                     ).asList();
-    }
-    
-    /**
-     * リソースキーリストを取得(無効なものも含む)
-     * @param spotId
-     * @return
-     */
-    public List<Key> getResourcesKeyList(Item item, Lang lang) {
-        return Datastore.query(meta)
-                .filter(
-                    meta.itemRef.equal(item.getKey()),
-                    meta.lang.equal(lang)
-                    ).asKeyList();
     }
 
 }

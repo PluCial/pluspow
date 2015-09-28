@@ -18,7 +18,7 @@ String itemId = (String) request.getAttribute("itemId");
 	</div><!-- /modal-header -->
     <form action="/spot/secure/itemDeleteEntry" id="item-delete-submit-form" method="post">
 		<div class="modal-body">
-			<p>一度削除すると元に戻すことはできません。<br />このアイテムを本当に削除してよろしいですか？</p>
+			<p>母国語のページからアイテムを削除すると、そのアイテムは他の言語ページからも削除されます。<br />また、一度削除したアイテムは元に戻すことはできません。<br /><br />このアイテムを本当に削除してよろしいですか？</p>
 		</div><!-- /modal-body -->
 		<div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>

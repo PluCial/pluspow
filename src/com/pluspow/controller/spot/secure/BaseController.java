@@ -1,5 +1,7 @@
 package com.pluspow.controller.spot.secure;
 
+import java.util.Properties;
+
 import org.slim3.controller.Navigation;
 import org.slim3.util.StringUtil;
 
@@ -24,6 +26,15 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
         }catch(NoLoginException e) {
             return redirect("/client/login");
         }
+        
+        // -------------------------------------
+        // 表示言語
+        // -------------------------------------
+        Lang localeLang = client.getLang();
+        requestScope("localeLang", localeLang);
+        
+        Properties appProp = getAppProp(client.getLang());
+        requestScope("appProp", appProp);
 
         // スポットの取得
         Spot spot = getSpot();

@@ -23,6 +23,9 @@ public class App {
      */
     public static final String MANAGEMENT_COMPANY_NAME_JP = "株式会社プラシャル";
     
+    /** サンプルスポットID */
+    public static final String SAMPLE_SPOT_ID = "bases";
+    
     /**
      * サービスのベース言語
      */
@@ -31,8 +34,8 @@ public class App {
     /** メール送信元アドレス */
     public static final String EMAIL_FROM_ADDRESS = "info@pluspow.com";
     
-    /** コンタクトメール送信先アドレス */
-    public static final String EMAIL_CONTACT_TO_ADDRESS = "info@pluspow.com";
+    /** お問い合わせメール送信先アドレス */
+    public static final String EMAIL_CONTACT_TO_ADDRESS = "info@plucial.com";
     
     // ---------------------------------------------------------------------------
     // GOOGLE PROJECT 定数
@@ -52,11 +55,7 @@ public class App {
     
     public static final int SPOT_LIST_BY_ACTIVITY_LIMIT = 10;
     
-    public static final int SPOT_ITEM_LIST_LIMIT = 3;
-    
-    public static final int SPOT_ITEM_LIST_BY_TYPE_LIMIT = 10;
-    
-    public static final int SPOT_HOWTO_LIST_LIMIT = 10;
+    public static final int SPOT_ITEM_LIST_LIMIT = 9;
     
     public static final int TRANS_HISTORY_LIST_LIMIT = 20;
     

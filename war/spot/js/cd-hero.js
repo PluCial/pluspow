@@ -5,7 +5,7 @@ jQuery(document).ready(function($){
 	});
 
 	//upload videos if not on mobile
-	uploadVideo($('.cd-hero-slider'));
+//	uploadVideo($('.cd-hero-slider'));
 
 	//change visible slide
 	$('.cd-slider-nav li').on('click', function(event){

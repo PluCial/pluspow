@@ -296,6 +296,14 @@ public class Spot implements Serializable {
         return backgroundImageRes == null ? null : backgroundImageRes.getServingUrl();
     }
     
+    public int getBackgroundImageWidth() {
+        if(backgroundImageRes == null)  return 0;
+        
+        if(backgroundImageRes.getWidth() > 1600) return 1600;
+        
+        return backgroundImageRes.getWidth();
+    }
+    
     public String getBackgroundImageResKey() {
         return backgroundImageRes == null ? null : backgroundImageRes.getKey().getName();
     }

@@ -48,7 +48,7 @@ String pageDescription = (String) request.getAttribute("pageDescription");
 	<!-- Style Swicther -->
 <!-- 	<link id="style-switch" href="/spot/css/presets/preset3.css" media="screen" rel="stylesheet" type="text/css"> -->
 	<!-- Style Custom -->
-	<link rel="stylesheet" href="/spot/css/custom.css">
+	<link rel="stylesheet" href="/spot/css/custom2.css">
 
 	<!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
     <!--[if lt IE 9]>

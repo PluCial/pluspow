@@ -1,46 +1,48 @@
 <%@page pageEncoding="UTF-8" isELIgnored="false" session="false"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@taglib prefix="f" uri="http://www.slim3.org/functions"%>
 <%@ page import="com.pluspow.App" %>
 <%@ page import="com.pluspow.model.*" %>
 <%@ page import="com.pluspow.enums.*" %>
+<%
+Lang localeLang =(Lang) request.getAttribute("localeLang");
+%>
+<fmt:setLocale value="<%=localeLang.toString() %>" />
 	<section id="footer" class="footer service-footer">
 		<div class="container">
-		
 			<div class="row">
-				<div class="col-md-3 col-sm-12 footer-widget">
-					<h3 class="widget-title"><%=App.APP_DISPLAY_NAME %></h3>
-
+				<div class="col-md-10 col-md-offset-2 footer-widget">
+ 					<h3 class="widget-title"><%=App.APP_DISPLAY_NAME %></h3>
+ 				</div>
+ 			</div>
+			
+			<div class="row">
+				<div class="col-md-3 col-sm-12 col-md-offset-2 footer-widget">
 					<ul class="unstyled">
-						<li><a href="/info/agreement">利用規約</a></li>
-						<li><a href="/info/privacy">プライバシーポリシー</a></li>
-						<li><a href="/info/price">料金プラン</a></li>
-						<li><a href="/info/sctl">特定商取引に関する表示</a></li>
-						<li><a href="/info/contact">お問い合わせ</a></li>
+						<li><a href="/info/about"><fmt:message key="mainFooter.nav.about"><fmt:param><%=App.APP_DISPLAY_NAME %></fmt:param></fmt:message></a></li>
+						<li><a href="/info/price"><fmt:message key="mainFooter.nav.price" /></a></li>
+						<li><a href="/info/langs"><fmt:message key="mainFooter.nav.langs" /></a></li>
+						<li><a href="/info/countryList"><fmt:message key="mainFooter.nav.countryList" /></a></li>
 					</ul>
-<!-- 
-					<div class="service-social">
-								<a class="fb" href="#"><i class="fa fa-facebook"></i></a>
-								<a class="twt" href="#"><i class="fa fa-twitter"></i></a>
-								<a class="gplus" href="#"><i class="fa fa-google-plus"></i></a>
-							</div> -->
-	
 				</div>
 			
-				<div class="col-md-5 col-sm-12 footer-widget footer-about-us">
-					<h3 class="widget-title">あなたも店舗情報を世界に公開してみませんか？</h3>
-					<%-- <p><strong><%=App.APP_DISPLAY_NAME %></strong>は、インバウンド市場に必要な多言語ページ、サービスメニュー、お問い合わせ管理機能(双方翻訳)などをだれでもすぐに利用できるインバウンドクラウドサービスです。</p> --%>
-					<p><strong><%=App.APP_DISPLAY_NAME %></strong>は、どなたでもインバウンド市場に参加できるように作られたインバウンド市場に特化したクラウドサービス & メディアです。</p>
-					<p>世界に向けての確実な情報発信をまず無料でお試しください。</p>
-					<br>
-					<p><a href="/" class="btn btn-primary solid">詳細 & 始める</a></p>
-				</div><!--/ end about us -->
-
-				<div class="col-md-4 col-sm-12 footer-widget">
-					<h3 class="widget-title">特徴</h3>
-					<ul class="">
-						<li>64か国語 & 多業種に対応</li>
-						<li>初期費用なし・月額無料<br />(必要に応じた有料プランあり)</li>
-						<li>専門知識は一切不要<br />(登録から開始までただの10分)</li>
+				<div class="col-md-3 col-sm-12 footer-widget">
+					<ul class="unstyled">
+						<li><a href="/info/agreement"><fmt:message key="mainFooter.nav.agreement" /></a></li>
+						<li><a href="/info/privacy"><fmt:message key="mainFooter.nav.privacy" /></a></li>
+						<li><a href="/info/sctl"><fmt:message key="mainFooter.nav.sctl" /></a></li>
+						<li><a href="/info/contact"><fmt:message key="mainFooter.nav.contact" /></a></li>
 					</ul>
+				</div>
+
+				<div class="col-md-2 col-sm-12 footer-widget">
+					<div class="service-social">
+						<a class="fb" href="#"><i class="fa fa-facebook"></i></a>
+						<a class="twt" href="#"><i class="fa fa-twitter"></i></a>
+						<a class="gplus" href="#"><i class="fa fa-google-plus"></i></a>
+					</div>
 				</div>
 
 			</div><!--/ Row end -->

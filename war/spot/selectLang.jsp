@@ -2,16 +2,25 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@taglib prefix="f" uri="http://www.slim3.org/functions"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="com.pluspow.model.*" %>
 <%@ page import="com.pluspow.enums.*" %>
 <%@ page import="org.slim3.util.StringUtil" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.pluspow.utils.*" %>
+<%@ page import="java.util.Properties" %>
 <%
 Spot spot = (Spot) request.getAttribute("spot");
 List<SpotLangUnit> langUnitList = (List<SpotLangUnit>) request.getAttribute("langUnitList");
 boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
+Lang localeLang =(Lang) request.getAttribute("localeLang");
+Properties appProp = (Properties) request.getAttribute("appProp");
+
+boolean isClientLogged = Boolean.valueOf((String) request.getAttribute("isClientLogged"));
+boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
+String scheme = (String) request.getAttribute("scheme");
 %>
+<fmt:setLocale value="<%=localeLang.toString() %>" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,10 +40,11 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 		<div class="pull-right">
 			<button class="btn btn-box-tool btn-sm" data-dismiss="modal"><i class="fa fa-times"></i></button>
 		</div>
-		<p style="margin-bottom: 0;"><strong>元の言語:</strong> 
-			<img class="flag-image" src="/images/flag/<%=spot.getBaseLang().getLangKey().toUpperCase() %>.png" />
-			<a href="<%=PathUtils.spotPage(spot, spot.getBaseLang()) %>" class="link">
-				<%=spot.getBaseLang().getName() %>
+		<p style="margin-bottom: 0;">
+			<strong><fmt:message key="page.spot.select.lang.originalLanguage" /></strong> 
+			<img class="align-middle" style="width:32px;vertical-align:middle;" src="<%=PathUtils.getCountryFlagUrl(spot.getBaseLang()) %>"> 
+			<a href="<%=isLocal || isClientLogged ? PathUtils.spotPage(spot, spot.getBaseLang()) : PathUtils.spotPageLangSubDomainUrl(scheme, spot.getSpotId(), spot.getBaseLang()) %>" class="link align-middle">
+				<%=appProp.getProperty("lang." + spot.getBaseLang().toString()) %> (<%=spot.getBaseLang().getName() %>)
 			</a>
 		</p>
 	</div>
@@ -45,9 +55,13 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 				for(Lang lang: spot.getLangs()) {
 					if(lang != spot.getBaseLang()) {
 			%>
-			<div class="col-sm-4 col-xs-6">
-				<img class="flag-image" src="/images/flag/<%=lang.getLangKey().toUpperCase() %>.png" />
-				<a href="<%=PathUtils.spotPage(spot, lang) %>"><%=lang.getName() %></a>
+			<div class="col-sm-6 col-xs-12">
+				<div class="lang-block" style="padding: 10px 20px;">
+					<img class="align-middle" style="width:32px;vertical-align:middle;" src="<%=PathUtils.getCountryFlagUrl(lang) %>"> 
+					<a class="link align-middle" href="<%=isLocal || isClientLogged ? PathUtils.spotPage(spot, lang) : PathUtils.spotPageLangSubDomainUrl(scheme, spot.getSpotId(), lang) %>">
+						<%=appProp.getProperty("lang." + lang.toString()) %> (<%=lang.getName() %>)
+					</a>
+				</div>
 			</div>
 			<%	} %>
 			<%} %>

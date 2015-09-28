@@ -106,6 +106,20 @@ NumberFormat fPrice = NumberFormat.getNumberInstance();
 	border-top: 1px dashed #dedede;
 	padding: 12px 29px;
 	font-weight: 500;
+    display: table;
+    width: 100%;
+}
+
+.plan ul li>span {
+	display: table-cell;
+    text-align: right;
+    width: 45%;
+}
+
+.plan ul li>strong {
+	display: table-cell;
+    text-align: left;
+    width: 55%;
 }
 
 .plan ul li:first-child {
@@ -201,9 +215,8 @@ ul.nav.nav-tabs li.active a {
 											<p class="plan-price"><strong>無料</strong></p>
 											<ul class="list-unstyled">
 												<li><span>利用可能言語数:</span><strong>母国語 + 1か国語</strong></li>
-												<li><span>機械翻訳:</span><strong>無料(<%=Lang.values().length %>か国語)</strong></li>
+												<li><span>機械翻訳:</span><strong><%=Lang.values().length %>か国語<br />(<%=ServicePlan.FREE.getTransCharMaxCount() %>文字まで)</strong></li>
 												<li><span>人力翻訳:</span><strong>利用不可</strong></li>
-												<li><span>翻訳文字数上限:</span><strong><%=ServicePlan.FREE.getTransCharMaxCount() %>文字</strong></li>
 												<li><span>広告:</span><strong>あり</strong></li>
 											</ul>
 											<a class="btn btn-primary" href="/client/register">今すぐ始める</a>
@@ -221,9 +234,8 @@ ul.nav.nav-tabs li.active a {
 											</p>
 											<ul class="list-unstyled">
 												<li><span>利用可能言語数:</span><strong>母国語 + <%=Lang.values().length - 1 %>か国語</strong></li>
-												<li><span>機械翻訳:</span><strong>無料(<%=Lang.values().length %>か国語)</strong></li>
-												<li><span>人力翻訳:</span><strong>利用可能(6か国語)</strong></li>
-												<li><span>翻訳文字数上限:</span><strong>無制限</strong></li>
+												<li><span>機械翻訳:</span><strong><%=Lang.values().length %>か国語<br />(文字数無制限)</strong></li>
+												<li><span>人力翻訳:</span><strong>6か国語</strong></li>
 												<li><span>広告:</span><strong>なし</strong></li>
 											</ul>
 										</div>
@@ -287,7 +299,7 @@ ul.nav.nav-tabs li.active a {
 											</span>
 											<p class="plan-price">
 												<sup class="currency"><i class="fa fa-language"></i></sup>
-												<strong><%=(int)TransType.HUMAN_ULTRA.getPrice() %></strong>
+												<strong>¥<%=(int)TransType.HUMAN_ULTRA.getPrice() %></strong>
 												<sub> / 1文字</sub>
 											</p>
 										</div>

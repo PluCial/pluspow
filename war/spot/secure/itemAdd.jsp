@@ -13,7 +13,7 @@
 Spot spot = (Spot) request.getAttribute("spot");
 Errors errors =(Errors) request.getAttribute("errors");
 String detail = (String) request.getAttribute("detail");
-String selectItemType = (String) request.getAttribute("itemType");
+String selectItemType = (String) request.getAttribute("activity");
 %>
 <!DOCTYPE html>
 <html lang="<%=spot.getLangUnit().getLang() %>">
@@ -122,15 +122,15 @@ String selectItemType = (String) request.getAttribute("itemType");
 										<%} %>
 										<input type="text" class="form-control" ${f:text("itemName")} placeholder="アイテム名"/>
 									</div>
-								
-									<div class="form-group ${f:errorClass('itemType','has-error')}">
-										<%if (errors.containsKey("itemType")){ %>
-										<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> ${errors.itemType}</label>
+									
+									<div class="form-group ${f:errorClass('activity','has-error')}">
+										<%if (errors.containsKey("activity")){ %>
+										<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> ${errors.activity}</label>
 										<%} %>
-										<select name="itemType" class="form-control">
+										<select name="activity" class="form-control">
 											<option value="">- アイテムの種類 -</option>
-											<%for(ItemType type: ItemType.values()) { %>
-											<option value="<%=type.toString() %>" <%=selectItemType != null && selectItemType.equals(type.toString()) ? "selected" : "" %>><%=type.getName() %></option>
+											<%for(SpotActivity type: SpotActivity.values()) { %>
+											<option value="<%=type.toString() %>" <%=selectItemType != null && selectItemType.equals(type.toString()) ? "selected" : "" %>><%=type.getItemTypeName() %></option>
 											<%} %>
 										</select>
 									</div>

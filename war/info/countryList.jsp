@@ -86,7 +86,7 @@ h2 {
 								<div class="col-sm-4 col-xs-12">
 									<div class="lang-box <%=country.isSupport() ? "support" : "" %>">
 										<div class="flg">
-											<img src="/images/flag/EN.png">
+											<img src="<%=PathUtils.getCountryFlagUrl(country) %>">
 										</div>
 										<div class="lang-name"><%=country.getName() %></div>
 										<div class="support-icon">

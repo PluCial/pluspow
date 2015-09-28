@@ -2,6 +2,7 @@ package com.pluspow.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import org.slim3.util.StringUtil;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.datastore.Transaction;
+import com.pluspow.App;
 import com.pluspow.constants.MemcacheKey;
 import com.pluspow.dao.SpotDao;
 import com.pluspow.enums.Country;
@@ -21,6 +23,7 @@ import com.pluspow.enums.DayOfWeek;
 import com.pluspow.enums.Lang;
 import com.pluspow.enums.PlanLimitType;
 import com.pluspow.enums.ServicePlan;
+import com.pluspow.enums.SpotActivity;
 import com.pluspow.enums.TextResRole;
 import com.pluspow.enums.TransStatus;
 import com.pluspow.enums.TransType;
@@ -294,6 +297,36 @@ public class SpotService {
         // 営業時間
         // ---------------------------------------------------
         spot.setOfficeHourList(OfficeHoursService.getOfficeHourList(spot));
+        
+        // ---------------------------------------------------
+        // スポットのアクティビティチェック・更新
+        // アイテムを削除した場合の処理分散のため、100回に一回ここで
+        // チェックし、必要に応じて更新する。
+        // また、繰り返し処理の途中でCollectionが変更するとConcurrentModificationException
+        // が発生するため、Iteratorで繰り返し処理を行う。
+        // ---------------------------------------------------
+        boolean isChanged = false;
+        List<SpotActivity> activitys = spot.getLangUnit().getActivitys();
+        if(activitys != null && activitys.size() > 0) {
+            Iterator<SpotActivity> iter = activitys.iterator();
+            while (iter.hasNext()) {
+                SpotActivity activity = iter.next();
+                // 存在しない場合
+                if(!ItemService.checkActivityHasOtherItem(spot, lang, activity)) {
+                    // アクティビティを更新
+                    // Iteratorに対してremoveを行うと元のリストも変更される。
+                    iter.remove();
+                    isChanged = true;
+                }
+            }
+        }
+        // 更新
+        if(isChanged) {
+            spot.getLangUnit().setActivitys(activitys);
+            SpotLangUnitService.update(spot.getLangUnit());
+            
+         // TODO: ドキュメントのアクティビティを更新
+        }
     }
     
     /**
@@ -472,7 +505,14 @@ public class SpotService {
         // ---------------------------------------------------
         // 住所の対象する言語で再取得
         // ---------------------------------------------------
-        GeoModel geoModel = GeoService.getGeoModel(spot.getAddress(), transLang);
+        GeoModel geoModel = null;
+        try {
+            geoModel = GeoService.getGeoModel(spot.getAddress(), transLang);
+        }catch(GeocoderLocationTypeException e) {
+            // ステータスは正常で、稀に発生する意味不明なエラー。
+            // 英語で一度再取得し、それを利用
+            geoModel = GeoService.getGeoModel(spot.getAddress(), Lang.en);
+        }
 
         // ---------------------------------------------------
         // 翻訳したテキストリソースを追加
@@ -643,6 +683,10 @@ public class SpotService {
             return payPlan.getPlan();
             
         } catch (ObjectNotExistException e) {
+            if(App.SAMPLE_SPOT_ID.equals(spot.getSpotId())) {
+                return ServicePlan.STANDARD;
+            }
+            
             return ServicePlan.FREE;
         }
     }

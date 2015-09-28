@@ -131,7 +131,7 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 	
 
 		<!-- Footer start -->
-		<jsp:include page="/spot/include-parts/main_footer.jsp" />
+		<jsp:include page="/include-parts/main_footer.jsp" />
 		<!--/ Footer end -->
 	
 	</div><!-- Body inner end -->
@@ -154,56 +154,5 @@ boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 	</jsp:include>
 	<!-- secure JS end -->
 	<%} %>
-	
-	<!-- javaScript Map start -->
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?language=<%=spot.getLangUnit().getLang() %>"></script>
-	<script>
-	jQuery(function($) {
-		  "use strict";
-		  
-		  $("#map").gmap3({
-		        map:{
-		            options:{
-		               center:[<%=spot.getLat() %>,<%=spot.getLng() %>],
-		               zoom: 14,
-		               scrollwheel: false
-		            }
-		        },
-		        marker:{
-		          values:[
-		            {address:"<%=spot.getGeoFormattedAddress() %>", data:" Welcome To <%=spot.getName() %> ! ! ", 
-		             options:{icon: "http://themewinter.com/html/marker.png"}}
-		          ],
-		          options:{
-		            draggable: false
-		          },
-		          events:{
-		            mouseover: function(marker, event, context){
-		              var map = $(this).gmap3("get"),
-		                infowindow = $(this).gmap3({get:{name:"infowindow"}});
-		              if (infowindow){
-		                infowindow.open(map, marker);
-		                infowindow.setContent(context.data);
-		              } else {
-		                $(this).gmap3({
-		                  infowindow:{
-		                    anchor:marker, 
-		                    options:{content: context.data}
-		                  }
-		                });
-		              }
-		            },
-		            mouseout: function(){
-		              var infowindow = $(this).gmap3({get:{name:"infowindow"}});
-		              if (infowindow){
-		                infowindow.close();
-		              }
-		            }
-		          }
-		        }
-		      });
-	});
-	</script>
-	<!-- javaScript Map end -->
 </body>
 </html>

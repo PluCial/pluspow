@@ -5,17 +5,17 @@
 <%@ page import="org.slim3.util.StringUtil" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.pluspow.utils.*" %>
-<%@ page import="com.pluspow.utils.*" %>
+<%@ page import="java.util.Properties" %>
 <%
-	Spot spot =(Spot) request.getAttribute("spot");
+Spot spot =(Spot) request.getAttribute("spot");
 boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
 boolean isEditPage = Boolean.valueOf((String) request.getParameter("isEditPage"));
-List<Lang> suppertLangList = (List<Lang>) request.getAttribute("suppertLangList");
+Properties appProp = (Properties) request.getAttribute("appProp");
 %>
-	<section id="spot-home" style="background-image:
-                  url(<%=spot.getBackgroundImageUrl() %>)">
+	<section id="spot-sub-page-top" style="background-image:
+                  url(<%=PathUtils.getSpotBackgroundImageUrl(spot) %>)">
 
-		<div id="spot-catch" class="spot-detail-inner"><!-- spot-image -->
+		<div id="spot-catch" class="text-center"><!-- spot-image -->
                   
 			<div class="detail">
 				<h1>
@@ -32,7 +32,7 @@ List<Lang> suppertLangList = (List<Lang>) request.getAttribute("suppertLangList"
 			data-target="#selectLangModel" 
 			style="color:#fff"
 			href="/spot/selectLang?spotId=<%=spot.getSpotId() %>&lang=<%=spot.getLangUnit().getLang().toString() %>">
-			<img style="width:25px;vertical-align: middle;" class="flag-image" src="/images/flag/<%=spot.getLangUnit().getLang().getLangKey().toUpperCase() %>.png" />
-			<%=spot.getLangUnit().getLang().getName() %> <i class="fa fa-chevron-down"></i>
+			<img class="align-middle" style="width:32px;vertical-align:middle;" src="<%=PathUtils.getCountryFlagUrl(spot.getLangUnit().getLang()) %>"> 
+			<%=appProp.getProperty("lang." + spot.getLangUnit().getLang().toString()) %> <i class="fa fa-chevron-down"></i>
 		</a>
 	</section>

@@ -16,7 +16,10 @@ if (request.getAttribute("cursor") != null && request.getAttribute("hasNext") !=
 	hasNext = Boolean.valueOf((String) request.getAttribute("hasNext"));
 }
 %>
-					<jsp:include page="/spot/include-parts/spot_item_list.jsp" />		
+					<jsp:include page="/spot/include-parts/spot_item_list.jsp">
+						<jsp:param name="isEditPage" value="true" />
+					</jsp:include>
+					
  					<%if(hasNext) { %>
 					<div class="col-md-12 col-xs-12 text-center listHasNext">
 						<a class="btn btn-default nextLink" href="/spot/itemListNext?spotId=<%=spot.getSpotId() %>&lang=<%=spot.getLangUnit().getLang().toString() %>&cursor=<%=cursor %>">もっと見る</a>

@@ -63,7 +63,7 @@ Item item =(Item) request.getAttribute("item");
 			
 				<div class="content">
 					<div class="register-logo">
-						<i class="fa fa-language"></i> 翻訳する言語の選択
+						<i class="fa fa-language"></i> 翻訳プランの選択
 					</div>
 					<h3 style="text-align: center;">
 						<a href="<%=PathUtils.spotPage(spot, spot.getLangUnit().getLang()) %>"><b><%=spot.getName() %></b></a>
@@ -80,12 +80,12 @@ Item item =(Item) request.getAttribute("item");
 												<tbody>
 													<tr>
 														<td class="flag">
-															<span style="background-image: url(/images/flag/<%=spot.getBaseLang().getLangKey().toUpperCase() %>.png);background-repeat:no-repeat;background-position: center left;background-size: 34px;padding-left:50px;"></span>
+															<span style="background-image: url(<%=PathUtils.getCountryFlagUrl(spot.getBaseLang()) %>);background-repeat:no-repeat;background-position: center left;background-size: 34px;padding-left:50px;"></span>
 														</td>
 														<td class="lang"><%=spot.getBaseLang().getName() %></td>
 														<td><i class="fa fa-arrow-right"></i></td>
 														<td class="flag">
-															<span style="background-image: url(/images/flag/<%=transLang.toUpperCase() %>.png);background-repeat:no-repeat;background-position: center left;background-size: 34px;padding-left:50px;"></span>
+															<span style="background-image: url(<%=PathUtils.getCountryFlagUrl(Lang.valueOf(transLang)) %>);background-repeat:no-repeat;background-position: center left;background-size: 34px;padding-left:50px;"></span>
 														</td>
 														<td class="lang"><%=Lang.valueOf(transLang).getName()%></td>
 													</tr>
