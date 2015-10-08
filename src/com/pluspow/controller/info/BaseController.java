@@ -41,6 +41,7 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
         // リクエストスコープの基本設定
         // -------------------------------------
         requestScope("isSmartPhone", String.valueOf(isSmartPhone()));
+        requestScope("isLocal", String.valueOf(isLocal()));
         
         // -------------------------------------
         // ログインチェックと設定

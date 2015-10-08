@@ -28,7 +28,7 @@ public class SetLangInvalidController extends BaseController {
             SpotService.setInvalid(spot, lang, invalid);
             
             // ベース言語ページにリダイレクト
-            return redirect(PathUtils.spotPage(spot, spot.getBaseLang()));
+            return redirect(PathUtils.spotPage(spot.getSpotId(), spot.getBaseLang(), isLocal(), true));
 
         case ITEM:
             // ------------------------------------------
@@ -49,7 +49,7 @@ public class SetLangInvalidController extends BaseController {
             ItemService.setInvalid(item, lang, invalid);
             
             // 現在の言語ページにリダイレクト
-            return redirect(PathUtils.spotPage(spot, lang));
+            return redirect(PathUtils.spotPage(spot.getSpotId(), lang, isLocal(), true));
             
         default:
             // その他の場合

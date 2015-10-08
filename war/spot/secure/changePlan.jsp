@@ -12,6 +12,7 @@
 <%
 Spot spot =(Spot) request.getAttribute("spot");
 NumberFormat fPrice = NumberFormat.getNumberInstance();
+boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 
 boolean isAlert = false;
 PlanLimitType limitType = null;
@@ -161,7 +162,7 @@ if (request.getAttribute("limitType") != null) {
 						<i class="fa fa-paper-plane"></i> プランの変更
 					</div>
 					<h3 style="text-align: center;">
-						<a href="<%=PathUtils.spotPage(spot, spot.getLangUnit().getLang()) %>"><b><%=spot.getName() %></b></a>
+						<a href="<%=PathUtils.spotPage(spot.getSpotId(), spot.getLangUnit().getLang(), isLocal, true) %>"><b><%=spot.getName() %></b></a>
 					</h3>
 					
 					<div class="row" style="margin-top: 3em;">

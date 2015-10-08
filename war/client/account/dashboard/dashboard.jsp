@@ -18,6 +18,7 @@ List<TransHistory> transHistoryList =(List<TransHistory>) request.getAttribute("
 NumberFormat fPrice = NumberFormat.getNumberInstance();
 /* ServicePlan planEnum = baseSpot.getPlan().getPlan(); */
 Errors errors =(Errors) request.getAttribute("errors");
+boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 %>
 <!DOCTYPE html>
 <html>
@@ -105,7 +106,7 @@ Errors errors =(Errors) request.getAttribute("errors");
 													<%if(langUnit.isInvalid()) { %>
 													<%=langUnit.getLang().getName() %>
 													<%}else { %>
-													<a href="<%=PathUtils.spotPage(spot, langUnit.getLang()) %>"><%=langUnit.getLang().getName() %></a>
+													<a href="<%=PathUtils.spotPage(spot.getSpotId(), langUnit.getLang(), isLocal, true) %>"><%=langUnit.getLang().getName() %></a>
 													<%} %>
 												</td>
 												<td>
@@ -199,19 +200,19 @@ Errors errors =(Errors) request.getAttribute("errors");
 												<td><%=history.getObjectType().getName() %></td>
 												<%if(history.getObjectType() == ObjectType.SPOT) { %>
 												<td>
-													<a href="<%=PathUtils.spotPage(spot, history.getBaseLang())  %>">
+													<a href="<%=PathUtils.spotPage(spot.getSpotId(), history.getBaseLang(), isLocal, true)  %>">
 														<%=history.getBaseLang().getName() %>
 													</a> → 
-													<a href="<%=PathUtils.spotPage(spot, history.getTransLang())  %>">
+													<a href="<%=PathUtils.spotPage(spot.getSpotId(), history.getTransLang(), isLocal, true)  %>">
 														<%=history.getTransLang().getName() %>
 													</a>
 												</td>
 												<%}else if(history.getObjectType() == ObjectType.ITEM) { %>
 												<td>
-													<a href="<%=PathUtils.itemPage(spot, history.getItemRef().getKey().getName(), history.getBaseLang()) %>">
+													<a href="<%=PathUtils.itemPage(spot, history.getItemRef().getKey().getName(), history.getBaseLang(), isLocal, true) %>">
 														<%=history.getBaseLang().getName() %>
 													</a> → 
-													<a href="<%=PathUtils.itemPage(spot, history.getItemRef().getKey().getName(), history.getTransLang()) %>">
+													<a href="<%=PathUtils.itemPage(spot, history.getItemRef().getKey().getName(), history.getTransLang(), isLocal, true) %>">
 														<%=history.getTransLang().getName() %>
 													</a>
 												</td>

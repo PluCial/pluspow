@@ -13,6 +13,8 @@ public class IndexController extends BaseController {
     @Override
     public Navigation run() throws Exception {
         
+        requestScope("isLocal", String.valueOf(isLocal()));
+        
         Lang localeLang = getLang();
 
         requestScope("localeLang", localeLang);

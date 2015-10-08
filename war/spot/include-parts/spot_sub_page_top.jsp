@@ -9,6 +9,7 @@
 <%
 Spot spot =(Spot) request.getAttribute("spot");
 boolean isOwner = Boolean.valueOf((String) request.getAttribute("isOwner"));
+boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 boolean isEditPage = Boolean.valueOf((String) request.getParameter("isEditPage"));
 Properties appProp = (Properties) request.getAttribute("appProp");
 %>
@@ -19,7 +20,7 @@ Properties appProp = (Properties) request.getAttribute("appProp");
                   
 			<div class="detail">
 				<h1>
-					<a href="<%=PathUtils.spotPage(spot, spot.getLangUnit().getLang()) %>"><%=spot.getName() %></a>
+					<a href="<%=PathUtils.spotPage(spot.getSpotId(), spot.getLangUnit().getLang(), isLocal, true) %>"><%=spot.getName() %></a>
 				</h1>
 				<p><%=spot.getCatchCopy() %></p>
 			</div>

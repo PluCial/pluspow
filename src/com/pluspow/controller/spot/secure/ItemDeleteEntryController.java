@@ -27,6 +27,6 @@ public class ItemDeleteEntryController extends BaseController {
             throw new NoContentsException();
         }
         
-        return redirect(PathUtils.spotPage(spot, spot.getLangUnit().getLang()));
+        return redirect(PathUtils.spotPage(spot.getSpotId(), spot.getLangUnit().getLang(), isLocal(), true));
     }
 }

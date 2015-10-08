@@ -65,7 +65,7 @@ public class ChangeGcsResEntryController extends BaseController {
                     imageX, imageY, imageWidth, imageHeight);
             }
             
-            return redirect(PathUtils.spotPage(spot, lang));
+            return redirect(PathUtils.spotPage(spot.getSpotId(), lang, isLocal(), true));
             
             
             
@@ -95,7 +95,7 @@ public class ChangeGcsResEntryController extends BaseController {
                 ItemGcsResService.addImageRes(spot, item, lang, fileItem, imageX, imageY, imageWidth, imageHeight);
             }
             
-            return redirect(PathUtils.itemPage(spot, item, lang));
+            return redirect(PathUtils.itemPage(spot, item.getKey().getName(), lang, isLocal(), true));
         }
         
         

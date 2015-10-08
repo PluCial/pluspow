@@ -4,7 +4,6 @@ import com.pluspow.App;
 import com.pluspow.enums.Country;
 import com.pluspow.enums.Lang;
 import com.pluspow.enums.PlanLimitType;
-import com.pluspow.model.Item;
 import com.pluspow.model.Spot;
 
 public class PathUtils {
@@ -15,29 +14,28 @@ public class PathUtils {
      * @param lang
      * @return
      */
-    public static String spotPage(Spot spot, Lang lang) {
-        return "/+" + spot.getSpotId() + "/l-" + lang.toString() + "/";
-    }
-    
-    /**
-     * スポットの相対パス
-     * @param spot
-     * @param lang
-     * @return
-     */
-    public static String spotPage(String spotId, Lang lang) {
+    private static String spotPage(String spotId, Lang lang) {
         return "/+" + spotId + "/l-" + lang.toString() + "/";
     }
     
     /**
-     * 言語込みサブドメインのURL(本番環境)
-     * @param scheme
-     * @param domein
+     * スポットのパス
      * @param spotId
      * @param lang
+     * @param isLocal
+     * @param isClientLogged
      * @return
      */
-    public static String spotProductionPage(String spotId, Lang lang) {
+    public static String spotPage(String spotId, Lang lang, boolean isLocal, boolean isClientLogged) {
+        
+        if(isLocal || isClientLogged) {
+            return spotPage(spotId, lang);
+        }
+        
+        if(lang.equals(App.APP_BASE_LANG)) {
+            return  App.APP_PRODUCTION_SCHEME + App.APP_PRODUCTION_DOMAIN + "/+" + spotId  + "/";
+        }
+        
         return App.APP_PRODUCTION_SCHEME + lang.toString() + "." + App.APP_PRODUCTION_DOMAIN + "/+" + spotId  + "/";
     }
     
@@ -48,19 +46,18 @@ public class PathUtils {
      * @param lang
      * @return
      */
-    public static String itemPage(Spot spot, Item item, Lang lang) {
-        return "/+" + spot.getSpotId() + "/l-" + lang.toString() + "/item/" + item.getKey().getName();
-    }
-    
-    /**
-     * アイテムページの相対パス
-     * @param spot
-     * @param item
-     * @param lang
-     * @return
-     */
-    public static String itemPage(Spot spot, String itemId, Lang lang) {
-        return "/+" + spot.getSpotId() + "/l-" + lang.toString() + "/item/" + itemId;
+    public static String itemPage(Spot spot, String itemId, Lang lang, boolean isLocal, boolean isClientLogged) {
+        if(isLocal || isClientLogged) {
+            return "/+" + spot.getSpotId() + "/l-" + lang.toString() + "/item/" + itemId;
+        }
+        
+        if(lang.equals(App.APP_BASE_LANG)) {
+            return  App.APP_PRODUCTION_SCHEME + App.APP_PRODUCTION_DOMAIN + "/+" + spot.getSpotId() + "/item/" + itemId;
+        }
+        
+        return App.APP_PRODUCTION_SCHEME + lang.toString() + "." + App.APP_PRODUCTION_DOMAIN + "/+" + spot.getSpotId() + "/item/" + itemId;
+        
+        
     }
     
     /**

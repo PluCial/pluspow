@@ -37,12 +37,10 @@ public class AppRouter extends RouterImpl {
             "/\\+{spotId}/l-{lang}/",
             "/spot/index?spotId={spotId}&lang={lang}");
         
-        // ITEM LIST
-        addRouting(
-            "/\\+{spotId}/l-{lang}/itemList",
-            "/spot/itemList?spotId={spotId}&lang={lang}");
-        
         // ITEM
+        addRouting(
+            "/\\+{spotId}/item/{itemId}",
+            "/spot/item?spotId={spotId}&itemId={itemId}");
         addRouting(
             "/\\+{spotId}/l-{lang}/item/{itemId}",
             "/spot/item?spotId={spotId}&lang={lang}&itemId={itemId}");

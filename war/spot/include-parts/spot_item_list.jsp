@@ -15,6 +15,8 @@ List<Item> itemList =(List<Item>) request.getAttribute("itemList");
 /* Map<String,Item> langItemMap = (Map<String,Item>) request.getAttribute("langItemMap"); */
 Lang lang = (Lang)request.getAttribute("lang");
 boolean isEditPage = Boolean.valueOf((String) request.getParameter("isEditPage"));
+boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
+boolean isClientLogged = Boolean.valueOf((String) request.getAttribute("isClientLogged"));
 %>
 				
 				<%for(Item item: itemList) {
@@ -30,7 +32,7 @@ boolean isEditPage = Boolean.valueOf((String) request.getParameter("isEditPage")
 						<figure data-wow-duration="500ms" data-wow-delay="0ms">
 							
 							<div class="img-wrapper" style="background-image: url(<%=item.getItemImageUrl() %>)">
-								<a href="<%=isSupport ? PathUtils.itemPage(spot, item, lang) : PathUtils.itemPage(spot, item, spot.getBaseLang()) %>"></a>
+								<a href="<%=isSupport ? PathUtils.itemPage(spot, item.getKey().getName(), lang, isLocal, isClientLogged) : PathUtils.itemPage(spot, item.getKey().getName(), spot.getBaseLang(), isLocal, isClientLogged) %>"></a>
 								<%if(item.getPrice() > 0) { %>
 								<div class="price-label"><i class="fa fa-jpy"></i> <span><%=item.getPriceString() %></span></div>
 								<%} %>
@@ -38,7 +40,7 @@ boolean isEditPage = Boolean.valueOf((String) request.getParameter("isEditPage")
 
 							<figcaption>
                                 <h4 class="text-ellipsis">
-                                	<a href="<%=PathUtils.itemPage(spot, item, item.getLangUnit().getLang()) %>">
+                                	<a href="<%=PathUtils.itemPage(spot, item.getKey().getName(), item.getLangUnit().getLang(), isLocal, isClientLogged) %>">
                                 		<%=item.getName() %>
                                 		<%-- <%if(isSupport && isEditPage && !spot.getBaseLang().equals(lang) && langItemMap != null) { %>
 											<%=langItemMap.get(item.getKey().getName()) != null ? langItemMap.get(item.getKey().getName()).getName() : item.getName() %>

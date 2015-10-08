@@ -47,21 +47,21 @@ public enum Lang {
     tr("tr", "トルコ語", Country.TR, "Türk", false),
     uk("uk", "ウクライナ語", Country.UA, "Український", false),
     lt("lt", "リトアニア語", Country.LT, "Lietuvos", false),
-    vi("vi", "ベトナム語",Country.VN, "Tiếng Việt", false),
+    vi("vi", "ベトナム語",Country.VN, "Tiếng Việt", false);
     
     // 以下除外
-    sr("sr", "セルビア語", Country.RS, "Srpski", false),
-    yi("yi", "イディッシュ語", Country.DE, "ייִדיש", false), 
-    ht("ht", "ハイチ語", Country.HT, "kreyòl ayisyen", false),
-    gl("gl", "ガリシア語", Country.ES, "galego", false),
-    et("et", "エストニア語", Country.EE, "eesti", false),
-    iw("iw", null, Country.IL, "עברית", false),
-    ur("ur", null, Country.IN, "اردو", false),
-    te("te", null,Country.IN, "Teluga", false),
-    ta("ta", null,Country.IN, "தமிழ்", false),
-    kn("kn", null,Country.IN, "ಕನ್ನಡ", false),
-    gu("gu", null,Country.IN, "ગુજરાતી", false),
-    sq("sq", null,Country.AL, "shqiptar", false);
+//    sr("sr", "セルビア語", Country.RS, "Srpski", false),
+//    yi("yi", "イディッシュ語", Country.DE, "ייִדיש", false), 
+//    ht("ht", "ハイチ語", Country.HT, "kreyòl ayisyen", false),
+//    gl("gl", "ガリシア語", Country.ES, "galego", false),
+//    et("et", "エストニア語", Country.EE, "eesti", false),
+//    iw("iw", null, Country.IL, "עברית", false),
+//    ur("ur", null, Country.IN, "اردو", false),
+//    te("te", null,Country.IN, "Teluga", false),
+//    ta("ta", null,Country.IN, "தமிழ்", false),
+//    kn("kn", null,Country.IN, "ಕನ್ನಡ", false),
+//    gu("gu", null,Country.IN, "ગુજરાતી", false),
+//    sq("sq", null,Country.AL, "shqiptar", false);
     
     
 //  af("af", null, "アフリカーンス語", false),

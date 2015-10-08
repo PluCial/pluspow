@@ -47,7 +47,7 @@ public class ItemAddEntryController extends BaseController {
             imageX, imageY, imageWidth, imageHeight);
         
         
-        return redirect(PathUtils.spotPage(spot, spot.getBaseLang()));
+        return redirect(PathUtils.spotPage(spot.getSpotId(), spot.getBaseLang(), isLocal(), true));
     }
     
     /**

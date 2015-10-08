@@ -15,6 +15,7 @@ String transLang = (String) request.getAttribute("transLang");
 int transCharCount = Integer.parseInt((String)request.getAttribute("transCharCount"));
 ObjectType objectType = (ObjectType) request.getAttribute("objectType");
 Item item =(Item) request.getAttribute("item");
+boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 %>
 <!DOCTYPE html>
 <html>
@@ -66,7 +67,7 @@ Item item =(Item) request.getAttribute("item");
 						<i class="fa fa-language"></i> 翻訳プランの選択
 					</div>
 					<h3 style="text-align: center;">
-						<a href="<%=PathUtils.spotPage(spot, spot.getLangUnit().getLang()) %>"><b><%=spot.getName() %></b></a>
+						<a href="<%=PathUtils.spotPage(spot.getSpotId(), spot.getLangUnit().getLang(), isLocal, true) %>"><b><%=spot.getName() %></b></a>
 					</h3>
 					
 					<div class="row" style="margin-top: 3em;">

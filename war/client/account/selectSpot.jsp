@@ -8,6 +8,7 @@
 <%@ page import="com.pluspow.utils.*" %>
 <%
 List<Spot> spotList =(List<Spot>) request.getAttribute("spotList");
+boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 boolean limitOver = false;
 if (request.getAttribute("limitOver") != null) {
 	limitOver = Boolean.valueOf((String) request.getAttribute("limitOver"));
@@ -93,7 +94,7 @@ if (request.getAttribute("limitOver") != null) {
 												</a>
 											</div>
 											<div class="pull-right">
-												<a href="<%=PathUtils.spotPage(spot, spot.getBaseLang()) %>" class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o"></i> ページの修正</a>
+												<a href="<%=PathUtils.spotPage(spot.getSpotId(), spot.getBaseLang(), isLocal, true) %>" class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o"></i> ページの修正</a>
 												<a href="/client/account/dashboard/?spotId=<%=spot.getSpotId() %>" class="btn btn-default btn-sm"><i class="fa fa-dashboard"></i> ダッシュボード</a>
 											</div>
 										</div>

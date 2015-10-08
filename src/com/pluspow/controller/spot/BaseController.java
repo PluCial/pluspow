@@ -49,7 +49,7 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
             // ローカルの場合は実行しない。
             if(!isLocal() && paramLang != null) {
                 if(request.getServletPath().indexOf("selectLang") < 0) {
-                    return redirect(PathUtils.spotProductionPage(spotId, paramLang));
+                    return redirect(PathUtils.spotPage(spotId, paramLang, false, false));
                 }
             }
         }
@@ -105,9 +105,6 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
         requestScope("isClientLogged", String.valueOf(isClientLogged));
         requestScope("isOwner", String.valueOf(isOwner));
         requestScope("isLocal", String.valueOf(isLocal()));
-        
-        
-        requestScope("scheme", getScheme());
         
         return execute(spot, lang, client, isClientLogged, isOwner);
     }

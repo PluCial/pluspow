@@ -13,6 +13,7 @@
 <%
 Lang localeLang =(Lang) request.getAttribute("localeLang");
 Properties appProp = (Properties) request.getAttribute("appProp");
+boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 %>
 <fmt:setLocale value="<%=localeLang.toString() %>" />
 <!DOCTYPE html>

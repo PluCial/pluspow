@@ -55,7 +55,7 @@ public class TransController extends BaseController {
 
                 if(unit.isInvalid()) {
                     SpotService.setInvalid(spot, transLang, false);
-                    return redirect(PathUtils.spotPage(spot, transLang));
+                    return redirect(PathUtils.spotPage(spot.getSpotId(), transLang, isLocal(), true));
                 }
             
             } catch (ObjectNotExistException e) {}
@@ -91,7 +91,7 @@ public class TransController extends BaseController {
                 ItemLangUnit unit = ItemLangUnitService.get(item, transLang);
                 if(unit.isInvalid()) {
                     ItemService.setInvalid(item, transLang, false);
-                    return redirect(PathUtils.spotPage(spot, transLang));
+                    return redirect(PathUtils.spotPage(spot.getSpotId(), transLang, isLocal(), true));
                 }
 
             } catch (ObjectNotExistException e) {}

@@ -36,7 +36,7 @@ public class TransEntryController extends BaseController {
             // ---------------------------------------------------
             SpotService.machineTrans(spot, transLang);
             
-            return redirect(PathUtils.spotPage(spot, transLang));
+            return redirect(PathUtils.spotPage(spot.getSpotId(), transLang, isLocal(), true));
 
 
 
@@ -51,7 +51,7 @@ public class TransEntryController extends BaseController {
 
             ItemService.machineTrans(spot, item, transLang);
 
-            return redirect(PathUtils.spotPage(spot, transLang));
+            return redirect(PathUtils.spotPage(spot.getSpotId(), transLang, isLocal(), true));
 
 
         default:
