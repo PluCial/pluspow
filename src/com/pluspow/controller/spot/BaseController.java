@@ -49,7 +49,7 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
             // ローカルの場合は実行しない。
             if(!isLocal() && paramLang != null) {
                 if(request.getServletPath().indexOf("selectLang") < 0) {
-                    return redirect(PathUtils.spotPageLangSubDomainUrl(getScheme(), spotId, paramLang));
+                    return redirect(PathUtils.spotProductionPage(spotId, paramLang));
                 }
             }
         }

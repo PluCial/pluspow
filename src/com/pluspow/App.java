@@ -11,6 +11,11 @@ public class App {
     /**
      * 本番ドメイン
      */
+    public static final String APP_PRODUCTION_SCHEME = "https://";
+    
+    /**
+     * 本番ドメイン
+     */
     public static final String APP_PRODUCTION_DOMAIN = "pluspow.com";
     
     /**

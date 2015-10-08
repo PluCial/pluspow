@@ -30,15 +30,15 @@ public class PathUtils {
     }
     
     /**
-     * 言語込みサブドメインのURL
+     * 言語込みサブドメインのURL(本番環境)
      * @param scheme
      * @param domein
      * @param spotId
      * @param lang
      * @return
      */
-    public static String spotPageLangSubDomainUrl(String scheme, String spotId, Lang lang) {
-        return scheme + "://" + lang.toString() + "." + App.APP_PRODUCTION_DOMAIN + "/+" + spotId  + "/";
+    public static String spotProductionPage(String spotId, Lang lang) {
+        return App.APP_PRODUCTION_SCHEME + lang.toString() + "." + App.APP_PRODUCTION_DOMAIN + "/+" + spotId  + "/";
     }
     
     /**

@@ -44,7 +44,7 @@ Properties appProp = (Properties) request.getAttribute("appProp");
 			<div class="col-sm-6 col-xs-12">
 				<div class="lang-block" style="padding: 10px 20px;">
 					<img class="align-middle" style="width:32px;vertical-align:middle;" src="<%=PathUtils.getCountryFlagUrl(lang) %>"> 
-					<a class="link align-middle" href="<%=App.APP_BASE_LANG == lang ? "/" : "/l-" + lang + "/" %>">
+					<a class="link align-middle" href="<%=App.APP_BASE_LANG == lang ? App.APP_PRODUCTION_SCHEME + App.APP_PRODUCTION_DOMAIN : App.APP_PRODUCTION_SCHEME + lang.toString() + "." + App.APP_PRODUCTION_DOMAIN %>">
 						<%=appProp.getProperty("lang." + lang.toString()) %> (<%=lang.getName() %>)
 					</a>
 				</div>

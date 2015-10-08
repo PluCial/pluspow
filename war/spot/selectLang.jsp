@@ -43,7 +43,7 @@ String scheme = (String) request.getAttribute("scheme");
 		<p style="margin-bottom: 0;">
 			<strong><fmt:message key="page.spot.select.lang.originalLanguage" /></strong> 
 			<img class="align-middle" style="width:32px;vertical-align:middle;" src="<%=PathUtils.getCountryFlagUrl(spot.getBaseLang()) %>"> 
-			<a href="<%=isLocal || isClientLogged ? PathUtils.spotPage(spot, spot.getBaseLang()) : PathUtils.spotPageLangSubDomainUrl(scheme, spot.getSpotId(), spot.getBaseLang()) %>" class="link align-middle">
+			<a href="<%=isLocal || isClientLogged ? PathUtils.spotPage(spot, spot.getBaseLang()) : PathUtils.spotProductionPage(spot.getSpotId(), spot.getBaseLang()) %>" class="link align-middle">
 				<%=appProp.getProperty("lang." + spot.getBaseLang().toString()) %> (<%=spot.getBaseLang().getName() %>)
 			</a>
 		</p>
@@ -58,7 +58,7 @@ String scheme = (String) request.getAttribute("scheme");
 			<div class="col-sm-6 col-xs-12">
 				<div class="lang-block" style="padding: 10px 20px;">
 					<img class="align-middle" style="width:32px;vertical-align:middle;" src="<%=PathUtils.getCountryFlagUrl(lang) %>"> 
-					<a class="link align-middle" href="<%=isLocal || isClientLogged ? PathUtils.spotPage(spot, lang) : PathUtils.spotPageLangSubDomainUrl(scheme, spot.getSpotId(), lang) %>">
+					<a class="link align-middle" href="<%=isLocal || isClientLogged ? PathUtils.spotPage(spot, lang) : PathUtils.spotProductionPage(spot.getSpotId(), lang) %>">
 						<%=appProp.getProperty("lang." + lang.toString()) %> (<%=lang.getName() %>)
 					</a>
 				</div>
