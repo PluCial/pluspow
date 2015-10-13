@@ -99,7 +99,7 @@ Lang localeLang =(Lang) request.getAttribute("localeLang");
 				</div>
 				<div class="col-md-7">
 					<div class="img-contents">
-						<a href="https://pluspow.com/+<%=App.SAMPLE_SPOT_ID %>/l-<%=localeLang.toString() %>/">
+						<a href="/+<%=App.SAMPLE_SPOT_ID %>/">
 							<img class="img-responsive" src="/images/devices_play.png" />
 						</a>
 					</div>

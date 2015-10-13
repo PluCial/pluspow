@@ -3,6 +3,7 @@ package com.pluspow.enums;
 
 /** 機械翻訳言語 */
 public enum Lang {
+    ar("ar", "アラビア語", Country.PS, "العربية", false),
     az("az", "アゼルバイジェン語", Country.AZ, "Azərbaycan", false),
     bn("bn", "ベンガル語", Country.BD, "বাঙালি", false),
     be("be", "ベラルーシ語", Country.BY, "беларускі", false),
@@ -39,7 +40,7 @@ public enum Lang {
     pt("pt", "ポルトガル語", Country.PT, "português", false),
     ro("ro", "ルーマニア語", Country.RO, "Română", false),
     ru("ru", "ロシア語", Country.RU, "Русский", false),
-    sk("sk", "スロヴァキア語", Country.SK, "slovenský", false),
+    sk("sk", "スロバキア語", Country.SK, "slovenský", false),
     sl("sl", "スロヴェニア語", Country.SI, "slovenščina", false),
     es("es", "スペイン語", Country.ES, "Español", true),
     sv("sv", "スウェーデン語", Country.SE, "svenska", false),
@@ -47,10 +48,15 @@ public enum Lang {
     tr("tr", "トルコ語", Country.TR, "Türk", false),
     uk("uk", "ウクライナ語", Country.UA, "Український", false),
     lt("lt", "リトアニア語", Country.LT, "Lietuvos", false),
-    vi("vi", "ベトナム語",Country.VN, "Tiếng Việt", false);
+    vi("vi", "ベトナム語",Country.VN, "Tiếng Việt", false),
+    sr("sr", "セルビア語", Country.RS, "Srpski", false);
+    
+    // 検討中
+  
+  
     
     // 以下除外
-//    sr("sr", "セルビア語", Country.RS, "Srpski", false),
+
 //    yi("yi", "イディッシュ語", Country.DE, "ייִדיש", false), 
 //    ht("ht", "ハイチ語", Country.HT, "kreyòl ayisyen", false),
 //    gl("gl", "ガリシア語", Country.ES, "galego", false),
@@ -70,7 +76,6 @@ public enum Lang {
 //  eo("eo", null, "エスペラント語", false),
 //  ca("ca", null, "カタロニア語", false),
 //  eu("eu", null, "バスク語", false),
-//  ar("ar", null, "アラビア語", false),
 
     private String langKey;
     private Country country;

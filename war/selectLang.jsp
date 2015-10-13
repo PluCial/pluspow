@@ -35,6 +35,9 @@ boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 		<div class="pull-right">
 			<button class="btn btn-box-tool btn-sm" data-dismiss="modal"><i class="fa fa-times"></i></button>
 		</div>
+		<p style="margin-bottom: 0;">
+			Select Language
+		</p>
 	</div>
 	
 	<div class="modal-body">
@@ -46,7 +49,7 @@ boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 				<div class="lang-block" style="padding: 10px 20px;">
 					<img class="align-middle" style="width:32px;vertical-align:middle;" src="<%=PathUtils.getCountryFlagUrl(lang) %>"> 
 					<a class="link align-middle" href="<%=App.APP_BASE_LANG == lang ? App.APP_PRODUCTION_SCHEME + App.APP_PRODUCTION_DOMAIN : App.APP_PRODUCTION_SCHEME + lang.toString() + "." + App.APP_PRODUCTION_DOMAIN %>">
-						<%=appProp.getProperty("lang." + lang.toString()) %> (<%=lang.getName() %>)
+						<%=appProp.getProperty("lang." + lang.toString()) %><br />(<%=lang.getName() %>)
 					</a>
 				</div>
 			</div>

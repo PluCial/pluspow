@@ -3,7 +3,6 @@ package com.pluspow.controller.info;
 
 import java.util.Properties;
 
-import org.datanucleus.util.StringUtils;
 import org.slim3.controller.Navigation;
 
 import com.pluspow.App;
@@ -19,20 +18,19 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
         // 言語の設定
         // -------------------------------------
         Lang lang = null;
-        String langString = asString("lang");
-        // 指定してない場合はサービスデフォルト言語に設定
-        try {
-            if(StringUtils.isEmpty(langString)) {
-                lang = App.APP_BASE_LANG;
+        Lang paramLang = getLangByParameter();
+        Lang subDomainLang = getLangBySubDomain();
 
-            }else {
-                lang = Lang.valueOf(langString);
-                
-            }
-
-        }catch(Exception e) {
+        if(paramLang != null) {
+            lang = paramLang;
+            
+        }else if(paramLang == null && subDomainLang != null) {
+            lang = subDomainLang;
+            
+        }else {
             lang = App.APP_BASE_LANG;
         }
+        
         requestScope("localeLang", lang);
         Properties appProp = getAppProp(lang);
         requestScope("appProp", appProp);
