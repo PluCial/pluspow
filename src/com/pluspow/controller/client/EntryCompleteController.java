@@ -4,6 +4,7 @@ import org.slim3.controller.Navigation;
 import org.slim3.util.StringUtil;
 
 import com.pluspow.enums.EntryType;
+import com.pluspow.enums.Lang;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.model.Entry;
 import com.pluspow.service.ResetPasswordEntryService;
@@ -12,7 +13,7 @@ import com.pluspow.service.SignupEntryService;
 public class EntryCompleteController extends BaseController {
 
     @Override
-    protected Navigation execute() throws Exception {
+    protected Navigation execute(Lang lang) throws Exception {
         String entryId = asString("entryId");
         String type = asString("type");
         

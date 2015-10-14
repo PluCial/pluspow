@@ -1,12 +1,18 @@
 <%@page pageEncoding="UTF-8" isELIgnored="false" session="false"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@taglib prefix="f" uri="http://www.slim3.org/functions"%>
 <%@ page import="org.slim3.controller.validator.Errors" %>
 <%@ page import="com.pluspow.App" %>
+<%@ page import="com.pluspow.enums.*" %>
+<%@ page import="com.pluspow.utils.*" %>
 <%
+String requestUrl =(String) request.getAttribute("requestUrl");
 Errors errors =(Errors) request.getAttribute("errors");
+Lang localeLang =(Lang) request.getAttribute("localeLang");
 %>
+<fmt:setLocale value="<%=localeLang.toString() %>" />
 <!DOCTYPE html>
 <html>
 	<head>
@@ -15,6 +21,18 @@ Errors errors =(Errors) request.getAttribute("errors");
 	<body class="register-page">
 		<div class="register-box">
 			<jsp:include page="/client/include-parts/main_header.jsp" />
+
+			<div class="text-center" style="margin-bottom: 2em;">
+				<span style="padding-right: 10px;">言語:</span>
+				<a data-toggle="modal" 
+					data-target="#selectLangModel" 
+					class="cd-btn btn btn-default btn-sm solid"
+					style="padding: 0 5px;"
+					href="/selectLang?lang=<%=localeLang %>&requestUrl=<%=requestUrl %>">
+					<img class="align-middle" style="width:32px;vertical-align:middle;" src="<%=PathUtils.getCountryFlagUrl(localeLang) %>"> 
+					<span class="align-middle"><%=localeLang.getName() %>  <i class="fa fa-chevron-down"></i></span>
+				</a>
+			</div>
 
 			<div class="register-box-body">
 				<h4 class="login-box-msg">アカウント登録</h4>
@@ -82,5 +100,9 @@ Errors errors =(Errors) request.getAttribute("errors");
 		<jsp:include page="/client/include-parts/main_footer.jsp" />
       	
 		<jsp:include page="/client/include-parts/html_script.jsp" />
+		
+		<jsp:include page="/spot/include-parts/dialog_modal.jsp">
+			<jsp:param name="modelId" value="selectLangModel" />
+		</jsp:include>
 	</body>
 </html>

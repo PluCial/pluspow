@@ -11,7 +11,7 @@ import com.pluspow.service.SignupEntryService;
 public class AddAccountController extends BaseController {
 
     @Override
-    protected Navigation execute() throws Exception {
+    protected Navigation execute(Lang lang) throws Exception {
         String entryId = asString("entryId");
         
         // DBからエントリー情報を取得
@@ -31,7 +31,7 @@ public class AddAccountController extends BaseController {
             signupEntry.getName(), 
             signupEntry.getEmail().getEmail(), 
             signupEntry.getPassword(), 
-            Lang.ja);  //TODO: 国際化まで暫定
+            signupEntry.getLang());
         
         // セッションの設定
         sessionScope("client", client);

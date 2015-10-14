@@ -32,11 +32,11 @@ TextRes textResources = (TextRes) request.getAttribute("textResources");
 		<div class="modal-body">
 			
 			<%if(textResources != null) { %>
-			<%if(!textResources.getRole().isLongText()) { %>
-			<input type="text" name="content" class="form-control" style="height: 40px;" value="<%=textResources.getContent().getValue() %>" />
-			<%}else { %>
-			<textarea name="content" class="form-control" rows="10"><%=textResources.getContent().getValue() %></textarea>
-			<%} %>
+				<%if(!textResources.getRole().isLongText()) { %>
+				<input type="text" name="content" class="form-control" style="height: 40px;" value="<%=textResources.getContent().getValue() %>" />
+				<%}else { %>
+				<textarea name="content" class="form-control" rows="10"><%=textResources.getContent().getValue() %></textarea>
+				<%} %>
 			<%} %>
 		</div><!-- /modal-body -->
 		<div class="modal-footer">

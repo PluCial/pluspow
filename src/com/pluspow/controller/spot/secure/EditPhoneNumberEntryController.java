@@ -3,9 +3,12 @@ package com.pluspow.controller.spot.secure;
 import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Validators;
 
+import com.pluspow.enums.Country;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
+import com.pluspow.service.MemcacheService;
 import com.pluspow.service.SpotService;
+import com.pluspow.validator.NGValidator;
 
 public class EditPhoneNumberEntryController extends BaseController {
     
@@ -20,22 +23,51 @@ public class EditPhoneNumberEntryController extends BaseController {
         // ------------------------------------------
         // リクエストパラメーターの取得
         // ------------------------------------------
-        
         boolean isDisplayFlg = asBoolean("isDisplayFlg");
+
+        // ------------------------------------------
+        // 国際電話番号の入力チェック
+        // ------------------------------------------
+        String phoneCountryString = asString("phoneCountryString");
+        Country phoneCountry = null;
+        try {
+            phoneCountry = Country.valueOf(phoneCountryString);
+
+        }catch(Exception e) {
+            Validators v = new Validators(request);
+            v.add("phoneCountry",
+                new NGValidator("国際電話番号コードが正しくありません。"));
+
+            v.validate();
+
+            requestScope("status", "NG");
+            return forward("/client/ajax_response.jsp");
+        }
+
         
         if(isDisplayFlg) {
+            // ------------------------------------------
+            // 電話番号を表示する場合
+            // ------------------------------------------
             if (!validatePhoneNumber()) {
                 requestScope("status", "NG");
                 return forward("/client/ajax_response.jsp");
             }
             
+            
             String phoneNumber = asString("phoneNumber");
-            SpotService.setPhoneNumber(spot, spot.getLangUnit().getLang(), isDisplayFlg, phoneNumber);
+            SpotService.setPhoneNumber(spot, spot.getLangUnit().getLang(), phoneCountry, isDisplayFlg, phoneNumber);
             
         }else {
-            SpotService.setPhoneNumber(spot, spot.getLangUnit().getLang(), isDisplayFlg, null);
+            // ------------------------------------------
+            // 電話番号を表示しない場合
+            // ------------------------------------------
+            SpotService.setPhoneNumber(spot, spot.getLangUnit().getLang(), phoneCountry, isDisplayFlg, null);
             
         }
+        
+        // キャッシュクリア
+        MemcacheService.deleteSpot(spot, spot.getLangUnit().getLang());
         
         requestScope("status", "OK");
         return forward("/client/ajax_response.jsp");
@@ -56,6 +88,11 @@ public class EditPhoneNumberEntryController extends BaseController {
     
     private boolean validatePhoneNumber() {
         Validators v = new Validators(request);
+        
+        // 国際電話番号コード
+        v.add("phoneCountryString", 
+            v.required("国際電話番号コードを入力してください。")
+                );
         
         // 電話番号
         v.add("phoneNumber", 

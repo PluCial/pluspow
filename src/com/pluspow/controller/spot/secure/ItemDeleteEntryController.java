@@ -9,6 +9,7 @@ import com.pluspow.model.Client;
 import com.pluspow.model.Item;
 import com.pluspow.model.Spot;
 import com.pluspow.service.ItemService;
+import com.pluspow.service.MemcacheService;
 import com.pluspow.utils.PathUtils;
 
 public class ItemDeleteEntryController extends BaseController {
@@ -23,9 +24,14 @@ public class ItemDeleteEntryController extends BaseController {
             Item item = ItemService.getModelOnly(itemId);
             ItemService.delete(spot, item);
             
+            // スポットのアクティビティが変わるため、すべての言語のキャッシュをクリア
+            MemcacheService.deleteSpotAll(spot);
+            
         }catch (ObjectNotExistException e){
             throw new NoContentsException();
         }
+        
+        
         
         return redirect(PathUtils.spotPage(spot.getSpotId(), spot.getLangUnit().getLang(), isLocal(), true));
     }

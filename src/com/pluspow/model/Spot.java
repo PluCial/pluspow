@@ -64,13 +64,13 @@ public class Spot implements Serializable {
      * GEO lat
      */
     @Attribute(unindexed = true)
-    private float lat;
+    private double lat;
     
     /**
      * GEO lng
      */
     @Attribute(unindexed = true)
-    private float lng;
+    private double lng;
     
     /**
      * country
@@ -133,6 +133,12 @@ public class Spot implements Serializable {
     private Date updateDate;
     
     // ----------------------------------------------------------------------
+    // クライアント
+    // ----------------------------------------------------------------------
+    @Attribute(persistent = false)
+    private Client client;
+    
+    // ----------------------------------------------------------------------
     // SpotLangUnit(永久かしない)
     // ----------------------------------------------------------------------
     /**
@@ -147,8 +153,21 @@ public class Spot implements Serializable {
     @Attribute(persistent = false)
     private List<Lang> langs = new ArrayList<Lang>();
     
+    /**
+     * 電話番号の国
+     * @return
+     */
+    public Country getPhoneCountry() {
+        if(langUnit == null || langUnit.getPhoneCountry() == null) return null;
+        return langUnit.getPhoneCountry();
+    }
+    
+    /**
+     * 電話番号
+     * @return
+     */
     public String getPhoneNumber() {
-        if(langUnit.getPhoneNumber() == null) return null;
+        if(langUnit == null || langUnit.getPhoneNumber() == null) return null;
         
         if(baseLang == langUnit.getLang()) {
             return langUnit.getPhoneNumber().getNumber();
@@ -159,7 +178,7 @@ public class Spot implements Serializable {
             sb1.delete(0,1);
         }
         
-        return "+81 " + sb1.toString();
+        return sb1.toString();
     }
     
     public String getDisplayAddress() {
@@ -227,10 +246,7 @@ public class Spot implements Serializable {
     @Attribute(persistent = false)
     private SpotTextRes detailRes;
 
-    /**
-     * Resourcesの設定
-     * @param resourcesMap
-     */
+    
     public void setTextResources(Map<String, SpotTextRes> resourcesMap) {
         this.setNameRes(
             SpotTextResService.getResourcesByMap(resourcesMap, TextResRole.SPOT_NAME)
@@ -562,6 +578,10 @@ public class Spot implements Serializable {
         this.iconImageRes = iconImageRes;
     }
     
+    public SpotGcsRes getBackgroundImageRes() {
+        return backgroundImageRes;
+    }
+    
     public void setBackgroundImageRes(SpotGcsRes backgroundImageRes) {
         this.backgroundImageRes = backgroundImageRes;
     }
@@ -590,22 +610,6 @@ public class Spot implements Serializable {
         this.itemSortOrderIndex = itemSortOrderIndex;
     }
 
-    public float getLat() {
-        return lat;
-    }
-
-    public void setLat(float lat) {
-        this.lat = lat;
-    }
-
-    public float getLng() {
-        return lng;
-    }
-
-    public void setLng(float lng) {
-        this.lng = lng;
-    }
-
     public Country getCountry() {
         return country;
     }
@@ -628,5 +632,29 @@ public class Spot implements Serializable {
 
     public void setFloor(int floor) {
         this.floor = floor;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }

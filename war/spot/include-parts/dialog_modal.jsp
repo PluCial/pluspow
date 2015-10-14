@@ -236,6 +236,8 @@ String modelId = (String)request.getParameter("modelId");
 				submitButton.bind('click', function(e) {
 					
 					var formData = submitform.serialize();
+					var selectCountry = $("#change-image option:selected").data("image");
+					var newPhoneCountryString = submitform.find('[name=phoneCountryString] option:selected').data('interCallCode');
 					var newPhoneNumber = submitform.find('[name=phoneNumber]').val();
 				
 					$.ajax({
@@ -250,7 +252,7 @@ String modelId = (String)request.getParameter("modelId");
   						
 								$('#phoneNumberModal').modal('hide');
   						
-								phoneNumberSpan.html(newPhoneNumber);
+								phoneNumberSpan.html('+' + newPhoneCountryString + ' ' + newPhoneNumber);
 								phoneNumberSpan.css({"display":"none"});
 								
 								if($('input[name="isDisplayFlg"]:checked' ).val() == 'true') {

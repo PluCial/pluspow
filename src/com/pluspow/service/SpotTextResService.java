@@ -97,14 +97,23 @@ public class SpotTextResService  extends TextResService{
      * @return
      * @throws ObjectNotExistException 
      */
-    protected static Map<String, SpotTextRes> getResourcesMap(Spot spot, Lang lang) throws ObjectNotExistException {
-        
-        Map<String,SpotTextRes> map = new HashMap<String,SpotTextRes>();
+    public static Map<String, SpotTextRes> getResourcesMap(Spot spot, Lang lang) throws ObjectNotExistException {
         
         List<SpotTextRes> list = getResourcesList(spot, lang);
         
-        for (SpotTextRes i : list) map.put(i.getRole().toString(),i);
+        return getResourcesMap(list);
+    }
+    
+    /**
+     * リストからリソースマップを取得
+     * @param spotTextResList
+     * @return
+     */
+    protected static Map<String, SpotTextRes> getResourcesMap(List<SpotTextRes> spotTextResList) {
         
+        Map<String,SpotTextRes> map = new HashMap<String,SpotTextRes>();
+        for (SpotTextRes i : spotTextResList) map.put(i.getRole().toString(),i);
+
         return map;
     }
     

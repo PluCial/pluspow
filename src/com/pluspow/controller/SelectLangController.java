@@ -33,7 +33,6 @@ public class SelectLangController extends BaseController {
         Properties appProp = getAppProp(localeLang);
         requestScope("appProp", appProp);
         
-        
         return forward("selectLang.jsp");
     }
 }

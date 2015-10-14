@@ -1,5 +1,7 @@
 package com.pluspow.controller.client.account;
 
+import java.util.Properties;
+
 import org.slim3.controller.Navigation;
 
 import com.pluspow.exception.NoLoginException;
@@ -16,6 +18,13 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
         }catch(NoLoginException e) {
             return redirect("/client/login");
         }
+        
+        // -------------------------------------
+        // 表示言語
+        // -------------------------------------
+        requestScope("localeLang", client.getLang());
+        Properties appProp = getAppProp(client.getLang());
+        requestScope("appProp", appProp);
 
         requestScope("isSmartPhone", String.valueOf(isSmartPhone()));
         requestScope("isLocal", String.valueOf(isLocal()));

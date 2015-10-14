@@ -3,6 +3,7 @@ package com.pluspow.controller.client;
 import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Validators;
 
+import com.pluspow.enums.Lang;
 import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Client;
 import com.pluspow.service.ClientService;
@@ -11,7 +12,7 @@ import com.pluspow.validator.NGValidator;
 public class LoginEntryController extends BaseController {
 
     @Override
-    public Navigation execute() throws Exception {
+    public Navigation execute(Lang lang) throws Exception {
         
         // 入力チェック
         if (!isPost() || !validate()) {

@@ -12,6 +12,7 @@ import com.pluspow.model.Client;
 import com.pluspow.model.Item;
 import com.pluspow.model.Spot;
 import com.pluspow.service.ItemService;
+import com.pluspow.service.MemcacheService;
 import com.pluspow.service.SpotService;
 import com.pluspow.utils.PathUtils;
 
@@ -26,6 +27,7 @@ public class TransEntryController extends BaseController {
         }
         
         ObjectType objectType = ObjectType.valueOf(asString("objectType"));
+        Lang baseLang = Lang.valueOf(asString("baseLang"));
         Lang transLang = Lang.valueOf(asString("transLang"));
         
         // 翻訳処理
@@ -34,7 +36,10 @@ public class TransEntryController extends BaseController {
             // ---------------------------------------------------
             // スポットの翻訳
             // ---------------------------------------------------
-            SpotService.machineTrans(spot, transLang);
+            SpotService.machineTrans(spot, baseLang, transLang);
+            
+            // キャッシュクリア
+            MemcacheService.deleteSpotAll(spot);
             
             return redirect(PathUtils.spotPage(spot.getSpotId(), transLang, isLocal(), true));
 
@@ -49,7 +54,10 @@ public class TransEntryController extends BaseController {
 
             Item item = ItemService.getByKey(itemId, spot.getBaseLang());
 
-            ItemService.machineTrans(spot, item, transLang);
+            ItemService.machineTrans(spot, item, baseLang, transLang);
+            
+            // キャッシュクリア
+            MemcacheService.deleteItemAll(item);
 
             return redirect(PathUtils.spotPage(spot.getSpotId(), transLang, isLocal(), true));
 
@@ -66,6 +74,11 @@ public class TransEntryController extends BaseController {
      */
     private boolean validate() {
         Validators v = new Validators(request);
+        
+     // 翻訳言語
+        v.add("baseLang", 
+            v.required("翻訳言語が選択されていません。")
+                );
 
         // 翻訳言語
         v.add("transLang", 

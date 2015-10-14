@@ -98,7 +98,9 @@ Lang localeLang =(Lang) request.getAttribute("localeLang");
 								<p>
 									<span id="address"><%=spot.getDisplayAddress() %> <%=spot.getFloor() %>F</span>
 								</p>
-								<p class="phone"><i class="fa fa-phone" style="<%=!isOwner && !spot.isPhoneDisplayFlg() ? "display: none;" : ""%>"></i> <span id="phone-number"><%=spot.isPhoneDisplayFlg() ? spot.getPhoneNumber() : ""%></span>
+								<p class="phone">
+									<i class="fa fa-phone" style="<%=!isOwner && !spot.isPhoneDisplayFlg() ? "display: none;" : ""%>"></i> 
+									<span id="phone-number"><%=spot.isPhoneDisplayFlg() ? "+" + spot.getPhoneCountry().getInterCallCode() + " " +spot.getPhoneNumber() : ""%></span>
 									<%if(isOwner && isEditPage) { %>
 									<!-- 修正モード -->
 									<a data-toggle="modal" 

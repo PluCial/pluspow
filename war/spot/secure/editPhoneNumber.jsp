@@ -47,9 +47,25 @@ Spot spot = (Spot) request.getAttribute("spot");
 			<div id="phone-number-area" style="<%=spot.getLangUnit().isPhoneDisplayFlg() ? "" : "display: none;" %>">
 				<div class="form-group">
 					<label id="errorMsg" class="control-label" for="inputError" style="display:none"><i class="fa fa-times-circle-o"></i> 入力した電話番号が正しくありません。</label>
-					<div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-phone"></i></span>
-						<input id="phone-number-input" value="<%=spot.getLangUnit().getPhoneNumber().getNumber() %>" type="text" name="phoneNumber" class="form-control" placeholder="092-1111-1111" />
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="form-group">
+								<select name="phoneCountryString" class="form-control">
+									<option value="">- 国際電話コード -</option>
+									<%for(Country country: Country.values()) { %>
+									<option value="<%=country.toString() %>" <%=(spot.getPhoneCountry() != null && spot.getPhoneCountry() == country) ? "selected" : "" %> data-inter-call-code="<%=country.getInterCallCode() %>">
+										<%=country.getName() %>(+<%=country.getInterCallCode() %>)
+									</option>
+									<%} %>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="fa fa-phone"></i></span>
+								<input id="phone-number-input" value="<%=spot.getLangUnit().getPhoneNumber().getNumber() %>" type="text" name="phoneNumber" class="form-control" placeholder="092-1111-1111" />
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

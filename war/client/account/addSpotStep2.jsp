@@ -3,8 +3,15 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@taglib prefix="f" uri="http://www.slim3.org/functions"%>
 <%@ page import="org.slim3.controller.validator.Errors" %>
+<%@ page import="com.pluspow.enums.*" %>
 <%
 Errors errors =(Errors) request.getAttribute("errors");
+Country phoneCountry = null;
+String phoneCountryString = (String) request.getAttribute("phoneCountryString");
+try {
+	phoneCountry = Country.valueOf(phoneCountryString);
+}catch(Exception e){}
+
 String content = (String) request.getAttribute("content");
 %>
 <!DOCTYPE html>
@@ -58,6 +65,39 @@ String content = (String) request.getAttribute("content");
 							<!-- form start -->
 							<form action="/client/account/AddSpotStep2Entry" method="post">
 								<div class="box-body">
+								
+									<div class="row">
+									
+										<div class="col-sm-4">
+											<div class="form-group ${f:errorClass('phoneCountryString','has-error')}">
+												<%if (errors.containsKey("phoneCountryString")){ %>
+												<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> ${errors.phoneCountryString}</label>
+												<%}else { %>
+												<label for="exampleInputEmail1">国際電話コード</label>
+												<%} %>
+												<select name="phoneCountryString" class="form-control">
+													<option value="">- 国際電話コード -</option>
+													<%for(Country country: Country.values()) { %>
+													<option value="<%=country.toString() %>" <%=(phoneCountry != null && phoneCountry == country) ? "selected" : "" %>><%=country.getName() %>(+<%=country.getInterCallCode() %>)</option>
+													<%} %>
+												</select>
+											</div>
+										</div>
+								
+										<div class="col-sm-8">
+											<div class="form-group ${f:errorClass('phoneNumber','has-error')}">
+												<%if (errors.containsKey("phoneNumber")){ %>
+												<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> ${errors.phoneNumber}</label>
+												<%}else { %>
+												<label for="exampleInputEmail1">電話番号</label>
+												<%} %>
+												<div class="input-group">
+													<span class="input-group-addon"><i class="fa fa-phone"></i></span>
+													<input type="text" ${f:text("phoneNumber")} class="form-control" placeholder="092-1111-1111" required>
+												</div>
+											</div>
+										</div>
+									</div>
 								
 									<div class="form-group ${f:errorClass('name','has-error')}">
 										<%if (errors.containsKey("name")){ %>

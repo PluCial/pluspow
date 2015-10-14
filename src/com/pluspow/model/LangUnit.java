@@ -28,7 +28,7 @@ public class LangUnit implements Serializable {
     /**
      * ベースラングフラグ
      */
-    private boolean baseLang = false;
+    private Lang baseLang;
     
     /**
      * 言語
@@ -185,11 +185,15 @@ public class LangUnit implements Serializable {
         this.invalid = invalid;
     }
 
-    public boolean isBaseLang() {
+    public Lang getBaseLang() {
         return baseLang;
     }
 
-    public void setBaseLang(boolean baseLang) {
+    public void setBaseLang(Lang baseLang) {
         this.baseLang = baseLang;
+    }
+
+    public boolean isBaseLang() {
+        return baseLang == lang;
     }
 }

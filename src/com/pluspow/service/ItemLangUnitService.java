@@ -91,7 +91,6 @@ public class ItemLangUnitService extends LangUnitService {
         
         ItemLangUnit model = new ItemLangUnit();
         model.setKey(createKey(spot));
-        model.setBaseLang(true);
         model.setLang(item.getBaseLang());
         model.getSpotRef().setModel(spot);
         model.getItemRef().setModel(item);
@@ -119,6 +118,7 @@ public class ItemLangUnitService extends LangUnitService {
             Transaction tx, 
             Spot spot, 
             Item item,
+            Lang baseLang,
             Lang lang, 
             TransType transType, 
             TransStatus trans
@@ -136,6 +136,7 @@ public class ItemLangUnitService extends LangUnitService {
         
         ItemLangUnit model = new ItemLangUnit();
         model.setKey(createKey(spot));
+        model.setBaseLang(baseLang);
         model.setLang(lang);
         model.getSpotRef().setModel(spot);
         model.getItemRef().setModel(item);

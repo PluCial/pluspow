@@ -26,6 +26,7 @@ import com.pluspow.exception.ArgumentException;
 import com.pluspow.exception.DataMismatchException;
 import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.exception.PlanLimitException;
+import com.pluspow.exception.SearchApiException;
 import com.pluspow.exception.TooManyException;
 import com.pluspow.exception.TransException;
 import com.pluspow.meta.ItemMeta;
@@ -71,15 +72,33 @@ public class ItemService {
      * @throws ObjectNotExistException 
      * @throws ArgumentException 
      */
-    public static Item getByKey(String key, Lang lang) throws ObjectNotExistException, ArgumentException {
+    public static Item getByKey(String itemKey, Lang lang) throws ObjectNotExistException, ArgumentException {
         
-        if(key == null || lang == null) throw new ArgumentException();
-        
-        Item model = dao.getOrNull(createKey(key));
-        if(model == null) throw new ObjectNotExistException();
+        if(itemKey == null || lang == null) throw new ArgumentException();
 
-        setItemInfo(model, lang);
-        
+        // ---------------------------------------------------
+        // キャッシュからスポット情報を取得
+        // ---------------------------------------------------
+        Item model = null;
+        try {
+            model = MemcacheService.getItem(itemKey, lang);
+            
+        }catch(ObjectNotExistException e) {
+
+            // ---------------------------------------------------
+            // キャッシュに存在しない場合は付属情報を含めてDBから再取得
+            // ---------------------------------------------------
+            model = getModelOnly(itemKey);
+
+            // 付属情報の取得
+            setItemInfo(model, lang);
+
+            // ---------------------------------------------------
+            // キャッシュの追加
+            // ---------------------------------------------------
+            MemcacheService.addItem(model, lang);
+        }
+
         return model;
     }
     
@@ -93,6 +112,7 @@ public class ItemService {
      * @throws IOException 
      * @throws ObjectNotExistException 
      * @throws TooManyException 
+     * @throws SearchApiException 
      */
     public static Item add(
             Spot spot, 
@@ -101,7 +121,7 @@ public class ItemService {
             boolean dutyFree,
             String name, 
             String detail,
-            FileItem fileItem, int leftX, int topY, int width, int height) throws IOException, ObjectNotExistException, TooManyException {
+            FileItem fileItem, int leftX, int topY, int width, int height) throws IOException, ObjectNotExistException, TooManyException, SearchApiException {
         
         // ---------------------------------------------------
         // アイテムの設定
@@ -168,6 +188,13 @@ public class ItemService {
             }
         }
         
+        // 検索APIの登録
+        try {
+            SearchApiService.putDocument(spot, spot.getBaseLang());
+        }catch(Exception e) {
+            // 影響する機能が多いため、更新できないとしても無視。
+        }
+        
         return model;
     }
     
@@ -175,16 +202,19 @@ public class ItemService {
      * 機械翻訳
      * @param spot
      * @param item
+     * @param baseLang
      * @param transLang
      * @throws ArgumentException
      * @throws TransException
      * @throws DataMismatchException
-     * @throws PlanLimitException 
+     * @throws PlanLimitException
+     * @throws SearchApiException 
      */
     public static void machineTrans(
             Spot spot, 
             Item item,
-            Lang transLang) throws ArgumentException, TransException, DataMismatchException, PlanLimitException {
+            Lang baseLang,
+            Lang transLang) throws ArgumentException, TransException, DataMismatchException, PlanLimitException, SearchApiException {
 
         if(item.getBaseLang() == transLang) throw new ArgumentException();
 
@@ -250,7 +280,7 @@ public class ItemService {
                 // ---------------------------------------------------
                 // 新規翻訳の保存処理
                 // ---------------------------------------------------
-                addLang(tx, spot, item, transLang, transContentsList, transResult);
+                addLang(tx, spot, item, baseLang, transLang, transContentsList, transResult);
             }
             
             // 翻訳クレジットの更新
@@ -296,15 +326,17 @@ public class ItemService {
      * @throws DataMismatchException
      * @throws TooManyException 
      * @throws ArgumentException 
+     * @throws SearchApiException 
      */
     private static void addLang(
             Transaction tx,
             Spot spot, 
             Item item,
+            Lang baseLang,
             Lang transLang,
             List<ItemTextRes> transContentsList,
             Document transResult) 
-                    throws DataMismatchException, ArgumentException, TooManyException {
+                    throws DataMismatchException, ArgumentException, TooManyException, SearchApiException {
 
         // ---------------------------------------------------
         // Itemの言語リストの追加
@@ -347,12 +379,21 @@ public class ItemService {
         // ---------------------------------------------------
         // 言語情報の追加
         // ---------------------------------------------------
-        ItemLangUnitService.add(tx, spot, item, transLang, TransType.MACHINE, TransStatus.TRANSLATED);
+        ItemLangUnitService.add(tx, spot, item, baseLang, transLang, TransType.MACHINE, TransStatus.TRANSLATED);
 
         // ---------------------------------------------------
         // GCSリソースの複製
         // ---------------------------------------------------
         ItemGcsResService.replicationOtherLangRes(tx, spot, item, transLang);
+        
+        // ---------------------------------------------------
+        // 検索APIの登録
+        // ---------------------------------------------------
+        try {
+            SearchApiService.putDocument(spot, transLang);
+        }catch(Exception e) {
+            // 影響する機能が多いため、更新できないとしても無視。
+        }
     }
     
     /**
@@ -413,7 +454,7 @@ public class ItemService {
      * @param lang
      * @throws ObjectNotExistException 
      */
-    public static void setItemInfo(Item item, Lang lang) throws ObjectNotExistException {
+    private static void setItemInfo(Item item, Lang lang) throws ObjectNotExistException {
         ItemLangUnit langUnit = ItemLangUnitService.get(item, lang);
         item.setLangUnit(langUnit);
         
@@ -431,8 +472,6 @@ public class ItemService {
     public static void changeSortOrder(Item item, double newOrder) {
         item.setSortOrder(newOrder);
         dao.put(item);
-        
-        // TODO: キャッシュクリア
     }
     
     /**
@@ -494,8 +533,9 @@ public class ItemService {
      * @param invalid
      * @throws ObjectNotExistException
      * @throws ArgumentException
+     * @throws SearchApiException 
      */
-    public static void setInvalid(Item item, Lang lang, boolean invalid) throws ObjectNotExistException, ArgumentException {
+    public static void setInvalid(Spot spot, Item item, Lang lang, boolean invalid) throws ObjectNotExistException, ArgumentException, SearchApiException {
 
         // ベース言語の有効無効切り替えはできない。
         if(item.getBaseLang() == lang) throw new ArgumentException();
@@ -530,6 +570,15 @@ public class ItemService {
             if(tx.isActive()) {
                 tx.rollback();
             }
+        }
+        
+        // ---------------------------------------------------
+        // 検索APIの更新
+        // ---------------------------------------------------
+        try {
+            SearchApiService.putDocument(spot, lang);
+        }catch(Exception e) {
+            // 影響する機能が多いため、更新できないとしても無視。
         }
     }
     

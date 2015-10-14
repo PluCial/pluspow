@@ -11,6 +11,7 @@
 <%@ page import="java.util.Properties" %>
 <%@ page import="com.pluspow.App" %>
 <%
+String requestUrl =(String) request.getAttribute("requestUrl");
 Lang localeLang =(Lang) request.getAttribute("localeLang");
 Properties appProp = (Properties) request.getAttribute("appProp");
 boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
@@ -44,15 +45,25 @@ boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 		<div class="row">
 			<%
 				for(Lang lang: Lang.values()) {
+					if(lang.isAvailable()) {
+						String link = App.APP_BASE_LANG == lang ? App.APP_PRODUCTION_SCHEME + App.APP_PRODUCTION_DOMAIN : App.APP_PRODUCTION_SCHEME + lang.toString() + "." + App.APP_PRODUCTION_DOMAIN;
+						if(!StringUtil.isEmpty(requestUrl)) link = link + requestUrl;
 			%>
-			<div class="col-sm-6 col-xs-12">
-				<div class="lang-block" style="padding: 10px 20px;">
-					<img class="align-middle" style="width:32px;vertical-align:middle;" src="<%=PathUtils.getCountryFlagUrl(lang) %>"> 
-					<a class="link align-middle" href="<%=App.APP_BASE_LANG == lang ? App.APP_PRODUCTION_SCHEME + App.APP_PRODUCTION_DOMAIN : App.APP_PRODUCTION_SCHEME + lang.toString() + "." + App.APP_PRODUCTION_DOMAIN %>">
-						<%=appProp.getProperty("lang." + lang.toString()) %><br />(<%=lang.getName() %>)
-					</a>
+			<div class="col-xs-6">
+				<div class="lang-block row" style="padding: 10px 20px;">
+					<div class="col-sm-3">
+						<a class="link" href="<%=link %>">
+							<img class="img-responsive" style="" src="<%=PathUtils.getCountryFlagUrl(lang) %>"> 
+						</a>
+					</div>
+					<div class="col-sm-9">
+						<a class="link" href="<%=link %>">
+							<%=appProp.getProperty("lang." + lang.toString()) %><br />(<%=lang.getName() %>)
+						</a>
+					</div>
 				</div>
 			</div>
+				<%} %>
 			<%} %>
 		</div>
 	</div><!-- /modal-body -->

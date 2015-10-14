@@ -58,7 +58,7 @@ public class App {
     // ---------------------------------------------------
     public static final int SPOT_LIST_LIMIT = 10;
     
-    public static final int SPOT_LIST_BY_ACTIVITY_LIMIT = 10;
+    public static final int KEYWORD_SEARCH_ITEM_LIST_LIMIT = 3;
     
     public static final int SPOT_ITEM_LIST_LIMIT = 9;
     

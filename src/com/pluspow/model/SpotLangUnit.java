@@ -9,6 +9,7 @@ import org.slim3.datastore.Model;
 
 import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.datastore.PostalAddress;
+import com.pluspow.enums.Country;
 import com.pluspow.enums.SpotActivity;
 
 @Model(schemaVersion = 1)
@@ -24,6 +25,12 @@ public class SpotLangUnit extends LangUnit implements Serializable {
      */
     @Attribute(unindexed = true)
     private String displayAddress;
+    
+    /**
+     * 電話先の国
+     */
+    @Attribute(unindexed = true)
+    private Country phoneCountry;
     
     /**
      * 電話番号
@@ -203,5 +210,13 @@ public class SpotLangUnit extends LangUnit implements Serializable {
 
     public void setDisplayAddress(String displayAddress) {
         this.displayAddress = displayAddress;
+    }
+
+    public Country getPhoneCountry() {
+        return phoneCountry;
+    }
+
+    public void setPhoneCountry(Country phoneCountry) {
+        this.phoneCountry = phoneCountry;
     }
 }

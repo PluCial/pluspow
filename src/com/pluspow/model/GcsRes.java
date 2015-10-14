@@ -47,6 +47,7 @@ public class GcsRes implements Serializable {
     private String contentType;
     
     /** サイズ */
+    @Attribute(unindexed = true)
     private int size;
     
     /** servingUrl */

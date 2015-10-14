@@ -14,6 +14,7 @@ import com.pluspow.model.Item;
 import com.pluspow.model.Spot;
 import com.pluspow.service.ItemGcsResService;
 import com.pluspow.service.ItemService;
+import com.pluspow.service.MemcacheService;
 import com.pluspow.service.SpotGcsResService;
 import com.pluspow.utils.PathUtils;
 
@@ -65,6 +66,9 @@ public class ChangeGcsResEntryController extends BaseController {
                     imageX, imageY, imageWidth, imageHeight);
             }
             
+            // キャッシュクリア
+            MemcacheService.deleteSpot(spot, lang);
+            
             return redirect(PathUtils.spotPage(spot.getSpotId(), lang, isLocal(), true));
             
             
@@ -94,6 +98,9 @@ public class ChangeGcsResEntryController extends BaseController {
                 // 追加
                 ItemGcsResService.addImageRes(spot, item, lang, fileItem, imageX, imageY, imageWidth, imageHeight);
             }
+            
+            // キャッシュクリア
+            MemcacheService.deleteItem(item, lang);
             
             return redirect(PathUtils.itemPage(spot, item.getKey().getName(), lang, isLocal(), true));
         }

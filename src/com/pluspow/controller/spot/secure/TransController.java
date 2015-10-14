@@ -90,7 +90,7 @@ public class TransController extends BaseController {
                 // ------------------------------------------
                 ItemLangUnit unit = ItemLangUnitService.get(item, transLang);
                 if(unit.isInvalid()) {
-                    ItemService.setInvalid(item, transLang, false);
+                    ItemService.setInvalid(spot, item, transLang, false);
                     return redirect(PathUtils.spotPage(spot.getSpotId(), transLang, isLocal(), true));
                 }
 
@@ -118,6 +118,7 @@ public class TransController extends BaseController {
         
         requestScope("objectType", objectType);
         requestScope("transCharCount", String.valueOf(transCharCount));
+        requestScope("transContentsList", transContentsList);
         
         return forward("trans.jsp");
     }
