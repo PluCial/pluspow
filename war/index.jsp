@@ -14,79 +14,21 @@ Lang localeLang =(Lang) request.getAttribute("localeLang");
 <html>
 <head>
 	<jsp:include page="/spot/include-parts/html_head.jsp" />
-    <style>
-    	video {
-    		z-index:-100;
-    	}
-    	#about {
-    		box-shadow: inset 0 0 20px rgba(0,0,0, 0.3);
-    		-webkit-box-shadow: inset 0 0 20px rgba(0,0,0, 0.3);
-    		-moz-box-shadow: inset 0 0 20px rgba(0,0,0, 0.3);
-   			-o-box-shadow: inset 0 0 20px rgba(0,0,0, 0.3);
-    	}
-     	#about .action {
-    		margin-top: 30px;
-    	}
-    	#about h3 {
-    		margin-top: 30px;
-    	}
-    	.country {
-  			position: relative;
-  			padding: 0;
-    	}
-    	.country h2, .country p {
-    		text-shadow: 1px 1px 3px rgba(0,0,0,.7),1px 1px 5px rgba(0,0,0,.3);
-    	}
-    	
-    	.country .country-flag {
-    		position: absolute;
-    		top: 10px;
-    		left: 10px;
-    		z-index: 100;
-    		width: 50px;
-    	}
-    	.country .search-area {
-    		padding: 50px;
-    	}
-    	.country .search-area .text-search input,
-    	.country .search-area .text-search .input-group-addon {
-    		    background-color: #fff;
-    	}
-    	.country .search-area .text-search input {
-    		border-top-left-radius: 4px;
-    		border-bottom-left-radius: 4px;
-    	}
-    	#about {
-    		padding-top: 5%;
-    	}
-    	#about .contents {
-    		padding: 30px;
-    		position: relative;
-    		padding-top: 50px;
-    	}
-    	#about .img-contents {
-			padding: 15px;
-    	}
-    </style>
+	<!-- Style index -->
+	<link rel="stylesheet" href="/css/index.css">
+	<link rel="stylesheet" href="/css/country-search.css">
 </head>
-<body lang="<%=localeLang %>">
+<body lang="<%=localeLang %>" class="service-top">
 	<div class="body-inner">
 		<!-- Header start -->
  		<jsp:include page="/include-parts/main_header.jsp" />
 		<!-- Header end -->
 		
+		<%if(localeLang.isAvailable()) { %>
 		<section id="about" class="no-padding">
 			<div class="row">
 				<div class="col-md-5">
 					<div class="contents">
-						<a data-toggle="modal" 
-							data-target="#selectLangModel" 
-							class="cd-btn btn btn-default btn-sm solid"
-							style="padding: 0 5px;"
-							href="/selectLang?lang=<%=localeLang %>">
-							<img class="align-middle" style="width:32px;vertical-align:middle;" src="<%=PathUtils.getCountryFlagUrl(localeLang) %>"> 
-							<span class="align-middle"><%=localeLang.getName() %>  <i class="fa fa-chevron-down"></i></span>
-						</a>
 						<h2><fmt:message key="page.index.about.h2" /></h2>
 						<h3 class="hidden-xs"><fmt:message key="page.index.about.h3" /></h3>
 						<h4 class="hidden-xs"><fmt:message key="page.index.about.h4"><fmt:param><%=Lang.values().length %></fmt:param></fmt:message></h4>
@@ -106,30 +48,48 @@ Lang localeLang =(Lang) request.getAttribute("localeLang");
 				</div>
 			</div>
 		</section>
+		<%} %>
 		
-		<section id="search-jp" class="country">
-			<img class="country-flag" src="/images/flag/flat/JP.png">
-			<ul class="cd-hero-slider">
-				<li class="cd-bg-video selected from-right">
-					<div class="cd-half-width">
-						<h2><fmt:message key="page.index.searchJp.h2" /></h2>
-						<p><fmt:message key="page.index.searchJp.p1" /></p>
-						<div class="text-center search-area">
-							<div class="text-search input-group">
-                    			<input type="text" class="form-control" placeholder="<fmt:message key="page.index.search.input.placeholder" />">
-                    			<span class="input-group-addon"><i class="fa fa-search"></i></span>
-                  			</div>
+		<section class="country-search" style="<%=localeLang.isAvailable() ? "" : "padding-top: 50px;" %>">
+			<div class="search-wrapper">
+				
+				<div class="row">
+					<div class="col-md-6 text-center">
+						<div class="search-form-wapper" style="<%=localeLang.isAvailable() ? "" : "min-height: 98vh;" %>">
+							<form action="/search" method="get">
+								<h2><fmt:message key="page.index.searchJp.h2" /></h2>
+								<p><fmt:message key="page.index.searchJp.p1" /></p>
+								<div class="search-area">
+									
+									<div class="text-search input-group">
+		                    			<input type="text" name="keyword" class="form-control" placeholder="<fmt:message key="page.index.search.input.placeholder" />" />
+		                    			<span class="input-group-addon"><i class="fa fa-search"></i></span>
+		                    			<input type="hidden" name="country" value="<%=Country.JP.toString() %>" />
+		                    			<img class="country-flag" src="/images/flag/flat/JP.png">
+		                  			</div>
+									
+									<div class="select-activity">
+										<%for(int i=0; i<SpotActivity.values().length; i++) { %>	
+										<input type="checkbox" name="activityArray" value="<%=SpotActivity.values()[i].toString() %>" id="checkbox<%=i %>" checked="checked" />
+										<label for="checkbox<%=i %>" class="checkbox"><i class="<%=SpotActivity.values()[i].getIconClass() %>"></i> <%=SpotActivity.values()[i].getName() %></label>
+										<%} %>
+									</div>
+									
+									<button type="submit" class="search-btn btn btn-default">検索</button>
+								</div>
+							</form>
 						</div>
 					</div>
-
-					<div class="cd-bg-video-wrapper" data-video="videos/video">
-						<video autoplay loop muted controls poster="/pluspow/war/videos/search_ja_video_default_image.jpg" width="100%">
-  						<source src="/videos/search_top_ja_superlow.mp4" type="video/mp4" />
-  						<img src="/pluspow/war/videos/search_ja_video_default_image.jpg" width="100%" />
-						</video>
-					</div>
-				</li>
-			</ul>
+				</div>
+				
+				<div class="video-wrapper" data-video="videos/video" style="background-image: url(/videos/search_ja_video_default_image.jpg)">
+					<video class="visible-lg" autoplay loop muted controls poster="/videos/search_ja_video_default_image.jpg" width="100%">
+						<source src="/videos/search_top_ja_superlow.mp4" type="video/mp4" />
+						<img src="/videos/search_ja_video_default_image.jpg" width="100%" />
+					</video>
+				</div>
+			</div>
+			
 		</section>
 		
 		<!-- Footer start -->

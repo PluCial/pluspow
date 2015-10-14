@@ -40,11 +40,7 @@ boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 			<button class="btn btn-box-tool btn-sm" data-dismiss="modal"><i class="fa fa-times"></i></button>
 		</div>
 		<p style="margin-bottom: 0;">
-			<strong><fmt:message key="page.spot.select.lang.originalLanguage" /></strong> 
-			<img class="align-middle" style="width:32px;vertical-align:middle;" src="<%=PathUtils.getCountryFlagUrl(spot.getBaseLang()) %>"> 
-			<a href="<%=PathUtils.spotPage(spot.getSpotId(), spot.getBaseLang(), isLocal, isClientLogged) %>" class="link align-middle">
-				<%=appProp.getProperty("lang." + spot.getBaseLang().toString()) %> (<%=spot.getBaseLang().getName() %>)
-			</a>
+			Select Language
 		</p>
 	</div>
 	
@@ -52,17 +48,21 @@ boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 		<div class="row">
 			<%
 				for(Lang lang: spot.getLangs()) {
-					if(lang != spot.getBaseLang()) {
 			%>
-			<div class="col-sm-6 col-xs-12">
-				<div class="lang-block" style="padding: 10px 20px;">
-					<img class="align-middle" style="width:32px;vertical-align:middle;" src="<%=PathUtils.getCountryFlagUrl(lang) %>"> 
-					<a class="link align-middle" href="<%=PathUtils.spotPage(spot.getSpotId(), lang, isLocal, isClientLogged) %>">
-						<%=appProp.getProperty("lang." + lang.toString()) %><br />(<%=lang.getName() %>)
-					</a>
+			<div class="col-xs-6">
+				<div class="lang-block row" style="padding: 10px 20px;">
+					<div class="col-sm-3">
+						<a class="link" href="<%=PathUtils.spotPage(spot.getSpotId(), lang, isLocal, isClientLogged) %>">
+							<img class="img-responsive" style="" src="<%=PathUtils.getCountryFlagUrl(lang) %>"> 
+						</a>
+					</div>
+					<div class="col-sm-9">
+						<a class="link" href="<%=PathUtils.spotPage(spot.getSpotId(), lang, isLocal, isClientLogged) %>">
+							<%=appProp.getProperty("lang." + lang.toString()) %><br />(<%=lang.getName() %>)
+						</a>
+					</div>
 				</div>
 			</div>
-			<%	} %>
 			<%} %>
 		</div>
 	</div><!-- /modal-body -->

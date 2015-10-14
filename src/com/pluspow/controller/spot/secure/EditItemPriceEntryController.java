@@ -8,6 +8,7 @@ import com.pluspow.model.Client;
 import com.pluspow.model.Item;
 import com.pluspow.model.Spot;
 import com.pluspow.service.ItemService;
+import com.pluspow.service.MemcacheService;
 
 public class EditItemPriceEntryController extends BaseController {
     
@@ -30,6 +31,9 @@ public class EditItemPriceEntryController extends BaseController {
         try {
             item = ItemService.getModelOnly(itemId);
             ItemService.setPrice(item, Double.valueOf(price));
+            
+            // キャッシュクリア(すべての言語)
+            MemcacheService.deleteItemAll(item);
             
         }catch(ObjectNotExistException e) {
             requestScope("status", "NG");

@@ -26,11 +26,13 @@ public class OfficeHours implements Serializable {
     /**
      * 曜日
      */
+    @Attribute(unindexed = true)
     private DayOfWeek dayOfWeek;
     
     /**
      * 営業フラグ
      */
+    @Attribute(unindexed = true)
     private boolean open = false;
     
     /**

@@ -6,6 +6,7 @@ import org.slim3.datastore.Attribute;
 import org.slim3.datastore.Model;
 
 import com.google.appengine.api.datastore.Email;
+import com.pluspow.enums.Lang;
 
 /**
  * Client登録エントリー
@@ -16,6 +17,12 @@ import com.google.appengine.api.datastore.Email;
 public class SignupEntry extends Entry implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
+    /**
+     * 利用言語
+     */
+    @Attribute(unindexed = true)
+    private Lang lang;
     
     /**
      * 名前
@@ -58,5 +65,13 @@ public class SignupEntry extends Entry implements Serializable {
 
     public void setEmail(Email email) {
         this.email = email;
+    }
+
+    public Lang getLang() {
+        return lang;
+    }
+
+    public void setLang(Lang lang) {
+        this.lang = lang;
     }
 }

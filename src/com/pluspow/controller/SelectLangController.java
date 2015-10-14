@@ -7,7 +7,7 @@ import org.slim3.controller.Navigation;
 import com.pluspow.App;
 import com.pluspow.enums.Lang;
 
-public class SelectLangController extends BaseController {
+public class SelectLangController extends AppBaseController {
 
     @Override
     public Navigation run() throws Exception {
@@ -32,7 +32,6 @@ public class SelectLangController extends BaseController {
         requestScope("localeLang", localeLang);
         Properties appProp = getAppProp(localeLang);
         requestScope("appProp", appProp);
-        
         
         return forward("selectLang.jsp");
     }

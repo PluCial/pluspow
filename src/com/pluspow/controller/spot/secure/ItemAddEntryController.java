@@ -9,6 +9,7 @@ import com.pluspow.enums.SpotActivity;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
 import com.pluspow.service.ItemService;
+import com.pluspow.service.MemcacheService;
 import com.pluspow.utils.PathUtils;
 
 public class ItemAddEntryController extends BaseController {
@@ -46,6 +47,8 @@ public class ItemAddEntryController extends BaseController {
             fileItem,
             imageX, imageY, imageWidth, imageHeight);
         
+        // キャッシュクリア
+        MemcacheService.deleteSpot(spot, spot.getBaseLang());
         
         return redirect(PathUtils.spotPage(spot.getSpotId(), spot.getBaseLang(), isLocal(), true));
     }

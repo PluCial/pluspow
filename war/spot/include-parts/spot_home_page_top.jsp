@@ -1,4 +1,8 @@
 <%@page pageEncoding="UTF-8" isELIgnored="false" session="false"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@taglib prefix="f" uri="http://www.slim3.org/functions"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="com.pluspow.App" %>
 <%@ page import="com.pluspow.model.*" %>
 <%@ page import="com.pluspow.enums.*" %>
@@ -17,41 +21,52 @@ List<Lang> suppertLangList = (List<Lang>) request.getAttribute("suppertLangList"
 Map<String, OfficeHours> officeHoursMap = (Map<String, OfficeHours>) request.getAttribute("officeHoursMap");
 DecimalFormat officeTimeformat = new DecimalFormat("00");
 Properties appProp = (Properties) request.getAttribute("appProp");
+Lang localeLang =(Lang) request.getAttribute("localeLang");
 %>
-	<section id="spot-home" class="no-padding" style="background-image:
-                  url(<%=PathUtils.getSpotBackgroundImageUrl(spot) %>)">
+<fmt:setLocale value="<%=localeLang.toString() %>" />
+	<section id="spot-home" class="no-padding">
+        <div class="contents css-table">
         
-		<div class="row">
-			<div id="spot-catch" class="col-md-8 spot-detail-inner"><!-- spot-image -->
+			<div class="left-content text-center" style="background-image:
+                  url(<%=PathUtils.getSpotBackgroundImageUrl(spot) %>)">
 			
-				<div class="detail">
-					<h2>
-						<span id="<%=spot.getCatchCopyResKey() %>"><%=spot.getCatchCopy() %></span>
-						<%if(isOwner && isEditPage) { %>
-						<a data-toggle="modal" 
-							data-backdrop="static"
-							data-target="#textResModal" 
-							style="color:#fff"
-							href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resourcesKey=<%=spot.getCatchCopyResKey() %>">
-							<i class="fa fa-pencil-square-o edit-mode"></i>
-						</a>
-						<%} %>
-					</h2>
-				</div>
+
+				<h2>
+					<span id="<%=spot.getCatchCopyResKey() %>"><%=spot.getCatchCopy() %></span>
+					<%if(isOwner && isEditPage) { %>
+					<a data-toggle="modal" 
+						data-backdrop="static"
+						data-target="#textResModal" 
+						style="color:#fff"
+						href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resourcesKey=<%=spot.getCatchCopyResKey() %>">
+						<i class="fa fa-pencil-square-o edit-mode"></i>
+					</a>
+					<%} %>
+				</h2>
+
+				
+				<%if(isOwner) { %>
+				<a id="background-image-btn" 
+					class="btn btn-default" 
+					href="/spot/secure/changeGcsRes?spotId=<%=spot.getSpotId() %>&lang=<%=spot.getLangUnit().getLang() %>&role=<%=GcsResRole.SPOT_BACKGROUND_IMAGE %>&resourcesKey=<%=spot.getBackgroundImageResKey() == null ? "" : spot.getBackgroundImageResKey() %>">
+					<i class="fa fa-file-image-o"></i> 背景画像</a>
+				<%} %>
 				
 				<a id="langs-select-btn"
 					data-toggle="modal" 
 					data-backdrop="static"
 					data-target="#selectLangModel" 
 					style="color:#fff"
-					href="/spot/selectLang?spotId=<%=spot.getSpotId() %> %>">
+					href="/spot/selectLang?spotId=<%=spot.getSpotId() %>&lang=<%=lang.toString() %>">
 					<img class="align-middle" style="width:32px;vertical-align:middle;" src="<%=PathUtils.getCountryFlagUrl(spot.getLangUnit().getLang()) %>"> 
-					<span class="align-middle"><%=spot.getLangUnit().getLang().getName() %> <i class="fa fa-chevron-down"></i></span>
+					<span class="align-middle">
+						<%=appProp.getProperty("lang." + spot.getLangUnit().getLang().toString()) %> <i class="fa fa-chevron-down"></i>
+					</span>
 				</a>
 
 			</div><!-- spot-catch end-->
 			
-			<div class="col-md-4 no-padding">
+			<div class="right-content no-padding">
 				<div id="spot-nav-tabs" class="full-width-tabs">
 					<ul class="nav nav-tabs">
 						<li class="active"><a href="#spot-info" data-toggle="tab"><i class="fa fa-map-marker"></i></a></li>
@@ -60,69 +75,73 @@ Properties appProp = (Properties) request.getAttribute("appProp");
 					</ul>
 				</div>
 				<div class="tab-content">
-					<div id="spot-info" class="spot-detail-inner tab-pane active">
-				
-						<%-- <div id="area-nav">
-							<!-- area-nav start -->
-							<ol class="breadcrumb">
-								<%if(!StringUtil.isEmpty(spot.getGeoAreaLevel1())) { %>
-								<li><a href=""><i class="fa fa-map-marker"></i> <%=spot.getGeoAreaLevel1() %></a></li>
-								<%} %>
-								<%if(!StringUtil.isEmpty(spot.getGeoAreaLevel2())) { %>
-									<li><a href=""><i class="fa fa-map-marker"></i> <%=spot.getGeoAreaLevel2() %></a></li>
-								<%} %>
-								<%if(!StringUtil.isEmpty(spot.getGeoAreaLevel3())) { %>
-								<li><a href=""><i class="fa fa-map-marker"></i> <%=spot.getGeoAreaLevel3() %></a></li>
-								<%} %>
-								<%if(!StringUtil.isEmpty(spot.getGeoLocality())) { %>
-								<li><a href=""><i class="fa fa-map-marker"></i> <%=spot.getGeoLocality() %></a></li>
-								<%} %>
-								<%if(!StringUtil.isEmpty(spot.getGeoWardLocality())) { %>
-								<li><a href=""><i class="fa fa-map-marker"></i> <%=spot.getGeoWardLocality() %></a></li>
-								<%} %>
-							</ol>
-							<!-- area-nav end -->
-						</div> --%>
-				
-						<div class="detail">
-							<div id="spot-logo"><i class="fa fa-map-marker"></i></div>
+					<div id="spot-info" class="tab-pane active">
 					
-							<h1>
-								<span id="<%=spot.getNameResKey() %>"><%=spot.getName() %></span>
-								<%if(isOwner && isEditPage) { %>
-								<!-- 修正モード -->
-								<a data-toggle="modal" 
-									data-backdrop="static"
-									data-target="#textResModal" 
-									style="color:#333"
-									href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resourcesKey=<%=spot.getNameResKey() %>">
-									<i class="fa fa-pencil-square-o edit-mode"></i>
-								</a>
-								<%} %>
-							</h1>
-					
-							<p>
-								<span id="address"><%=spot.getDisplayAddress() %> <%=spot.getFloor() %>F</span>
-							</p>
-							<p class="phone"><i class="fa fa-phone" style="<%=!isOwner && !spot.isPhoneDisplayFlg() ? "display: none;" : ""%>"></i> <span id="phone-number"><%=spot.isPhoneDisplayFlg() ? spot.getPhoneNumber() : ""%></span>
-								<%if(isOwner && isEditPage) { %>
-								<!-- 修正モード -->
-								<a data-toggle="modal" 
-									data-backdrop="static"
-									data-target="#phoneNumberModal" 
-									style="color:#333"
-									href="/spot/secure/editPhoneNumber?spotId=<%=spot.getSpotId() %>&lang=<%=spot.getLangUnit().getLang().toString() %>">
-									<i class="fa fa-pencil-square-o edit-mode"></i>
-								</a>
-								<%} %>
-							</p>
+						<div class="contents">
+							<div id="area-nav">
+								<!-- area-nav start -->
+								<ol class="breadcrumb">
+									<%if(!StringUtil.isEmpty(spot.getGeoAreaLevel1())) { %>
+									<li><a href="/search?areaLevel1=<%=spot.getGeoAreaLevel1() %>"><%=spot.getGeoAreaLevel1() %></a></li>
+									<%} %>
+									<%if(!StringUtil.isEmpty(spot.getGeoAreaLevel2())) { %>
+										<li><a href="/search?areaLevel2=<%=spot.getGeoAreaLevel2() %>"><%=spot.getGeoAreaLevel2() %></a></li>
+									<%} %>
+									<%if(!StringUtil.isEmpty(spot.getGeoAreaLevel3())) { %>
+									<li><a href="/search?areaLevel3=<%=spot.getGeoAreaLevel3() %>"><%=spot.getGeoAreaLevel3() %></a></li>
+									<%} %>
+									<%if(!StringUtil.isEmpty(spot.getGeoLocality())) { %>
+									<li><a href="/search?locality=<%=spot.getGeoLocality() %>"><%=spot.getGeoLocality() %></a></li>
+									<%} %>
+									<%if(!StringUtil.isEmpty(spot.getGeoWardLocality())) { %>
+									<li><a href="/search?wardLocality=<%=spot.getGeoWardLocality() %>"><%=spot.getGeoWardLocality() %></a></li>
+									<%} %>
+								</ol>
+								<!-- area-nav end -->
 						</div>
+						
+							<div class="detail">
+								<div id="spot-logo"><i class="fa fa-map-marker"></i></div>
+						
+								<h1>
+									<span id="<%=spot.getNameResKey() %>"><%=spot.getName() %></span>
+									<%if(isOwner && isEditPage) { %>
+									<!-- 修正モード -->
+									<a data-toggle="modal" 
+										data-backdrop="static"
+										data-target="#textResModal" 
+										style="color:#333"
+										href="/spot/secure/editTextResources?spotId=<%=spot.getSpotId() %>&resourcesKey=<%=spot.getNameResKey() %>">
+										<i class="fa fa-pencil-square-o edit-mode"></i>
+									</a>
+									<%} %>
+								</h1>
+						
+								<p>
+									<span id="address"><%=spot.getDisplayAddress() %> <%=spot.getFloor() %>F</span>
+								</p>
+								<p class="phone">
+									<i class="fa fa-phone" style="<%=!isOwner && !spot.isPhoneDisplayFlg() ? "display: none;" : ""%>"></i> 
+									<span id="phone-number"><%=spot.isPhoneDisplayFlg() ? "+" + spot.getPhoneCountry().getInterCallCode() + " " +spot.getPhoneNumber() : ""%></span>
+									<%if(isOwner && isEditPage) { %>
+									<!-- 修正モード -->
+									<a data-toggle="modal" 
+										data-backdrop="static"
+										data-target="#phoneNumberModal" 
+										style="color:#333"
+										href="/spot/secure/editPhoneNumber?spotId=<%=spot.getSpotId() %>&lang=<%=spot.getLangUnit().getLang().toString() %>">
+										<i class="fa fa-pencil-square-o edit-mode"></i>
+									</a>
+									<%} %>
+								</p>
+							</div>
 
-						<div class="map" id="map"></div>
+							<div class="map" id="map"></div>
+						</div>
 					</div>
 			
-					<div id="spot-detail" class="spot-detail-inner tab-pane">
-						<div>
+					<div id="spot-detail" class="tab-pane">
+						<div class="contents">
 							<h1><%=spot.getName() %></h1>
 							<p>
 								<span id="<%=spot.getDetailResKey() %>"><%=Utils.getJspDisplayString(spot.getDetail()) %></span>
@@ -140,12 +159,13 @@ Properties appProp = (Properties) request.getAttribute("appProp");
 						</div>
 					</div>
 					
-					<div id="spot-office-hours" class="spot-detail-inner tab-pane">
+					<div id="spot-office-hours" class="tab-pane">
 						<%for(DayOfWeek dayOfWeek: DayOfWeek.values()) {
 							OfficeHours officeHours = officeHoursMap.get(dayOfWeek.toString());
+							if(isOwner || officeHours.isOpen()) {
 						%>
-						<div id="<%=officeHours.getKey().getName() %>" class="plan text-center row">
-							<div class="plan-name col-md-4">
+						<div id="<%=officeHours.getKey().getName() %>" class="plan css-table text-center">
+							<div class="plan-name">
 								<%=appProp.getProperty("dayOfWeek." + officeHours.getDayOfWeek().toString()) %>
 								<%if(isOwner && isEditPage) { %>
 								<a data-toggle="modal" 
@@ -157,14 +177,16 @@ Properties appProp = (Properties) request.getAttribute("appProp");
 								</a>
 								<%} %>
 							</div>
-							<div class="plan-price col-md-8 spot-office-hours-area" style="<%=officeHours.isOpen() ? "" : "display:none" %>">
+							<div class="plan-price spot-office-hours-area" style="<%=officeHours.isOpen() ? "" : "display:none" %>">
 								<sup class="currency">
 									<i class="fa fa-sun-o"></i>
 								</sup>
 								<strong><span class="office-open-hour"><%=officeTimeformat.format(officeHours.getOpenHour()) %></span>:<span class="office-open-minute"><%=officeTimeformat.format(officeHours.getOpenMinute()) %></span></strong> 
 								<sub><i class="fa fa-moon-o"></i><span class="office-close-hour"><%=officeTimeformat.format(officeHours.getCloseHour()) %></span>:<span class="office-close-minute"><%=officeTimeformat.format(officeHours.getCloseMinute()) %></span></sub>
 							</div>
+							
 						</div>
+							<%} %>
 						<%} %>
 					</div>
 			
@@ -172,4 +194,6 @@ Properties appProp = (Properties) request.getAttribute("appProp");
 			</div>
 				
 		</div>
+<!-- 		
+		</div> -->
     </section>

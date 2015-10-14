@@ -6,7 +6,7 @@ import java.util.Properties;
 import org.slim3.controller.Navigation;
 import org.slim3.util.StringUtil;
 
-import com.pluspow.App;
+import com.pluspow.controller.AppBaseController;
 import com.pluspow.enums.Lang;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.exception.NoLoginException;
@@ -16,7 +16,7 @@ import com.pluspow.model.Spot;
 import com.pluspow.service.SpotService;
 import com.pluspow.utils.PathUtils;
 
-public abstract class BaseController extends com.pluspow.controller.BaseController {
+public abstract class BaseController extends AppBaseController {
 
     @Override
     protected Navigation run() throws Exception {
@@ -32,7 +32,6 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
         boolean isOwner = false;
         
         Lang paramLang = getLangByParameter();
-        Lang subDomainLang = getLangBySubDomain();
         
         // -------------------------------------
         // ログインチェック
@@ -58,15 +57,7 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
         // -------------------------------------
         // 言語の選定
         // -------------------------------------
-        if(paramLang != null) {
-            lang = paramLang;
-            
-        }else if(paramLang == null && subDomainLang != null) {
-            lang = subDomainLang;
-            
-        }else {
-            lang = App.APP_BASE_LANG;
-        }
+        lang = getLang();
         
         // -------------------------------------
         // 表示言語

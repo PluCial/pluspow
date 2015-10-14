@@ -100,5 +100,14 @@ public class PathUtils {
     public static String getSpotBackgroundImageUrl(Spot spot) {
         return spot.getBackgroundImageUrl() != null ? spot.getBackgroundImageUrl() + "=s" + spot.getBackgroundImageWidth() : "/images/spot/spot_default_background_image.jpg";
     }
+    
+    /**
+     * スポットの背景画像
+     * @param spot
+     * @return
+     */
+    public static String getSpotBackgroundImageUrl(Spot spot, int width) {
+        return spot.getBackgroundImageUrl() != null ? spot.getBackgroundImageUrl() + "=s" + width : "/images/spot/spot_default_background_image.jpg";
+    }
 
 }

@@ -7,6 +7,7 @@ import com.pluspow.exception.NoContentsException;
 import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
+import com.pluspow.service.MemcacheService;
 import com.pluspow.service.SpotService;
 import com.pluspow.utils.PathUtils;
 
@@ -21,6 +22,9 @@ public class SpotDeleteEntryController extends BaseController {
         try {
             Spot spot = SpotService.getSpotModelOnly(spotId);
             SpotService.delete(spot);
+            
+            // すべての言語キャッシュをクリア
+            MemcacheService.deleteSpotAll(spot);
             
         }catch (ObjectNotExistException e){
             throw new NoContentsException();

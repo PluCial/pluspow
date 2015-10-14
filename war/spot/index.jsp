@@ -39,7 +39,7 @@ Lang localeLang =(Lang) request.getAttribute("localeLang");
 		<!-- Header end -->
 
 		<!-- Slider start -->
-		<jsp:include page="/spot/include-parts/spot_home_page_top2.jsp">
+		<jsp:include page="/spot/include-parts/spot_home_page_top.jsp">
 			<jsp:param name="isEditPage" value="true" />
 		</jsp:include>
     	<!--/ Slider end -->
@@ -107,7 +107,6 @@ Lang localeLang =(Lang) request.getAttribute("localeLang");
 	<jsp:include page="/spot/include-parts/dialog_modal.jsp">
 		<jsp:param name="modelId" value="phoneNumberModal" />
 	</jsp:include>
-	<script type="text/javascript" src="/plugins/waiting-dialog/waiting-dialog.js"></script>
 	<script type="text/javascript" src="/plugins/timepicker/bootstrap-timepicker.min.js"></script>
 	<!-- secure JS end -->
 	<%} %>

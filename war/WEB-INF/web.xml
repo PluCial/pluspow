@@ -105,4 +105,12 @@
             <role-name>admin</role-name>
         </auth-constraint>
     </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/client/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
 </web-app>

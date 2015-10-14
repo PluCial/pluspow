@@ -8,6 +8,7 @@ import org.slim3.datastore.Sort;
 
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.pluspow.enums.Lang;
+import com.pluspow.enums.TransStatus;
 import com.pluspow.meta.SpotLangUnitMeta;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotLangUnit;
@@ -39,7 +40,8 @@ public class SpotLangUnitDao extends DaoBase<SpotLangUnit>{
         return  Datastore.query(meta)
                 .filter(
                     meta.spotRef.equal(spot.getKey()),
-                    meta.invalid.equal(false)
+                    meta.invalid.equal(false),
+                    meta.transStatus.equal(TransStatus.TRANSLATED)
                     )
                 .limit(limit)
                 .sort(new Sort(meta.createDate, SortDirection.ASCENDING)).asList();

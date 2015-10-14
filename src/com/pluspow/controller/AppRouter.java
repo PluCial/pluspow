@@ -12,12 +12,16 @@ public class AppRouter extends RouterImpl {
 
 	public AppRouter() {
 	    
-	    // SPOT TOP
+	    // LANG
         addRouting(
                 "/l-{lang}/",
                 "/?lang={lang}");
 	    
-//	    setSpotEdit();
+        // Search
+        addRouting(
+            "/{country}/search",
+            "/search?country={country}");
+        
 	    setSpot();
 	    
 	}

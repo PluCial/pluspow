@@ -13,6 +13,7 @@
 Spot spot =(Spot) request.getAttribute("spot");
 String transLang = (String) request.getAttribute("transLang");
 int transCharCount = Integer.parseInt((String)request.getAttribute("transCharCount"));
+List<TextRes> transContentsList = (List<TextRes>)request.getAttribute("transContentsList");
 ObjectType objectType = (ObjectType) request.getAttribute("objectType");
 Item item =(Item) request.getAttribute("item");
 boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
@@ -53,6 +54,9 @@ boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 			.description-block>.description-header {
 				margin-top: 0.5em;
 				margin-bottom: 1.0em;
+			}
+			table.table td {
+				font-size: 14px;
 			}
 		</style>
 	</head>
@@ -103,6 +107,12 @@ boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 													<th>翻訳する文字数</th>
 													<th><%=transCharCount%></th>
 												</tr>
+												<%for(TextRes textRes: transContentsList) { %>
+												<tr>
+													<td><%=textRes.getRole().getName() %></td>
+													<td><%=textRes.getContentString().length() %></td>
+												</tr>
+												<%} %>
 											</tbody>
 										</table>
 									</div>
@@ -115,7 +125,7 @@ boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 												<p>(¥<%=TransType.MACHINE.getPrice()%>/1文字)</p>
 												<h5 class="description-header">¥<%=(int)(transCharCount * TransType.MACHINE.getPrice())%></h5>
 												<div>
-													<a href="/spot/secure/transEntry?spotId=<%=spot.getSpotId()%>&transLang=<%=transLang%>&objectType=<%=objectType.toString()%>&itemId=<%=item == null ? "" : item.getKey().getName()%>" class="btn btn-default"><i class="fa fa-language"></i> 翻訳する</a>
+													<a href="/spot/secure/transEntry?spotId=<%=spot.getSpotId()%>&baseLang=<%=spot.getBaseLang().toString() %>&transLang=<%=transLang%>&objectType=<%=objectType.toString()%>&itemId=<%=item == null ? "" : item.getKey().getName()%>" class="btn btn-default"><i class="fa fa-language"></i> 翻訳する</a>
 												</div>
 												
 											</div><!-- /.description-block -->
@@ -141,7 +151,9 @@ boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 										</div><!-- /.col -->
 										<div class="col-sm-3 col-xs-6">
 											<div class="description-block border-right">
-												<h4 class="description-text"><i class="fa fa-user"></i> <%=TransType.HUMAN_STANDARD.getName()%></h4>
+												<h4 class="description-text">
+													<i class="fa fa-user"></i> 
+													<%=TransType.HUMAN_BUSINESS.getName()%></h4>
 												
 												<%
 																									if(Lang.valueOf(transLang).isHumanTransSupport()) {

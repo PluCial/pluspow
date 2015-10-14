@@ -7,6 +7,7 @@ import com.pluspow.model.Client;
 import com.pluspow.model.Item;
 import com.pluspow.model.Spot;
 import com.pluspow.service.ItemService;
+import com.pluspow.service.MemcacheService;
 
 public class ItemChangeIndexController extends BaseController {
 
@@ -56,6 +57,9 @@ public class ItemChangeIndexController extends BaseController {
         
         // 保存処理
         ItemService.changeSortOrder(targetItem, order);
+        
+        // キャッシュクリア
+        MemcacheService.deleteItem(targetItem, spot.getBaseLang());
         
         
         requestScope("status", "OK");

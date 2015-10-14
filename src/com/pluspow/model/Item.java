@@ -38,7 +38,6 @@ public class Item implements Serializable {
     /**
      * 値段
      */
-    @Attribute(unindexed = true)
     private double price;
     
     /**

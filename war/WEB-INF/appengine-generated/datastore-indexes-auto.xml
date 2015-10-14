@@ -1,4 +1,29 @@
-<!-- Indices written at Wed, 7 Oct 2015 16:26:31 JST -->
+<!-- Indices written at Fri, 30 Oct 2015 18:40:17 JST -->
 
-<datastore-indexes/>
+<datastore-indexes>
 
+    <!-- Used 3 times in query history -->
+    <datastore-index kind="SpotPayPlan" ancestor="false" source="auto">
+        <property name="spotRef" direction="asc"/>
+        <property name="endDate" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 3 times in query history -->
+    <datastore-index kind="LangUnit" ancestor="false" source="auto">
+        <property name="invalid" direction="asc"/>
+        <property name="slim3.classHierarchyList" direction="asc"/>
+        <property name="spotRef" direction="asc"/>
+        <property name="transStatus" direction="asc"/>
+        <property name="createDate" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 5 times in query history -->
+    <datastore-index kind="Item" ancestor="false" source="auto">
+        <property name="activity" direction="asc"/>
+        <property name="invalid" direction="asc"/>
+        <property name="langs" direction="asc"/>
+        <property name="spotRef" direction="asc"/>
+        <property name="sortOrder" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>

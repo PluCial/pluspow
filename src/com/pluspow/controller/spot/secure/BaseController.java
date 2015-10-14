@@ -15,7 +15,7 @@ import com.pluspow.model.Spot;
 import com.pluspow.service.SpotService;
 import com.pluspow.utils.PathUtils;
 
-public abstract class BaseController extends com.pluspow.controller.BaseController {
+public abstract class BaseController extends com.pluspow.controller.AppBaseController {
 
     @Override
     protected Navigation run() throws Exception {

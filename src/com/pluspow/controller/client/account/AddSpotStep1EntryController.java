@@ -29,7 +29,7 @@ public class AddSpotStep1EntryController extends BaseController {
         String spotId = asString("spotId");
         String address = asString("address");
         int floor = asInteger("floor");
-        String phoneNumber = asString("phoneNumber");
+        
         
         // ------------------------------------------
         // spotId重複チェック
@@ -72,25 +72,9 @@ public class AddSpotStep1EntryController extends BaseController {
         }
         
         // ------------------------------------------
-        // 国のサポートチェック
+        // 国の取得
         // ------------------------------------------
-        Country country = null;
-        try {
-            country = Country.valueOf(geoModel.getCountryShortName());
-            
-            if(!country.isSupport()) {
-                throw new IllegalArgumentException();
-            }
-            
-        }catch(IllegalArgumentException e) {
-            Validators v = new Validators(request);
-            v.add("address",
-                new NGValidator(geoModel.getCountryLongName() + "のスポットは現在サポートしていません。"));
-            v.validate();
-
-            return forward("/client/account/addSpotStep1.jsp");
-
-        }
+        Country country = Country.valueOf(geoModel.getCountryShortName());
         
         // ------------------------------------------
         // スポットエントリーの設定
@@ -98,11 +82,9 @@ public class AddSpotStep1EntryController extends BaseController {
         spot = SpotService.setStep1(
             client, 
             spotId, 
-            client.getLang(), 
             country, 
             address, 
             floor, 
-            phoneNumber, 
             geoModel);
         
         // セッションへ保存
@@ -133,13 +115,6 @@ public class AddSpotStep1EntryController extends BaseController {
         v.add("floor", 
             v.required("フロアーを入力してください。"),
             v.integerType("半角数字を入力してください。")
-                );
-        
-        // 電話番号
-        v.add("phoneNumber", 
-            v.required("電話番号を入力してください。"),
-            v.minlength(10, "電話番号は正しくありません。"),
-            v.regexp("^[0-9-]+$", "電話番号は正しくありません。")
                 );
         
         // オーナー

@@ -1,0 +1,25 @@
+@CHARSET "utf-8";
+
+    	#about {
+    		box-shadow: inset 0 0 20px rgba(0,0,0, 0.3);
+    		-webkit-box-shadow: inset 0 0 20px rgba(0,0,0, 0.3);
+    		-moz-box-shadow: inset 0 0 20px rgba(0,0,0, 0.3);
+   			-o-box-shadow: inset 0 0 20px rgba(0,0,0, 0.3);
+    	}
+     	#about .action {
+    		margin-top: 30px;
+    	}
+    	#about h3 {
+    		margin-top: 30px;
+    	}
+    	#about {
+    		padding-top: 5%;
+    	}
+    	#about .contents {
+    		padding: 30px;
+    		position: relative;
+    		padding-top: 50px;
+    	}
+    	#about .img-contents {
+			padding: 15px;
+    	}

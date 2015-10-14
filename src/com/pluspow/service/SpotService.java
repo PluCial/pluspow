@@ -9,14 +9,12 @@ import java.util.Map;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slim3.datastore.Datastore;
-import org.slim3.memcache.Memcache;
 import org.slim3.util.StringUtil;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.App;
-import com.pluspow.constants.MemcacheKey;
 import com.pluspow.dao.SpotDao;
 import com.pluspow.enums.Country;
 import com.pluspow.enums.DayOfWeek;
@@ -34,6 +32,7 @@ import com.pluspow.exception.GeocoderLocationTypeException;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.exception.PlanLimitException;
+import com.pluspow.exception.SearchApiException;
 import com.pluspow.exception.TooManyException;
 import com.pluspow.exception.TransException;
 import com.pluspow.meta.SpotMeta;
@@ -65,16 +64,14 @@ public class SpotService {
     public static Spot setStep1(
             Client client,
             String spotId, 
-            Lang lang,
             Country country,
             String address, 
             int floor,
-            String phoneNumber, 
             GeoModel geoModel) {
         
         Spot model = new Spot();
         model.setSpotId(spotId);
-        model.setBaseLang(lang);
+        model.setBaseLang(client.getLang());
         model.setEmail(client.getEmail());
         
         // 住所情報の設定
@@ -82,8 +79,8 @@ public class SpotService {
         model.setFloor(floor);
         
         // 座標の設定
-        model.setLat(geoModel.getLat().floatValue());
-        model.setLng(geoModel.getLng().floatValue());
+        model.setLat(geoModel.getLat().doubleValue());
+        model.setLng(geoModel.getLng().doubleValue());
         
         // 国の設定
         model.setCountry(country);
@@ -92,20 +89,27 @@ public class SpotService {
         model.getClientRef().setModel(client);
         
         // 言語ユニットの設定
-        model.setLangUnit(SpotLangUnitService.getNewModel(model, lang, phoneNumber, geoModel));
+        SpotLangUnit info = new SpotLangUnit();
+        info.getSpotRef().setModel(model);
+        info.setBaseLang(client.getLang());
+        info.setLang(client.getLang());
+        SpotLangUnitService.setSpotGeo(info, geoModel);
+        model.setLangUnit(info);
         
         return model;
     }
     
     /**
      * スポットの追加(ステップ２の設定 永久化しない)
-     * @param spotId
-     * @param address
+     * @param model
+     * @param phoneCountry
      * @param phoneNumber
-     * @param email
-     * @return
+     * @param name
+     * @param catchCopy
+     * @param content
      */
-    public static void setStep2(Spot model, String name, String catchCopy, String content) {
+    public static void setStep2(Spot model, Country phoneCountry,
+            String phoneNumber,String name, String catchCopy, String content) {
         
         // 名前
         SpotTextRes nameRes = new SpotTextRes();
@@ -124,6 +128,10 @@ public class SpotService {
         detailRes.setStringToContent(content);
         detailRes.setRole(TextResRole.SPOT_DETAIL);
         model.setDetailRes(detailRes);
+        
+        // 電話番号
+        model.getLangUnit().setPhoneCountry(phoneCountry);
+        model.getLangUnit().setPhoneNumber(new PhoneNumber(phoneNumber));
     }
     
     /**
@@ -133,10 +141,10 @@ public class SpotService {
      * @param client
      * @return
      * @throws TooManyException
+     * @throws ObjectNotExistException 
      */
     public static Spot startFreePlan(
-            Spot spot,
-            Client client) throws TooManyException {
+            Spot spot) throws TooManyException, ObjectNotExistException {
         
         // SpotIdの重複確認(時間差で登録される場合があるため、念のための最終チェック)
         if(dao.getBySpotId(spot.getSpotId()) != null) {
@@ -188,6 +196,13 @@ public class SpotService {
                 tx.rollback();
             }
         }
+        
+        // 検索APIの登録
+        try {
+            SearchApiService.putDocument(spot, spot.getBaseLang());
+        }catch(Exception e) {
+            // 影響する機能が多いため、更新できないとしても無視。
+        }
 
         return spot;
     }
@@ -220,27 +235,42 @@ public class SpotService {
     
     /**
      * スポットを取得
+     * <pre>
+     * 付属情報のみをキャッシュし、スポットの基本情報は毎回取得する
+     * </pre>
      * @param keyString
      * @return
-     * @throws ArgumentException 
      * @throws NoContentsException 
      */
     public static Spot getSpot(String spotId, Lang lang) throws ObjectNotExistException {
         
-        Spot model = Memcache.get(MemcacheKey.getSpotKey(spotId, lang));
-        if(model != null) return model;
-
-        model = getSpotModelOnly(spotId);
-        
-        // 付属情報の追加
+        // ---------------------------------------------------
+        // キャッシュからスポット情報を取得
+        // ---------------------------------------------------
+        Spot model = null;
         try {
-            setSpotInfo(model, lang);
-            
-        } catch (ArgumentException e) {
-            // langUnitListを取得する時に引数のSpotにプランオブジェクトが存在しない場合に発生するが、
-            // setSpotInfo() 内でプランを設定しているため、発生することがありません。
-            // 呼び出し側に対してこのExceptionを隠します。
-        }
+            model = MemcacheService.getSpot(spotId, lang);
+
+        }catch(ObjectNotExistException e) {
+
+            // ---------------------------------------------------
+            // キャッシュに存在しない場合は付属情報含めをDBから再取得
+            // ---------------------------------------------------
+            model = getSpotModelOnly(spotId);
+            try {
+                setSpotInfo(model, lang);
+
+            } catch (ArgumentException e1) {
+                // langUnitListを取得する時に引数のSpotにプランオブジェクトが存在しない場合に発生するが、
+                // setSpotInfo() 内でプランを設定しているため、発生することがありません。
+                // 呼び出し側に対してこのExceptionを隠します。
+            }
+
+            // ---------------------------------------------------
+            // キャッシュの追加
+            // ---------------------------------------------------
+            MemcacheService.addSpot(model, lang);
+        };
 
         return model;
     }
@@ -300,7 +330,7 @@ public class SpotService {
         
         // ---------------------------------------------------
         // スポットのアクティビティチェック・更新
-        // アイテムを削除した場合の処理分散のため、100回に一回ここで
+        // アイテムを削除した場合の処理分散のため、
         // チェックし、必要に応じて更新する。
         // また、繰り返し処理の途中でCollectionが変更するとConcurrentModificationException
         // が発生するため、Iteratorで繰り返し処理を行う。
@@ -320,14 +350,20 @@ public class SpotService {
                 }
             }
         }
-        // 更新
+        // 更新があった場合
         if(isChanged) {
             spot.getLangUnit().setActivitys(activitys);
             SpotLangUnitService.update(spot.getLangUnit());
             
-         // TODO: ドキュメントのアクティビティを更新
+            // ドキュメントのアクティビティを更新
+            try {
+                SearchApiService.putDocument(spot, lang);
+            }catch(Exception e) {
+                // 影響する機能が多いため、更新できないとしても無視。
+            }
         }
     }
+
     
     /**
      * クライアントからベース言語スポットリストを取得
@@ -354,18 +390,20 @@ public class SpotService {
     /**
      * 機械翻訳
      * @param spot
+     * @param baseLang
      * @param transLang
      * @throws ArgumentException
      * @throws TransException
      * @throws IOException
-     * @throws DataMismatchException 
-     * @throws PlanLimitException 
+     * @throws DataMismatchException
+     * @throws PlanLimitException
      */
     public static void machineTrans(
             Spot spot,
+            Lang baseLang,
             Lang transLang) throws ArgumentException, TransException, IOException, DataMismatchException, PlanLimitException {
         
-        if(spot.getBaseLang() == transLang) throw new ArgumentException();
+        if(baseLang == transLang) throw new ArgumentException();
         
         ServicePlan plan = SpotService.getSpotPlan(spot);
         
@@ -385,7 +423,8 @@ public class SpotService {
         // ---------------------------------------------------
         List<SpotTextRes> transContentsList;
         try {
-            transContentsList = SpotTextResService.getResourcesList(spot, spot.getBaseLang());
+            transContentsList = SpotTextResService.getResourcesList(spot, baseLang);
+            if(transContentsList.size() <= 0) throw new ObjectNotExistException();
 
         } catch (ObjectNotExistException e2) {
             // 翻訳するコンテンツがなければそのまま終了
@@ -442,7 +481,7 @@ public class SpotService {
                 // ---------------------------------------------------
                 // 新規翻訳の保存処理
                 // ---------------------------------------------------
-                addLang(tx, spot, transLang, transContentsList, transResult);
+                addLang(tx, spot, baseLang, transLang, transContentsList, transResult);
             }
             
             // 翻訳クレジットの更新
@@ -479,6 +518,13 @@ public class SpotService {
                 tx.rollback();
             }
         }
+        
+        // 検索APIの登録
+        try {
+            SearchApiService.putDocument(spot, transLang);
+        }catch(Exception e) {
+            // 影響する機能が多いため、更新できないとしても無視。
+        }
 
     }
     
@@ -495,9 +541,10 @@ public class SpotService {
      * @throws ArgumentException
      * @throws TooManyException
      */
-    private static void addLang(
+    private static SpotLangUnit addLang(
             Transaction tx,
             Spot spot, 
+            Lang baseLang,
             Lang transLang,
             List<SpotTextRes> transContentsList,
             Document transResult) throws IOException, GeocodeStatusException, GeocoderLocationTypeException, ArgumentException, TooManyException {
@@ -531,12 +578,22 @@ public class SpotService {
         // ---------------------------------------------------
         // 言語情報の追加
         // ---------------------------------------------------
-        SpotLangUnitService.add(tx, spot, transLang, TransType.MACHINE, TransStatus.TRANSLATED, geoModel);
+        SpotLangUnit langUnit = SpotLangUnitService.add(
+            tx, 
+            spot, 
+            baseLang, 
+            transLang, 
+            spot.getPhoneCountry(), 
+            spot.getPhoneNumber(),
+            TransType.MACHINE, 
+            TransStatus.TRANSLATED, geoModel);
 
         // ---------------------------------------------------
         // Gcsリソースの複製
         // ---------------------------------------------------
         SpotGcsResService.replicationOtherLangRes(tx, spot, transLang);
+        
+        return langUnit;
     }
     
     /**
@@ -594,8 +651,9 @@ public class SpotService {
      * @throws ObjectNotExistException 
      * @throws ArgumentException 
      * @throws PlanLimitException 
+     * @throws SearchApiException 
      */
-    public static void setInvalid(Spot spot, Lang lang, boolean invalid) throws ObjectNotExistException, ArgumentException, PlanLimitException {
+    public static void setInvalid(Spot spot, Lang lang, boolean invalid) throws ObjectNotExistException, ArgumentException, PlanLimitException, SearchApiException {
         
         // ベース言語の有効無効切り替えはできない。
         if(spot.getBaseLang() == lang) throw new ArgumentException();
@@ -620,6 +678,18 @@ public class SpotService {
             langUnit.setInvalid(invalid);
             Datastore.put(tx, langUnit);
             
+            // 検索APIの更新
+            try {
+                if(invalid) {
+                    SearchApiService.deleteSpot(spot, lang);
+
+                }else {
+                    SearchApiService.putDocument(spot, lang);
+                }
+            }catch(Exception e) {
+                throw new SearchApiException();
+            }
+            
             // コミット
             tx.commit();
             
@@ -642,6 +712,7 @@ public class SpotService {
     public static void setPhoneNumber(
             Spot spot, 
             Lang lang, 
+            Country phoneCountry,
             boolean isDisplayFlg, 
             String phoneNumber) throws ObjectNotExistException, ArgumentException {
         
@@ -653,9 +724,9 @@ public class SpotService {
         Transaction tx = Datastore.beginTransaction();
         try {
             if(isDisplayFlg) {
-                if(StringUtil.isEmpty(phoneNumber)) throw new ArgumentException();
+                if(phoneCountry == null || StringUtil.isEmpty(phoneNumber)) throw new ArgumentException();
+                langUnit.setPhoneCountry(phoneCountry);
                 langUnit.setPhoneNumber(new PhoneNumber(phoneNumber));
-                
             }
             
             langUnit.setPhoneDisplayFlg(isDisplayFlg);
@@ -703,10 +774,24 @@ public class SpotService {
             spot.setInvalid(true);
             Datastore.put(tx, spot);
             
-            // TODO: テキスト検索Documentの削除
+            // 検索APIからの削除
+            // (プランによってはspot.getLangs() からすべて取得できない可能性があるため、
+            // SpotLangUnitServiceから言語リストを取得。未登録のものを削除)
+            List<SpotLangUnit> langUnitList = SpotLangUnitService.getAllList(spot);
+            for(SpotLangUnit langUnit: langUnitList) {
+                try {
+                    SearchApiService.deleteSpot(spot, langUnit.getLang());
+            
+                }catch(IllegalArgumentException e) {
+                    // ドキュメントが存在しない場合のエラーをキャッチし、無視する
+                }
+            }
             
             // コミット
             tx.commit();
+            
+        } catch (ObjectNotExistException e) {
+            return;
             
         }finally {
             if(tx.isActive()) {

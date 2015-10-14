@@ -3,6 +3,7 @@ package com.pluspow.controller.client.account.dashboard;
 import org.slim3.controller.Navigation;
 import org.slim3.util.StringUtil;
 
+import com.pluspow.controller.AppBaseController;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.exception.NoLoginException;
 import com.pluspow.exception.ObjectNotExistException;
@@ -11,7 +12,7 @@ import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
 import com.pluspow.service.SpotService;
 
-public abstract class BaseController extends com.pluspow.controller.BaseController {
+public abstract class BaseController extends AppBaseController {
 
     @Override
     protected Navigation run() throws Exception {

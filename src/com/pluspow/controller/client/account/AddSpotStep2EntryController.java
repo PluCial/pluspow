@@ -3,10 +3,12 @@ package com.pluspow.controller.client.account;
 import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Validators;
 
+import com.pluspow.enums.Country;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
 import com.pluspow.service.SpotService;
 import com.pluspow.utils.PathUtils;
+import com.pluspow.validator.NGValidator;
 
 public class AddSpotStep2EntryController extends BaseController {
 
@@ -24,15 +26,34 @@ public class AddSpotStep2EntryController extends BaseController {
         String name = asString("name");
         String catchCopy = asString("catchCopy");
         String content = asString("content");
+        String phoneNumber = asString("phoneNumber");
+        
+        // ------------------------------------------
+        // 国際電話番号の入力チェック
+        // ------------------------------------------
+        String phoneCountryString = asString("phoneCountryString");
+        Country phoneCountry = null;
+        try {
+            phoneCountry = Country.valueOf(phoneCountryString);
+
+        }catch(Exception e) {
+            Validators v = new Validators(request);
+            v.add("phoneCountryString",
+                new NGValidator("国際電話番号コードが正しくありません。"));
+
+            v.validate();
+
+            return forward("/client/account/addSpotStep2.jsp");
+        }
         
         
         // ------------------------------------------
         // スポットエントリーの設定
         // ------------------------------------------
         Spot spot = sessionScope("spotEntryInfo");
-        SpotService.setStep2(spot, name, catchCopy, content);
+        SpotService.setStep2(spot, phoneCountry, phoneNumber, name, catchCopy, content);
         
-        SpotService.startFreePlan(spot, client);
+        SpotService.startFreePlan(spot);
         
         // セッション変更
         removeSessionScope("spotEntryInfo");
@@ -63,6 +84,18 @@ public class AddSpotStep2EntryController extends BaseController {
         v.add("content", 
             v.required("スポットの説明を入力してください。")
         );
+        
+        // 国際電話の国
+        v.add("phoneCountryString", 
+            v.required("国際電話番号コードを選択してください。")
+                );
+        
+        // 電話番号
+        v.add("phoneNumber", 
+            v.required("電話番号を入力してください。"),
+            v.minlength(10, "電話番号は正しくありません。"),
+            v.regexp("^[0-9-]+$", "電話番号は正しくありません。")
+                );
         
         return v.validate();
     }

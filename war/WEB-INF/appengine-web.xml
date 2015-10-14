@@ -17,4 +17,5 @@
 	</system-properties>
 	<sessions-enabled>true</sessions-enabled>
 	<threadsafe>true</threadsafe>
+	<ssl-enabled>true</ssl-enabled>
 </appengine-web-app>

@@ -12,6 +12,8 @@ Lang localeLang =(Lang) request.getAttribute("localeLang");
 <fmt:setLocale value="<%=localeLang.toString() %>" />
 	<section id="footer" class="footer service-footer">
 		<div class="container">
+		
+			<%if(localeLang.isAvailable()) { %>
 			<div class="row">
 				<div class="col-md-10 col-md-offset-2 footer-widget">
  					<h3 class="widget-title"><%=App.APP_DISPLAY_NAME %></h3>
@@ -46,6 +48,7 @@ Lang localeLang =(Lang) request.getAttribute("localeLang");
 				</div>
 
 			</div><!--/ Row end -->
+			<%} %>
 			
 			<div class="row">
 				<div class="col-md-12 text-center">

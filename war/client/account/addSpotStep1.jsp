@@ -84,27 +84,15 @@ int floor = StringUtil.isEmpty(floorString) ? 1 : Integer.valueOf(floorString);
 									
  									<div class="row">
  										<div class="col-xs-5 col-xs-offset-7">
-									<div class="form-group ${f:errorClass('floor','has-error')}">
-										<%if (errors.containsKey("floor")){ %>
-										<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> ${errors.floor}</label>
-										<%} %>
-										<div class="input-group">
-											<input type="number" name="floor" class="form-control" min="1" value="<%=floor %>" style="text-align: right;">
-											<span class="input-group-addon">階</span>
-										</div>
-									</div>
-									</div>
-									</div>
-									
-									<div class="form-group ${f:errorClass('phoneNumber','has-error')}">
-										<%if (errors.containsKey("phoneNumber")){ %>
-										<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> ${errors.phoneNumber}</label>
-										<%}else { %>
-										<label for="exampleInputEmail1">電話番号</label>
-										<%} %>
-										<div class="input-group">
-											<span class="input-group-addon"><i class="fa fa-phone"></i></span>
-											<input type="text" ${f:text("phoneNumber")} class="form-control" placeholder="092-1111-1111" required>
+											<div class="form-group ${f:errorClass('floor','has-error')}">
+												<%if (errors.containsKey("floor")){ %>
+												<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> ${errors.floor}</label>
+												<%} %>
+												<div class="input-group">
+													<input type="number" name="floor" class="form-control" min="1" value="<%=floor %>" style="text-align: right;">
+													<span class="input-group-addon">階</span>
+												</div>
+											</div>
 										</div>
 									</div>
                     

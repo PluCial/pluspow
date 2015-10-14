@@ -5,11 +5,11 @@ import java.util.Properties;
 
 import org.slim3.controller.Navigation;
 
-import com.pluspow.App;
+import com.pluspow.controller.AppBaseController;
 import com.pluspow.enums.Lang;
 import com.pluspow.model.Client;
 
-public abstract class BaseController extends com.pluspow.controller.BaseController {
+public abstract class BaseController extends AppBaseController {
 
     @Override
     protected Navigation run() throws Exception {
@@ -17,19 +17,7 @@ public abstract class BaseController extends com.pluspow.controller.BaseControll
         // -------------------------------------
         // 言語の設定
         // -------------------------------------
-        Lang lang = null;
-        Lang paramLang = getLangByParameter();
-        Lang subDomainLang = getLangBySubDomain();
-
-        if(paramLang != null) {
-            lang = paramLang;
-            
-        }else if(paramLang == null && subDomainLang != null) {
-            lang = subDomainLang;
-            
-        }else {
-            lang = App.APP_BASE_LANG;
-        }
+        Lang lang = getLang();
         
         requestScope("localeLang", lang);
         Properties appProp = getAppProp(lang);

@@ -12,6 +12,7 @@ import com.pluspow.model.Client;
 import com.pluspow.model.Item;
 import com.pluspow.model.Spot;
 import com.pluspow.service.ItemService;
+import com.pluspow.service.MemcacheService;
 import com.pluspow.service.SpotService;
 import com.pluspow.utils.PathUtils;
 
@@ -26,6 +27,9 @@ public class SetLangInvalidController extends BaseController {
         switch(objectType) {
         case SPOT:
             SpotService.setInvalid(spot, lang, invalid);
+            
+            // キャッシュクリア(すべての言語)
+            MemcacheService.deleteSpotAll(spot);
             
             // ベース言語ページにリダイレクト
             return redirect(PathUtils.spotPage(spot.getSpotId(), spot.getBaseLang(), isLocal(), true));
@@ -46,7 +50,11 @@ public class SetLangInvalidController extends BaseController {
                 throw new NoContentsException();
             }
             
-            ItemService.setInvalid(item, lang, invalid);
+            ItemService.setInvalid(spot, item, lang, invalid);
+            
+            // キャッシュクリア(spot のアクティビティの更新があるため、spotのキャッシュもクリア)
+            MemcacheService.deleteSpotAll(spot);
+            MemcacheService.deleteItemAll(item);
             
             // 現在の言語ページにリダイレクト
             return redirect(PathUtils.spotPage(spot.getSpotId(), lang, isLocal(), true));

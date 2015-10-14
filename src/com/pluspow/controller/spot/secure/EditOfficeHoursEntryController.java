@@ -6,6 +6,7 @@ import org.slim3.controller.validator.Validators;
 import com.pluspow.enums.DayOfWeek;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
+import com.pluspow.service.MemcacheService;
 import com.pluspow.service.OfficeHoursService;
 
 public class EditOfficeHoursEntryController extends BaseController {
@@ -49,6 +50,8 @@ public class EditOfficeHoursEntryController extends BaseController {
             OfficeHoursService.setIsNotOpen(spot, dayOfWeek);
         }
         
+        // キャッシュクリア
+        MemcacheService.deleteSpotAll(spot);
         
         requestScope("status", "OK");
         return forward("/client/ajax_response.jsp");

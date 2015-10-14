@@ -7,6 +7,7 @@ import org.slim3.datastore.Datastore;
 import com.google.appengine.api.datastore.Email;
 import com.google.appengine.api.datastore.Key;
 import com.pluspow.dao.SignupEntryDao;
+import com.pluspow.enums.Lang;
 import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.meta.SignupEntryMeta;
 import com.pluspow.model.Entry;
@@ -32,12 +33,16 @@ public class SignupEntryService {
     
     /**
      * PUT
-     * @param model
+     * @param lang
+     * @param name
+     * @param email
+     * @param password
      * @return
      */
-    public static SignupEntry add(String name, String email, String password) {
+    public static SignupEntry add(Lang lang, String name, String email, String password) {
         
         SignupEntry model = new SignupEntry();
+        model.setLang(lang);
         model.setName(name);
         model.setEmail(new Email(email));
         model.setPassword(password);

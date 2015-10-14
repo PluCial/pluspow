@@ -8,6 +8,7 @@ import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.datastore.PostalAddress;
 import com.google.appengine.api.datastore.Transaction;
 import com.pluspow.dao.SpotLangUnitDao;
+import com.pluspow.enums.Country;
 import com.pluspow.enums.Lang;
 import com.pluspow.enums.TransStatus;
 import com.pluspow.enums.TransType;
@@ -72,25 +73,6 @@ public class SpotLangUnitService extends LangUnitService {
         return list;
     }
     
-//    /**
-//     * リストの取得
-//     * @param spot
-//     * @param invalid
-//     * @return
-//     * @throws ObjectNotExistException 
-//     */
-//    public static List<SpotLangUnit> getList(Spot spot, boolean invalid) throws ObjectNotExistException {
-//
-//        List<SpotLangUnit> allUnitList = getList(spot);
-//        
-//        List<SpotLangUnit> unitList = new ArrayList<SpotLangUnit>();
-//        for(SpotLangUnit unit: allUnitList) {
-//            if(unit.isInvalid() == invalid) unitList.add(unit);
-//        }
-//        
-//        return unitList;
-//    }
-    
     /**
      * 新しいモデルの取得(未永久化)
      * @param spot
@@ -98,29 +80,27 @@ public class SpotLangUnitService extends LangUnitService {
      * @param geoModel
      * @return
      */
-    public static SpotLangUnit getNewModel(Spot spot, Lang lang, String phoneNumber, GeoModel geoModel) {
-        
-        SpotLangUnit info = new SpotLangUnit();
-        
-        // 言語の設定
-        info.setLang(lang);
-        
-        // ベース言語の場合
-        if(spot.getBaseLang() == lang) {
-            info.setPhoneDisplayFlg(true);
-        }
-        
-        // Spotキーの設定
-        info.getSpotRef().setModel(spot);
-        
-        // 電話番号の設定
-        info.setPhoneNumber(new PhoneNumber(phoneNumber));
-        
-        // GEO 情報の設定
-        setSpotGeo(info, geoModel);
-        
-        return info;
-    }
+//    protected static SpotLangUnit getNewModel(Spot spot, Lang baseLang, Lang lang, String phoneNumber, GeoModel geoModel) {
+//        
+//        SpotLangUnit info = new SpotLangUnit();
+//        
+//        // 言語の設定
+//        info.setBaseLang(baseLang);
+//        info.setLang(lang);
+//        
+//        // Spotキーの設定
+//        info.getSpotRef().setModel(spot);
+//        
+//        // 電話番号の設定(Step1では電話番号が追加されないためNull判断を行う)
+//        if(phoneNumber != null) {
+//            info.setPhoneNumber(new PhoneNumber(phoneNumber));
+//        }
+//        
+//        // GEO 情報の設定
+//        setSpotGeo(info, geoModel);
+//        
+//        return info;
+//    }
     
     /**
      * 追加(用コミット)
@@ -142,7 +122,6 @@ public class SpotLangUnitService extends LangUnitService {
         
         // キーの設定
         info.setKey(createKey(spot));
-        info.setBaseLang(true);
         info.setTransStatus(TransStatus.TRANSLATED);
         
         // 保存
@@ -155,25 +134,31 @@ public class SpotLangUnitService extends LangUnitService {
      * 追加(用コミット)
      * @param tx
      * @param spot
+     * @param baseLang
      * @param lang
-     * @param geoModel
+     * @param phoneCountry
+     * @param phoneNumber
      * @param transType
      * @param trans
+     * @param geoModel
      * @return
-     * @throws ArgumentException 
+     * @throws ArgumentException
      * @throws TooManyException
      */
     protected static SpotLangUnit add(
             Transaction tx, 
             Spot spot, 
+            Lang baseLang,
             Lang lang, 
+            Country phoneCountry,
+            String phoneNumber,
             TransType transType, 
             TransStatus trans,
             GeoModel geoModel
             ) throws ArgumentException, TooManyException {
         
         // baseLangの場合はエラー
-        if(spot.getBaseLang() == lang) throw new ArgumentException();
+        if(baseLang == lang) throw new ArgumentException();
         
         try {
             // 既に存在した場合はエラー
@@ -181,8 +166,22 @@ public class SpotLangUnitService extends LangUnitService {
             throw new TooManyException();
             
         } catch (ObjectNotExistException e) {}
+
+        SpotLangUnit info = new SpotLangUnit();
         
-        SpotLangUnit info =  getNewModel(spot, lang, spot.getPhoneNumber(), geoModel);
+        // 言語の設定
+        info.setBaseLang(baseLang);
+        info.setLang(lang);
+        
+        // Spotキーの設定
+        info.getSpotRef().setModel(spot);
+        
+        // 電話番号の設定
+        info.setPhoneCountry(phoneCountry);
+        info.setPhoneNumber(new PhoneNumber(phoneNumber));
+        
+        // GEO 情報の設定
+        setSpotGeo(info, geoModel);
         
         // キーの設定
         info.setKey(createKey(spot));
@@ -227,7 +226,7 @@ public class SpotLangUnitService extends LangUnitService {
      * @param spot
      * @param geoModel
      */
-    private static void setSpotGeo(SpotLangUnit info, GeoModel geoModel) {
+    protected static void setSpotGeo(SpotLangUnit info, GeoModel geoModel) {
         info.setGeoPostalAddress(new PostalAddress(geoModel.getPostalCodeLongName()));
         info.setDisplayAddress(geoModel.getFormattedAddress());
         info.setGeoCountry(geoModel.getCountryLongName());

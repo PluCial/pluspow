@@ -8,8 +8,8 @@ public enum Lang {
     bn("bn", "ベンガル語", Country.BD, "বাঙালি", false),
     be("be", "ベラルーシ語", Country.BY, "беларускі", false),
     bg("bg", "ブルガリア語", Country.BG, "български", false),
-    zhch("zh-CN","中国語 (簡体)", Country.CN, "中文（中国）", true),
-    zhtw("zh-TW", "中国語 (繁体)", Country.TW, "中國（台灣）", true),
+    zhch("zh-CN","中国語 (簡体)", Country.CN, "中文（中国）", false),
+    zhtw("zh-TW", "中国語 (繁体)", Country.TW, "中國（台灣）", false),
     hr("hr", "クロアチア語", Country.HR, "hrvatska", false),
     cs("cs", "チェコ語", Country.CZ, "čeština", false),
     da("da", "デンマーク語", Country.DK, "danske", false),
@@ -24,11 +24,11 @@ public enum Lang {
     hi("hi", "ヒンディー語", Country.IN, "हिन्दी", false),
     hu("hu", "ハンガリー語", Country.HU, "magyar", false),
     is("is", "アイスランド語", Country.IS, "Íslenska", false),
-    id("id", "インドネシア語", Country.ID, "indonesia", true),
+    id("id", "インドネシア語", Country.ID, "indonesia", false),
     ga("ga", "アイルランド語", Country.IE, "irish", false),
     it("it", "イタリア語", Country.IT, "italiano", false),
-    ja("ja", "日本語", Country.JP, "日本語", false),
-    ko("ko", "韓国語", Country.KR, "한국어", true),
+    ja("ja", "日本語", Country.JP, "日本語", true),
+    ko("ko", "韓国語", Country.KR, "한국어", false),
     la("la", "ラテン語", Country.VA, "Latine", false),
     lv("lv", "ラトビア語 (レット語)", Country.LV, "Latvijā", false),
     mk("mk", "マカドニア語", Country.MK, "ПЈР македонски", false), 
@@ -42,9 +42,9 @@ public enum Lang {
     ru("ru", "ロシア語", Country.RU, "Русский", false),
     sk("sk", "スロバキア語", Country.SK, "slovenský", false),
     sl("sl", "スロヴェニア語", Country.SI, "slovenščina", false),
-    es("es", "スペイン語", Country.ES, "Español", true),
+    es("es", "スペイン語", Country.ES, "Español", false),
     sv("sv", "スウェーデン語", Country.SE, "svenska", false),
-    th("th", "タイ語", Country.TH, "ภาษาไทย", true),
+    th("th", "タイ語", Country.TH, "ภาษาไทย", false),
     tr("tr", "トルコ語", Country.TR, "Türk", false),
     uk("uk", "ウクライナ語", Country.UA, "Український", false),
     lt("lt", "リトアニア語", Country.LT, "Lietuvos", false),
@@ -80,13 +80,13 @@ public enum Lang {
     private String langKey;
     private Country country;
     private String name;
-    private boolean humanTransSupport;
+    private boolean available;
 
-    private Lang(String langKey,String nameJp, Country country, String name, boolean humanTransSupport) {
+    private Lang(String langKey,String nameJp, Country country, String name, boolean available) {
         this.langKey = langKey;
         this.country = country;
         this.name = name;
-        this.humanTransSupport = humanTransSupport;
+        this.available = available;
     }
 
     public String getLangKey() {
@@ -97,11 +97,19 @@ public enum Lang {
         return name;
     }
 
-    public boolean isHumanTransSupport() {
-        return humanTransSupport;
-    }
-
     public Country getCountry() {
         return country;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+    
+    /**
+     * TODO: 人力翻訳機能実装時に削除
+     * @return
+     */
+    public boolean isHumanTransSupport() {
+        return false;
     }
 }

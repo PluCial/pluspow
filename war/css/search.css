@@ -1,0 +1,62 @@
+@CHARSET "utf-8";
+
+.search-results-container {
+	padding-left:15px;
+	padding-right:15px;
+	max-width: 1400px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.spot-box {
+	height: 492px;
+	overflow: hidden;
+    background-position: center;
+    background-size: cover;
+    display: table;
+    padding: 30px 10px 30px 10px;
+    position: relative;
+    width: 100%;
+    margin-bottom: 25px;
+}
+	.spot-box>a {
+		display: block;
+		padding: 15px;
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	    bottom: 0;
+	    right: 0;
+	    width: 100%;
+	    height: 100%;
+	}
+	.spot-box>a>span {
+		display: block;
+		color: #fff;
+		font-size:20px;
+		width: 40px;
+    	height: 40px;
+    	line-height: 40px;
+    	display: inline-block;
+    	text-align: center;
+		font-family: 'JaapokkiRegular';
+		text-transform: uppercase;
+		text-shadow: 1px 1px 1px rgba(0,0,0,.3),1px 1px 1px rgba(0,0,0,.1);
+	}
+
+	.spot-box .contents {
+		display: table-cell;
+		vertical-align: bottom;
+	}
+		.spot-box .contents strong, .spot-box .contents span{
+			text-shadow: 1px 1px 3px rgba(0,0,0,.7),1px 1px 5px rgba(0,0,0,.3);
+			color: #fff;
+			display: block;
+		}
+		
+		.spot-box .contents strong {
+    		font-size: 32px;
+			font-weight: bold;
+			margin-bottom:15px;
+		}
+		

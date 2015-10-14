@@ -4,6 +4,7 @@ import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Validators;
 
 import com.pluspow.enums.EntryType;
+import com.pluspow.enums.Lang;
 import com.pluspow.exception.ArgumentException;
 import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.SignupEntry;
@@ -16,7 +17,7 @@ import com.pluspow.validator.PasswordConfirmationValidator;
 public class RegisterEntryController extends BaseController {
 
     @Override
-    protected Navigation execute() throws Exception {
+    protected Navigation execute(Lang lang) throws Exception {
         // 入力チェック
         if (!isPost() || !validate()) {
             return forward("/client/register");
@@ -32,7 +33,7 @@ public class RegisterEntryController extends BaseController {
         }
         
         // エントリーを保存
-        SignupEntry entry = SignupEntryService.add(name, email, password);
+        SignupEntry entry = SignupEntryService.add(lang, name, email, password);
         
         String registerUrl = super.getAccessDomeinUrl() + "/client/EntryComplete?type=" + EntryType.REGISTER.toString() + "&entryId=" + entry.getKey().getName();
         

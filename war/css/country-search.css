@@ -1,0 +1,195 @@
+@CHARSET "utf-8";
+
+    	.country-search {
+  			position: relative;
+  			padding: 0;
+    	}
+    	
+    	.country-search .search-wrapper {
+    		position: relative;
+  			padding: 0;
+  			margin:0;
+    	}
+    	
+    	.country-search .video-wrapper {
+    		position: absolute;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    height: 100%;
+		    overflow: hidden;
+		    z-index:-100;
+    	}
+    	
+    	.country-search .video-wrapper video {
+    		display: block;
+		    min-height: 100%;
+		    min-width: 100%;
+		    max-width: none;
+		    height: auto;
+		    width: auto;
+		    position: absolute;
+		    left: 50%;
+		    top: 50%;
+		    bottom: auto;
+		    right: auto;
+		    background-position: center;
+    		background-size: cover;
+		    -webkit-transform: translateX(-50%) translateY(-50%);
+		    -moz-transform: translateX(-50%) translateY(-50%);
+		    -ms-transform: translateX(-50%) translateY(-50%);
+		    -o-transform: translateX(-50%) translateY(-50%);
+		    transform: translateX(-50%) translateY(-50%);
+    	}
+    	
+    	.country-search .search-form-wapper {
+    		display: table;
+    		padding: 100px 0;
+    	}
+    	
+    	.service-top .country-search .search-form-wapper {
+    		padding: 160px 0;
+    	}
+    	
+    	.country-search .search-form-wapper form {
+    		display: table-cell;
+    		vertical-align: middle;
+    	}
+    	
+    	.country-search .search-form-wapper .text-search {
+    		width:100%;
+    	}
+    	
+    	.country-search video {
+    		z-index:-100;
+    	}
+    	
+    	.country-search h2, .country-search p {
+    		color: #fff;
+    		text-shadow: 1px 1px 3px rgba(0,0,0,.7),1px 1px 5px rgba(0,0,0,.3);
+    	}
+    	
+    	.country-search .country-flag {
+    		position: absolute;
+    		top: 0px;
+    		left: 10px;
+    		z-index: 100;
+    		width: 50px;
+    	}
+    	
+    	.country-search .search-area {
+    		padding: 50px 30px;
+    	}
+    	
+    	.country-search .search-area .text-search input,
+    	.country-search .search-area .text-search .input-group-addon {
+    		    background-color: #fff;
+    	}
+    	
+    	.country-search .search-area .text-search input {
+    		border-top-left-radius: 4px;
+    		border-bottom-left-radius: 4px;
+    		padding-left: 70px;
+    	}
+    	
+    	
+    	.country-search .cd-half-width {
+    		padding-top: 160px;
+    	}
+    	
+    	.country-search .search-area button.search-btn {
+    		padding: 6px 50px;
+    		margin-top: 20px;
+    	}
+    
+    	.country-search .select-activity {
+    		margin-top:30px;
+			text-align: left;
+    	}
+    	
+    	.country-search input[type=radio], .country-search input[type=checkbox] {
+		  display: none;
+		}
+		
+		.country-search .radio, .country-search .checkbox {
+		  box-sizing: border-box;
+		  -webkit-transition: background-color 0.2s linear;
+		  transition: background-color 0.2s linear;
+		  position: relative;
+		  display: inline-block;
+		  margin: 0 20px 8px 0;
+		  padding: 12px 12px 12px 42px;
+		  border-radius: 2px;
+		/*   background-color: #f6f7f8; */
+		  vertical-align: middle;
+		  cursor: pointer;
+		  color: #fff;
+		  font-size: 18px;
+		  text-shadow: 1px 1px 1px rgba(0,0,0,.3),1px 1px 1px rgba(0,0,0,.1);
+		}
+		
+		.country-search .radio:hover, .country-search .checkbox:hover {
+		/*   background-color: #e2edd7; */
+		}
+		
+		.country-search .radio:hover:after, .country-search .checkbox:hover:after {
+		/*   border-color: #53b300; */
+		}
+		
+		.country-search .radio:after, .checkbox:after {
+		  -webkit-transition: border-color 0.2s linear;
+		  transition: border-color 0.2s linear;
+		  position: absolute;
+		  top: 50%;
+		  left: 15px;
+		  display: block;
+		  margin-top: -10px;
+		  width: 22px;
+		  height: 22px;
+		  border: 2px solid #fff;
+		  border-radius: 3px;
+		  content: '';
+		}
+		
+		.country-search .radio:before {
+		  -webkit-transition: opacity 0.2s linear;
+		  transition: opacity 0.2s linear;
+		  position: absolute;
+		  top: 50%;
+		  left: 20px;
+		  display: block;
+		  margin-top: -5px;
+		  width: 10px;
+		  height: 10px;
+		  border-radius: 50%;
+		  background-color: #3c8dbc;
+		  content: '';
+		  opacity: 0;
+		}
+		
+		.country-search input[type=radio]:checked + .radio:before {
+		  opacity: 1;
+		}
+		
+		.country-search .checkbox:before {
+		  -webkit-transition: opacity 0.2s linear;
+		  transition: opacity 0.2s linear;
+		  position: absolute;
+		  top: 50%;
+		  left: 21px;
+		  display: block;
+		  margin-top: -9px;
+		  width: 10px;
+		  height: 15px;
+		  border-right: 3px solid #fff;
+		  border-bottom: 3px solid #fff;
+		  content: '';
+		  opacity: 0;
+		  -webkit-transform: rotate(45deg);
+		  -ms-transform: rotate(45deg);
+		  transform: rotate(45deg);
+		}
+		
+		.country-search input[type=checkbox]:checked + .checkbox:before {
+		  opacity: 1;
+		}

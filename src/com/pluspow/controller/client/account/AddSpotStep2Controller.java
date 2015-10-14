@@ -27,6 +27,8 @@ public class AddSpotStep2Controller extends BaseController {
             requestScope("content", spot.getDetail());
         }
         
+        requestScope("phoneCountryString", spot.getCountry().toString());
+        
         return forward("addSpotStep2.jsp");
     }
 }

@@ -4,6 +4,7 @@ import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Validators;
 
 import com.pluspow.enums.EntryType;
+import com.pluspow.enums.Lang;
 import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Client;
 import com.pluspow.model.ResetPasswordEntry;
@@ -15,7 +16,7 @@ import com.pluspow.validator.NGValidator;
 public class ResetPasswordEntryController extends BaseController {
 
     @Override
-    protected Navigation execute() throws Exception {
+    protected Navigation execute(Lang lang) throws Exception {
         // 入力チェック
         if (!isPost() || !validate()) {
             return forward("/client/resetPassword");

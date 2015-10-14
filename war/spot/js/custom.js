@@ -377,5 +377,45 @@ jQuery(function($) {
     	  var targetpath = pathname.replace('/' + langpath + '/', '/l-' + selectedval + '/');
     	  location.href = targetpath;
       });
+      
+      /* ----------------------------------------------------------- */
+      /*  search more
+      /* ----------------------------------------------------------- */
+      function nextResultsHandler(event) {
+    	  event.preventDefault();
+    	  var $form = $(this);
+    	  
+    	  var $button = $form.find('button');
+    	  
+    	  $.ajax({
+              url: $form.attr('action'),
+              type: $form.attr('method'),
+              dataType: 'html',
+              data: $form.serialize(),
+              timeout: 10000,  // 単位はミリ秒
+              
+              // 送信前
+              beforeSend: function(data) {
+                  // ボタンを無効化し、二重送信を防止
+                  $button.attr('disabled', true);
+                  waitingDialog.show();
+              },
+              // 応答後
+              complete: function(data) {
+                  // ボタンを有効化し、再送信を許可
+                  $button.attr('disabled', false);
+                  waitingDialog.hide();
+              },
+              
+              // 通信成功時の処理
+              success: function(data) {
+            	  $form.remove();
+            	  $('.results-row').append(data);
+            	  
+            	  $('form.nextResultsForm').bind('submit', nextResultsHandler);
+              }
+          });
+      }
+      $('form.nextResultsForm').bind('submit', nextResultsHandler);
 
 });
