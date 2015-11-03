@@ -8,12 +8,14 @@ import org.slim3.util.StringUtil;
 import com.google.appengine.api.search.Results;
 import com.google.appengine.api.search.ScoredDocument;
 import com.pluspow.App;
+import com.pluspow.enums.Country;
 import com.pluspow.enums.Lang;
 import com.pluspow.enums.SpotActivity;
+import com.pluspow.exception.NoContentsException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
+import com.pluspow.search.SearchApi;
 import com.pluspow.search.SearchSpot;
-import com.pluspow.service.SearchApiService;
 
 public class SearchController extends BaseController {
 
@@ -21,14 +23,27 @@ public class SearchController extends BaseController {
     protected Navigation execute(Lang lang, Client client,
             boolean isClientLogged) throws Exception {
         
+        // ---------------------------------------------------
+        // 国の取得
+        // ---------------------------------------------------
+        String countryString = asString("country");
+        if(StringUtil.isEmpty(countryString)) throw new NoContentsException();
+        
+        Country country = null;
+        try {
+            country = Country.valueOf(countryString);
+        }catch(Exception e) {
+            throw new NoContentsException();
+        }
+        
         // 検索ビルダーの初期化
-        SearchSpot builder = SearchApiService.newSearchBuilder(lang);
+        SearchSpot builder = SearchApi.newSearchBuilder(country, lang);
 
         // ---------------------------------------------------
         // 検索条件の設定
         // ---------------------------------------------------
         builder.addKeyword(asString("keyword"));
-        builder.addCountry(asString("country"));
+        builder.addCountry(countryString);
         builder.addGeoAreaLevel1(asString("areaLevel1"));
         builder.addGeoAreaLevel2(asString("areaLevel2"));
         builder.addGeoAreaLevel3(asString("areaLevel3"));

@@ -63,7 +63,7 @@ public class ItemDao extends DaoBase<Item>{
     }
     
     /**
-     * アイテムリストの取得(無効なものも含む)
+     * 指定したアクティビティのアイテムが存在するかをチェック
      * @param spot
      * @param lang
      * @param num
@@ -80,6 +80,27 @@ public class ItemDao extends DaoBase<Item>{
                         .sort(new Sort(meta.sortOrder))
                         .limit(1)
                         .asList();
+    }
+    
+    /**
+     * 対象の言語の有効なアイテムの最も高い値段を取得
+     * @param spot
+     * @param lang
+     * @return
+     */
+    public Double getItemMaxPrice(Spot spot, Lang lang) {
+
+        List<Item> list = Datastore.query(meta)
+                .filter(
+                    meta.spotRef.equal(spot.getKey()),
+                    meta.langs.in(lang),
+                    meta.invalid.equal(false)
+                        )
+                        .sort(meta.price.desc)
+                        .limit(1)
+                        .asList();
+
+        return list == null || list.size() <= 0 ? 0 : list.get(0).getPrice();
     }
 
 }

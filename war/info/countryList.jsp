@@ -84,7 +84,7 @@ h2 {
 							
 								<%for(Country country: Country.values()) { %>
 								<div class="col-sm-4 col-xs-12">
-									<div class="lang-box <%=country.isSupport() ? "support" : "" %>">
+									<div class="lang-box support">
 										<div class="flg">
 											<img src="<%=PathUtils.getCountryFlagUrl(country) %>">
 										</div>

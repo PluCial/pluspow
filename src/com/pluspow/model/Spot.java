@@ -75,7 +75,6 @@ public class Spot implements Serializable {
     /**
      * country
      */
-    @Attribute(unindexed = true)
     private Country country;
     
     /**
@@ -101,6 +100,12 @@ public class Spot implements Serializable {
      */
     @Attribute(unindexed = true)
     private double itemSortOrderIndex = 0.0;
+    
+    /**
+     * 入場料
+     */
+    @Attribute(unindexed = true)
+    private double admissionFee = 0;
     
     // ----------------------------------------------------------------------
     // 関連
@@ -383,6 +388,15 @@ public class Spot implements Serializable {
         this.plan = plan;
     }
     
+    // ----------------------------------------------------------------------
+    // 最高利用額(永久かしない)
+    // ----------------------------------------------------------------------
+    /**
+     * 最高利用額(アイテムの値段の最大値)
+     */
+    @Attribute(persistent = false)
+    private double maxPrice = 0;
+    
     
     // ----------------------------------------------------------------------
     // ゲッター＆セッター
@@ -656,5 +670,21 @@ public class Spot implements Serializable {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public double getAdmissionFee() {
+        return admissionFee;
+    }
+
+    public void setAdmissionFee(double admissionFee) {
+        this.admissionFee = admissionFee;
+    }
+
+    public double getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(double maxPrice) {
+        this.maxPrice = maxPrice;
     }
 }

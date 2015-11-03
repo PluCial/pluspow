@@ -1835,7 +1835,7 @@
                                                                                                     </listeners>
                                                                                                     <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2"/>
                                                                                                     <name>baseLang</name>
-                                                                                                    <type>boolean</type>
+                                                                                                    <type>Lang</type>
                                                                                                     <isStatic>false</isStatic>
                                                                                                   </net.java.amateras.uml.classdiagram.model.AttributeModel>
                                                                                                   <net.java.amateras.uml.classdiagram.model.AttributeModel>

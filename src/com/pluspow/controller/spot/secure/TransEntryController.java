@@ -58,6 +58,7 @@ public class TransEntryController extends BaseController {
             
             // キャッシュクリア
             MemcacheService.deleteItemAll(item);
+            MemcacheService.deleteSpot(spot, transLang);
 
             return redirect(PathUtils.spotPage(spot.getSpotId(), transLang, isLocal(), true));
 

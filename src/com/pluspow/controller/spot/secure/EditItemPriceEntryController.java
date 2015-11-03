@@ -35,6 +35,9 @@ public class EditItemPriceEntryController extends BaseController {
             // キャッシュクリア(すべての言語)
             MemcacheService.deleteItemAll(item);
             
+            // スポットの最大値段を更新するためにスポットのキャッシュもクリア
+            MemcacheService.deleteSpotAll(spot);
+            
         }catch(ObjectNotExistException e) {
             requestScope("status", "NG");
             return forward("/client/ajax_response.jsp");

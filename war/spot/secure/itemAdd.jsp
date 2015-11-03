@@ -140,8 +140,8 @@ String selectItemType = (String) request.getAttribute("activity");
 										<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> ${errors.price}</label>
 										<%} %>
 										<div class="input-group">
-											<span class="input-group-addon">¥</span>
-											<input type="text" class="form-control"  ${f:text("price")}style="height:40px;text-align: right;" placeholder="税抜き金額">
+											<span class="input-group-addon"><%=spot.getCountry().getCurrencie().getSymbol() %></span>
+											<input type="text" class="form-control"  ${f:text("price")} style="height:40px;text-align: right;" placeholder="税抜き金額">
 											<span class="input-group-addon">.00</span>
 										</div>
 									</div>

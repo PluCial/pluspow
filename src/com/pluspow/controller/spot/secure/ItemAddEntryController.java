@@ -47,8 +47,8 @@ public class ItemAddEntryController extends BaseController {
             fileItem,
             imageX, imageY, imageWidth, imageHeight);
         
-        // キャッシュクリア
-        MemcacheService.deleteSpot(spot, spot.getBaseLang());
+        // キャッシュクリア(スポットの最大利用金額を更新するため、すべての言語のキャッシュをクリア)
+        MemcacheService.deleteSpotAll(spot);
         
         return redirect(PathUtils.spotPage(spot.getSpotId(), spot.getBaseLang(), isLocal(), true));
     }

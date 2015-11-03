@@ -4,14 +4,12 @@ import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Validators;
 
 import com.pluspow.exception.ArgumentException;
-import com.pluspow.exception.SearchApiException;
 import com.pluspow.model.Client;
 import com.pluspow.model.ItemTextRes;
 import com.pluspow.model.Spot;
 import com.pluspow.model.TextRes;
 import com.pluspow.service.ItemTextResService;
 import com.pluspow.service.MemcacheService;
-import com.pluspow.service.SearchApiService;
 import com.pluspow.service.SpotTextResService;
 import com.pluspow.service.TextResService;
 
@@ -39,11 +37,11 @@ public class EditTextResourcesEntryController extends BaseController {
             SpotTextResService.update(resourcesKey, content);
             
             // 検索APIの更新
-            try {
-                SearchApiService.putDocument(spot, textRes.getLang());
-            }catch(Exception e) {
-                throw new SearchApiException();
-            }
+//            try {
+//                SearchApi.putDocument(spot, textRes.getLang());
+//            }catch(Exception e) {
+//                throw new SearchApiException();
+//            }
             
             // キャッシュクリア
             MemcacheService.deleteSpot(spot, textRes.getLang());

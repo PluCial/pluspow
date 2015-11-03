@@ -3,7 +3,7 @@ package com.pluspow.enums;
 
 /** 機械翻訳言語 */
 public enum Lang {
-    en("en", "英語", Country.US, "English", true),
+    en("en", "英語", Country.US, "English", false),
     ja("ja", "日本語", Country.JP, "日本語", true),
     ar("ar", "アラビア語", Country.PS, "العربية", false),
     az("az", "アゼルバイジェン語", Country.AZ, "Azərbaycan", false),

@@ -82,19 +82,19 @@ Lang localeLang =(Lang) request.getAttribute("localeLang");
 								<!-- area-nav start -->
 								<ol class="breadcrumb">
 									<%if(!StringUtil.isEmpty(spot.getGeoAreaLevel1())) { %>
-									<li><a href="/search?areaLevel1=<%=spot.getGeoAreaLevel1() %>"><%=spot.getGeoAreaLevel1() %></a></li>
+									<li><a href="/<%=spot.getCountry().toString() %>/search?areaLevel1=<%=spot.getGeoAreaLevel1() %>"><%=spot.getGeoAreaLevel1() %></a></li>
 									<%} %>
 									<%if(!StringUtil.isEmpty(spot.getGeoAreaLevel2())) { %>
-										<li><a href="/search?areaLevel2=<%=spot.getGeoAreaLevel2() %>"><%=spot.getGeoAreaLevel2() %></a></li>
+										<li><a href="/<%=spot.getCountry().toString() %>/search?areaLevel2=<%=spot.getGeoAreaLevel2() %>"><%=spot.getGeoAreaLevel2() %></a></li>
 									<%} %>
 									<%if(!StringUtil.isEmpty(spot.getGeoAreaLevel3())) { %>
-									<li><a href="/search?areaLevel3=<%=spot.getGeoAreaLevel3() %>"><%=spot.getGeoAreaLevel3() %></a></li>
+									<li><a href="/<%=spot.getCountry().toString() %>/search?areaLevel3=<%=spot.getGeoAreaLevel3() %>"><%=spot.getGeoAreaLevel3() %></a></li>
 									<%} %>
 									<%if(!StringUtil.isEmpty(spot.getGeoLocality())) { %>
-									<li><a href="/search?locality=<%=spot.getGeoLocality() %>"><%=spot.getGeoLocality() %></a></li>
+									<li><a href="/<%=spot.getCountry().toString() %>/search?locality=<%=spot.getGeoLocality() %>"><%=spot.getGeoLocality() %></a></li>
 									<%} %>
 									<%if(!StringUtil.isEmpty(spot.getGeoWardLocality())) { %>
-									<li><a href="/search?wardLocality=<%=spot.getGeoWardLocality() %>"><%=spot.getGeoWardLocality() %></a></li>
+									<li><a href="/<%=spot.getCountry().toString() %>/search?wardLocality=<%=spot.getGeoWardLocality() %>"><%=spot.getGeoWardLocality() %></a></li>
 									<%} %>
 								</ol>
 								<!-- area-nav end -->

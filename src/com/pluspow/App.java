@@ -11,7 +11,7 @@ public class App {
     /**
      * 本番ドメイン
      */
-    public static final String APP_PRODUCTION_SCHEME = "https://";
+    public static final String APP_PRODUCTION_SCHEME = "http://";
     
     /**
      * 本番ドメイン

@@ -33,7 +33,7 @@ Item item = (Item) request.getAttribute("item");
 			<div class="form-group">
 				<label id="errorMsg" class="control-label" for="inputError" style="display:none"><i class="fa fa-times-circle-o"></i> 入力した金額が正しくありません。</label>
 				<div class="input-group">
-					<span class="input-group-addon">¥</span>
+					<span class="input-group-addon"><%=spot.getCountry().getCurrencie().getSymbol() %></span>
 					<input type="text" id="price-input" name="price" class="form-control" value="<%=(int)item.getPrice() %>" style="height:40px;text-align: right;" placeholder="税抜き金額" />
 					<span class="input-group-addon">.00</span>
 				</div>

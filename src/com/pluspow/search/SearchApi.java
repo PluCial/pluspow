@@ -1,7 +1,6 @@
-package com.pluspow.service;
+package com.pluspow.search;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.slim3.util.StringUtil;
@@ -13,6 +12,7 @@ import com.google.appengine.api.search.GeoPoint;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.IndexSpec;
 import com.google.appengine.api.search.SearchServiceFactory;
+import com.pluspow.enums.Country;
 import com.pluspow.enums.Lang;
 import com.pluspow.enums.SpotActivity;
 import com.pluspow.exception.ArgumentException;
@@ -20,22 +20,20 @@ import com.pluspow.exception.ObjectNotExistException;
 import com.pluspow.model.Client;
 import com.pluspow.model.Spot;
 import com.pluspow.model.SpotLangUnit;
-import com.pluspow.search.SearchField;
-import com.pluspow.search.SearchSpot;
 
-public class SearchApiService {
+public class SearchApi {
     
-    private static final String SPOT_DOCUMENT_INDEX = "spot_document_index";
+    private static final String SPOT_DOCUMENT_INDEX = "spot_index";
     
     /**
      * ドキュメントインデックスの取得
      * @param lang
      * @return
      */
-    private static Index getDocumentIndex(Lang lang) {
+    private static Index getDocumentIndex(Country country, Lang lang) {
         return SearchServiceFactory.getSearchService()
                 .getIndex(IndexSpec.newBuilder()
-                    .setName(SPOT_DOCUMENT_INDEX + "_" + lang.toString()));
+                    .setName(SPOT_DOCUMENT_INDEX  + "_" + country.toString() + "_" + lang.toString()));
     }
     
     /**
@@ -56,7 +54,7 @@ public class SearchApiService {
     private static Document getDocumentById(Spot spot, Lang lang) {
         String documentId = getDocumentId(spot, lang);
         
-        Index index = getDocumentIndex(lang);
+        Index index = getDocumentIndex(spot.getCountry(), lang);
         
         return index.get(documentId);
     }
@@ -69,7 +67,7 @@ public class SearchApiService {
     public static void deleteSpot(Spot spot, Lang lang) {
         Document document = getDocumentById(spot, lang);
         if(document == null) return;
-        Index index = getDocumentIndex(lang);
+        Index index = getDocumentIndex(spot.getCountry(), lang);
         
         index.delete(document.getId());
     }
@@ -84,8 +82,12 @@ public class SearchApiService {
     public static void putDocument(Spot spot, Lang lang) throws ObjectNotExistException {
         
         Client client = spot.getClientRef().getModel();
-        SpotLangUnit langUnit = SpotLangUnitService.get(spot, lang);
-        spot.setTextResources(SpotTextResService.getResourcesMap(spot, lang));
+//        SpotLangUnit langUnit = SpotLangUnitService.get(spot, lang);
+//        spot.setTextResources(SpotTextResService.getResourcesMap(spot, lang));
+//        Double maxPrice = ItemService.getItemMaxPrice(spot, lang);
+        
+        SpotLangUnit langUnit = spot.getLangUnit();
+        Double maxPrice = spot.getMaxPrice();
         
         // ドキュメントの作成
         Builder builder = Document.newBuilder()
@@ -110,7 +112,13 @@ public class SearchApiService {
                     .setText(spot.getCatchCopy()))
                 .addField(Field.newBuilder()
                      .setName(SearchField.DETAIL)
-                     .setText(spot.getDetail()));
+                     .setText(spot.getDetail()))
+                .addField(Field.newBuilder()
+                    .setName(SearchField.ADMISSION_FRR)
+                    .setNumber(spot.getAdmissionFee()))
+                 .addField(Field.newBuilder()
+                    .setName(SearchField.MAX_PRICE)
+                    .setNumber(maxPrice));
         
                 // ---------------------------------------------------
                 // 位置情報
@@ -160,12 +168,12 @@ public class SearchApiService {
                 
                 builder.addField(Field.newBuilder()
                     .setName(SearchField.CREATE_DATE)
-                    .setAtom(String.valueOf(new Date().getTime())));
+                    .setAtom(String.valueOf(langUnit.getCreateDate().getTime())));
         
         Document document = builder.build();
         
         // ドキュメントの保存
-        Index index = getDocumentIndex(langUnit.getLang());
+        Index index = getDocumentIndex(spot.getCountry(), langUnit.getLang());
         index.put(document);
     }
     
@@ -233,8 +241,8 @@ public class SearchApiService {
      * @return
      * @throws ArgumentException
      */
-    public static SearchSpot newSearchBuilder(Lang lang) throws ArgumentException {
-        Index index = getDocumentIndex(lang);
+    public static SearchSpot newSearchBuilder(Country country, Lang lang) throws ArgumentException {
+        Index index = getDocumentIndex(country, lang);
         
         return new SearchSpot(index, lang);
     }

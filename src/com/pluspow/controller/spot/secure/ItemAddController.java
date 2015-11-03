@@ -15,6 +15,8 @@ public class ItemAddController extends BaseController {
         
         requestScope("suppertLangList", new ArrayList<Lang>());
         
+        requestScope("price", "0");
+        
         return forward("itemAdd.jsp");
     }
 }

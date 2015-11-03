@@ -56,7 +56,7 @@ Lang localeLang =(Lang) request.getAttribute("localeLang");
 				<div class="row">
 					<div class="col-md-6 text-center">
 						<div class="search-form-wapper" style="<%=localeLang.isAvailable() ? "" : "min-height: 98vh;" %>">
-							<form action="/search" method="get">
+							<form action="/<%=Country.JP.toString() %>/search" method="get">
 								<h2><fmt:message key="page.index.searchJp.h2" /></h2>
 								<p><fmt:message key="page.index.searchJp.p1" /></p>
 								<div class="search-area">
@@ -64,7 +64,6 @@ Lang localeLang =(Lang) request.getAttribute("localeLang");
 									<div class="text-search input-group">
 		                    			<input type="text" name="keyword" class="form-control" placeholder="<fmt:message key="page.index.search.input.placeholder" />" />
 		                    			<span class="input-group-addon"><i class="fa fa-search"></i></span>
-		                    			<input type="hidden" name="country" value="<%=Country.JP.toString() %>" />
 		                    			<img class="country-flag" src="/images/flag/flat/JP.png">
 		                  			</div>
 									

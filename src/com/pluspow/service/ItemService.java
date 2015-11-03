@@ -187,11 +187,11 @@ public class ItemService {
         }
         
         // 検索APIの登録
-        try {
-            SearchApiService.putDocument(spot, spot.getBaseLang());
-        }catch(Exception e) {
-            // 影響する機能が多いため、更新できないとしても無視。
-        }
+//        try {
+//            SearchApi.putDocument(spot, spot.getBaseLang());
+//        }catch(Exception e) {
+//            // 影響する機能が多いため、更新できないとしても無視。
+//        }
         
         return model;
     }
@@ -317,11 +317,11 @@ public class ItemService {
         // ---------------------------------------------------
         // 検索APIの登録
         // ---------------------------------------------------
-        try {
-            SearchApiService.putDocument(spot, transLang);
-        }catch(Exception e) {
-            // 影響する機能が多いため、更新できないとしても無視。
-        }
+//        try {
+//            SearchApi.putDocument(spot, transLang);
+//        }catch(Exception e) {
+//            // 影響する機能が多いため、更新できないとしても無視。
+//        }
     }
             
     
@@ -608,11 +608,11 @@ public class ItemService {
         // ---------------------------------------------------
         // 検索APIの更新
         // ---------------------------------------------------
-        try {
-            SearchApiService.putDocument(spot, lang);
-        }catch(Exception e) {
-            // 影響する機能が多いため、更新できないとしても無視。
-        }
+//        try {
+//            SearchApi.putDocument(spot, lang);
+//        }catch(Exception e) {
+//            // 影響する機能が多いため、更新できないとしても無視。
+//        }
     }
     
     /**
@@ -652,6 +652,16 @@ public class ItemService {
                 tx.rollback();
             }
         }
+    }
+    
+    /**
+     * 対象の言語の有効なアイテムの最も高い値段を取得
+     * @param spot
+     * @param lang
+     * @return
+     */
+    public static Double getItemMaxPrice(Spot spot, Lang lang) {
+        return dao.getItemMaxPrice(spot, lang);
     }
     
     /**

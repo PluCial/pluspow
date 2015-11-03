@@ -94,6 +94,7 @@ public class ItemLangUnitService extends LangUnitService {
         model.setLang(item.getBaseLang());
         model.getSpotRef().setModel(spot);
         model.getItemRef().setModel(item);
+        model.setBaseLang(item.getBaseLang());
         model.setTransStatus(TransStatus.TRANSLATED);
         
         // 保存

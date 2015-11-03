@@ -55,8 +55,6 @@ public class SearchSpot {
 
         if(StringUtil.isEmpty(qstr.toString().trim())) return null;
         
-        System.out.println(qstr.toString());
-        
         if (StringUtil.isEmpty(cursorString)) {
             return search(limit);
             

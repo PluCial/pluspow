@@ -21,6 +21,7 @@ import com.pluspow.model.TextRes;
 import com.pluspow.service.ItemLangUnitService;
 import com.pluspow.service.ItemService;
 import com.pluspow.service.ItemTextResService;
+import com.pluspow.service.MemcacheService;
 import com.pluspow.service.SpotLangUnitService;
 import com.pluspow.service.SpotService;
 import com.pluspow.service.SpotTextResService;
@@ -55,6 +56,10 @@ public class TransController extends BaseController {
 
                 if(unit.isInvalid()) {
                     SpotService.setInvalid(spot, transLang, false);
+                    
+                    // キャッシュクリア(すべての言語をクリアしないと、各言語がもつ言語リストが更新されない)
+                    MemcacheService.deleteSpotAll(spot);
+                    
                     return redirect(PathUtils.spotPage(spot.getSpotId(), transLang, isLocal(), true));
                 }
             
@@ -79,6 +84,9 @@ public class TransController extends BaseController {
             try {
                 item = ItemService.getItem(itemId, spot.getBaseLang());
                 requestScope("item", item);
+                
+                // キャッシュクリア(すべての言語をクリアしないと、各言語がもつaアクティビティリストが更新されない)
+                MemcacheService.deleteSpotAll(spot);
                 
             } catch (ObjectNotExistException e) {
                 throw new NoContentsException();

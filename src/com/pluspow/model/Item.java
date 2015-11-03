@@ -38,7 +38,7 @@ public class Item implements Serializable {
     /**
      * 値段
      */
-    private double price;
+    private double price = 0;
     
     /**
      * ソート順

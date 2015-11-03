@@ -25,6 +25,7 @@ public class ItemDeleteEntryController extends BaseController {
             ItemService.delete(spot, item);
             
             // スポットのアクティビティが変わるため、すべての言語のキャッシュをクリア
+            MemcacheService.deleteItemAll(item);
             MemcacheService.deleteSpotAll(spot);
             
         }catch (ObjectNotExistException e){

@@ -36,6 +36,10 @@ public class SearchField {
     
     public static final String ACTIVITYS = "activitys";
     
+    public static final String ADMISSION_FRR = "admissionFee";
+    
+    public static final String MAX_PRICE = "maxPrice";
+    
     public static final String RATING = "rating";
     
     public static final String CREATE_DATE = "createDate";

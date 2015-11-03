@@ -14,6 +14,8 @@
 <%
 Lang localeLang =(Lang) request.getAttribute("localeLang");
 String[] selectedActivitys =(String[]) request.getAttribute("selectedActivitys");
+String countryString = (String)request.getAttribute("country");
+Country country = Country.valueOf(countryString);
 %>
 <fmt:setLocale value="<%=localeLang.toString() %>" />
 <!DOCTYPE html>
@@ -37,7 +39,7 @@ String[] selectedActivitys =(String[]) request.getAttribute("selectedActivitys")
 				<div class="row">
 					<div class="col-md-6 col-md-offset-3 text-center">
 						<div class="search-form-wapper" style="padding: 30px 0;">
-							<form action="/search?country=<%=Country.JP.toString() %>" method="get">
+							<form action="/<%=country.toString() %>/search" method="get">
 								<div class="search-area">
 									
 									<div class="text-search input-group">

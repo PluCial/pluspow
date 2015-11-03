@@ -29,6 +29,9 @@ boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 			color: #069;
 			font-size: 14px;
 		}
+		#selectLangModel strong {
+			font-size: 14px;
+		}
 	</style>
 </head>
 <body>
@@ -50,6 +53,15 @@ boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 			%>
 			<div class="col-xs-6">
 				<div class="lang-block row" style="padding: 10px 20px;">
+				
+					<%if(lang == localeLang) { %>
+					<div class="col-sm-3">
+						<img class="img-responsive" style="" src="<%=PathUtils.getCountryFlagUrl(lang) %>"> 
+					</div>
+					<div class="col-sm-9">
+						<strong><%=appProp.getProperty("lang." + lang.toString()) %><br />(<%=lang.getName() %>)</strong>
+					</div>
+					<%}else { %>
 					<div class="col-sm-3">
 						<a class="link" href="<%=link %>">
 							<img class="img-responsive" style="" src="<%=PathUtils.getCountryFlagUrl(lang) %>"> 
@@ -60,6 +72,7 @@ boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 							<%=appProp.getProperty("lang." + lang.toString()) %><br />(<%=lang.getName() %>)
 						</a>
 					</div>
+					<%} %>
 				</div>
 			</div>
 			<%} %>

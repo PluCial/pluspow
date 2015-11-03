@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -43,10 +45,16 @@ import com.pluspow.model.SpotLangUnit;
 import com.pluspow.model.SpotPayPlan;
 import com.pluspow.model.SpotTextRes;
 import com.pluspow.model.TransCredit;
+import com.pluspow.search.SearchApi;
 import com.pluspow.utils.Utils;
 
 
 public class SpotService {
+    
+    /**
+     * Logger
+     */
+    private static final Logger logger = Logger.getLogger(SpotService.class.getName());
     
     /** DAO */
     private static final SpotDao dao = new SpotDao();
@@ -198,11 +206,11 @@ public class SpotService {
         }
         
         // 検索APIの登録
-        try {
-            SearchApiService.putDocument(spot, spot.getBaseLang());
-        }catch(Exception e) {
-            // 影響する機能が多いため、更新できないとしても無視。
-        }
+//        try {
+//            SearchApi.putDocument(spot, spot.getBaseLang());
+//        }catch(Exception e) {
+//            // 影響する機能が多いため、更新できないとしても無視。
+//        }
 
         return spot;
     }
@@ -258,6 +266,13 @@ public class SpotService {
             // キャッシュの追加
             // ---------------------------------------------------
             MemcacheService.addSpot(model, lang);
+            
+            // 検索APIの登録
+            try {
+                SearchApi.putDocument(model, lang);
+            }catch(Exception ex) {
+                // 影響する機能が多いため、更新できないとしても無視。
+            }
         };
 
         return model;
@@ -313,6 +328,11 @@ public class SpotService {
         spot.setOfficeHourList(OfficeHoursService.getOfficeHourList(spot));
         
         // ---------------------------------------------------
+        // Max Price
+        // ---------------------------------------------------
+        spot.setMaxPrice(ItemService.getItemMaxPrice(spot, lang));
+        
+        // ---------------------------------------------------
         // スポットのアクティビティチェック・更新
         // アイテムを削除した場合の処理分散のため、
         // チェックし、必要に応じて更新する。
@@ -340,11 +360,11 @@ public class SpotService {
             SpotLangUnitService.update(spot.getLangUnit());
             
             // ドキュメントのアクティビティを更新
-            try {
-                SearchApiService.putDocument(spot, lang);
-            }catch(Exception e) {
-                // 影響する機能が多いため、更新できないとしても無視。
-            }
+//            try {
+//                SearchApi.putDocument(spot, lang);
+//            }catch(Exception e) {
+//                // 影響する機能が多いため、更新できないとしても無視。
+//            }
         }
     }
 
@@ -504,11 +524,11 @@ public class SpotService {
         }
         
         // 検索APIの登録
-        try {
-            SearchApiService.putDocument(spot, transLang);
-        }catch(Exception e) {
-            // 影響する機能が多いため、更新できないとしても無視。
-        }
+//        try {
+//            SearchApi.putDocument(spot, transLang);
+//        }catch(Exception e) {
+//            // 影響する機能が多いため、更新できないとしても無視。
+//        }
 
     }
     
@@ -539,9 +559,17 @@ public class SpotService {
         GeoModel geoModel = null;
         try {
             geoModel = GeoService.getGeoModel(spot.getAddress(), transLang);
-        }catch(GeocoderLocationTypeException e) {
+            
+        }catch(Exception error) {
             // ステータスは正常で、稀に発生する意味不明なエラー。
             // 英語で一度再取得し、それを利用
+            if(error instanceof GeocodeStatusException) {
+                GeocodeStatusException gse = (GeocodeStatusException)error; 
+                logger.log(Level.WARNING, "Geocode Status:" + gse.getStatus().name(), error);
+            }
+            logger.log(Level.WARNING, error.getMessage(), error);
+            
+            
             geoModel = GeoService.getGeoModel(spot.getAddress(), Lang.en);
         }
 
@@ -662,11 +690,12 @@ public class SpotService {
             // 検索APIの更新
             try {
                 if(invalid) {
-                    SearchApiService.deleteSpot(spot, lang);
+                    SearchApi.deleteSpot(spot, lang);
 
-                }else {
-                    SearchApiService.putDocument(spot, lang);
                 }
+//                else {
+//                    SearchApi.putDocument(spot, lang);
+//                }
             }catch(Exception e) {
                 throw new SearchApiException();
             }
@@ -761,7 +790,7 @@ public class SpotService {
             List<SpotLangUnit> langUnitList = SpotLangUnitService.getAllList(spot);
             for(SpotLangUnit langUnit: langUnitList) {
                 try {
-                    SearchApiService.deleteSpot(spot, langUnit.getLang());
+                    SearchApi.deleteSpot(spot, langUnit.getLang());
             
                 }catch(IllegalArgumentException e) {
                     // ドキュメントが存在しない場合のエラーをキャッチし、無視する
