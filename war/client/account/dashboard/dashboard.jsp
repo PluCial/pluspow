@@ -10,6 +10,7 @@
 <%@ page import="com.pluspow.model.*" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="org.slim3.controller.validator.Errors" %>
+<%@ page import="java.util.Properties" %>
 <%
 Client client =(Client) request.getAttribute("client");
 Spot spot =(Spot) request.getAttribute("spot");
@@ -19,7 +20,10 @@ NumberFormat fPrice = NumberFormat.getNumberInstance();
 /* ServicePlan planEnum = baseSpot.getPlan().getPlan(); */
 Errors errors =(Errors) request.getAttribute("errors");
 boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
+Properties appProp = (Properties) request.getAttribute("appProp");
+Lang localeLang =(Lang) request.getAttribute("localeLang");
 %>
+<fmt:setLocale value="<%=localeLang.toString() %>" />
 <!DOCTYPE html>
 <html>
 	<head>
@@ -106,7 +110,7 @@ boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 													<%if(langUnit.isInvalid()) { %>
 													<%=langUnit.getLang().getName() %>
 													<%}else { %>
-													<a href="<%=PathUtils.spotPage(spot.getSpotId(), langUnit.getLang(), isLocal, true) %>"><%=langUnit.getLang().getName() %></a>
+													<a href="<%=PathUtils.spotPage(spot.getSpotId(), langUnit.getLang(), isLocal, true) %>"><%=appProp.getProperty("lang." + langUnit.getLang().toString()) %></a>
 													<%} %>
 												</td>
 												<td>
@@ -148,7 +152,7 @@ boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 										<h3><%=spot.getPlan().getPlanName() %></h3>
 										<p><%=fPrice.format((int)spot.getPlan().getMonthlyAmount()) %> / 月</p>
 									</div>
-									<div class="icon">
+									<div class="icon" style="padding-top: 18px;">
 										<i class="fa fa-paper-plane"></i>
 									</div>
 									<a href="<%=PathUtils.changePlanPage(spot) %>" class="small-box-footer">プランの変更 <i class="fa fa-arrow-circle-right"></i>
@@ -158,14 +162,20 @@ boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 								<%} %>
 								
 								<section class="info-box bg-aqua">
-									<span class="info-box-icon"><i class="fa fa-language"></i></span>
+									<span class="info-box-icon"><i class="fa fa-language" style="line-height: 90px;"></i></span>
 									<div class="info-box-content">
 										<span class="info-box-text">翻訳した文字数</span>
 										<span class="info-box-number"><%=spot.getTransAcc().getTransCharCount() %> 文字</span>
 										<div class="progress">
 											<div class="progress-bar" style="width: <%=((float)spot.getTransAcc().getTransCharCount() / (float)spot.getPlan().getTransCharMaxCount()) * 100 %>%"></div>
 										</div>
-										<span class="progress-description">フリープランでは<%=spot.getPlan().getTransCharMaxCount() %>文字まで翻訳できます。</span>
+										<span class="progress-description"><%=spot.getPlan().getPlanName() %>プランは
+											<%if(spot.getPlan().getTransCharMaxCount() < 0) { %>
+												翻訳文字数無制限です。
+											<%}else { %>
+											<%=spot.getPlan().getTransCharMaxCount() %>文字まで翻訳できます。
+											<%} %>
+										</span>
 									</div><!-- /.info-box-content -->
 								</section><!-- /.info-box -->
 							
@@ -213,7 +223,7 @@ boolean isLocal = Boolean.valueOf((String) request.getAttribute("isLocal"));
 														<%=history.getBaseLang().getName() %>
 													</a> → 
 													<a href="<%=PathUtils.itemPage(spot, history.getItemRef().getKey().getName(), history.getTransLang(), isLocal, true) %>">
-														<%=history.getTransLang().getName() %>
+														<%=appProp.getProperty("lang." + history.getTransLang().toString()) %>
 													</a>
 												</td>
 												<%} %>

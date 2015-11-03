@@ -1,9 +1,12 @@
 package com.pluspow.controller.client.account.dashboard;
 
+import java.util.Properties;
+
 import org.slim3.controller.Navigation;
 import org.slim3.util.StringUtil;
 
 import com.pluspow.controller.AppBaseController;
+import com.pluspow.enums.Lang;
 import com.pluspow.exception.NoContentsException;
 import com.pluspow.exception.NoLoginException;
 import com.pluspow.exception.ObjectNotExistException;
@@ -26,6 +29,15 @@ public abstract class BaseController extends AppBaseController {
             if(!isOwner) {
                 throw new PermissionException();
             }
+            
+            // -------------------------------------
+            // 言語の設定
+            // -------------------------------------
+            Lang lang = getLang();
+            
+            requestScope("localeLang", lang);
+            Properties appProp = getAppProp(lang);
+            requestScope("appProp", appProp);
 
             requestScope("isSmartPhone", String.valueOf(isSmartPhone()));
             requestScope("isLocal", String.valueOf(isLocal()));
@@ -39,10 +51,6 @@ public abstract class BaseController extends AppBaseController {
             if(!StringUtil.isEmpty(request.getServletPath())) {
                 String[] servletPathParts =  request.getServletPath().split("/");
                 requestScope("activeMenu", servletPathParts[servletPathParts.length - 1]);
-                
-                if(isLocal()) {
-                    System.out.println(servletPathParts[servletPathParts.length - 1]);
-                }
             }
             
             // ログインしている場合

@@ -3,6 +3,8 @@ package com.pluspow.enums;
 
 /** 機械翻訳言語 */
 public enum Lang {
+    en("en", "英語", Country.US, "English", true),
+    ja("ja", "日本語", Country.JP, "日本語", true),
     ar("ar", "アラビア語", Country.PS, "العربية", false),
     az("az", "アゼルバイジェン語", Country.AZ, "Azərbaycan", false),
     bn("bn", "ベンガル語", Country.BD, "বাঙালি", false),
@@ -14,7 +16,6 @@ public enum Lang {
     cs("cs", "チェコ語", Country.CZ, "čeština", false),
     da("da", "デンマーク語", Country.DK, "danske", false),
     nl("nl", "オランダ語", Country.NL, "nederlandse", false),
-    en("en", "英語", Country.US, "English", true),
     tl("tl", "タガログ語", Country.PH, "tagalog", false),
     fi("fi", "フィンランド語", Country.FI, "suomi", false),
     fr("fr", "フランス語", Country.FR, "français", false),
@@ -27,7 +28,6 @@ public enum Lang {
     id("id", "インドネシア語", Country.ID, "indonesia", false),
     ga("ga", "アイルランド語", Country.IE, "irish", false),
     it("it", "イタリア語", Country.IT, "italiano", false),
-    ja("ja", "日本語", Country.JP, "日本語", true),
     ko("ko", "韓国語", Country.KR, "한국어", false),
     la("la", "ラテン語", Country.VA, "Latine", false),
     lv("lv", "ラトビア語 (レット語)", Country.LV, "Latvijā", false),
