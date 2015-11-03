@@ -53,9 +53,7 @@ public class ItemService {
      * @throws ObjectNotExistException 
      * @throws ArgumentException 
      */
-    public static Item getModelOnly(String key) throws ObjectNotExistException, ArgumentException {
-        
-        if(key == null) throw new ArgumentException();
+    public static Item getModelOnly(String key) throws ObjectNotExistException {
         
         Item model = dao.get(createKey(key));
         if(model == null) throw new ObjectNotExistException();
@@ -72,7 +70,7 @@ public class ItemService {
      * @throws ObjectNotExistException 
      * @throws ArgumentException 
      */
-    public static Item getByKey(String itemKey, Lang lang) throws ObjectNotExistException, ArgumentException {
+    public static Item getItem(String itemKey, Lang lang) throws ObjectNotExistException, ArgumentException {
         
         if(itemKey == null || lang == null) throw new ArgumentException();
 
@@ -217,6 +215,8 @@ public class ItemService {
             Lang transLang) throws ArgumentException, TransException, DataMismatchException, PlanLimitException, SearchApiException {
 
         if(item.getBaseLang() == transLang) throw new ArgumentException();
+        
+        ServicePlan plan = SpotService.getSpotPlan(spot);
 
         // ---------------------------------------------------
         // 翻訳するコンテンツリスト
@@ -242,10 +242,9 @@ public class ItemService {
         // ---------------------------------------------------
         // 言語文字数のプラン制限確認
         // ---------------------------------------------------
-        ServicePlan plan = SpotService.getSpotPlan(spot);
         TransCredit credit = TransCreditService.get(spot);
         if(plan.getTransCharMaxCount() > 0 
-                && (credit.getTransCharCount() + transCharCount) >= plan.getTransCharMaxCount()) {
+                && (credit.getTransCharCount() + transCharCount) > plan.getTransCharMaxCount()) {
             throw new PlanLimitException(PlanLimitType.TRANS_CHAR_MAX_COUNT);
         }
 
@@ -390,7 +389,14 @@ public class ItemService {
         // ---------------------------------------------------
         // 言語情報の追加
         // ---------------------------------------------------
-        ItemLangUnitService.add(tx, spot, item, baseLang, transLang, TransType.MACHINE, TransStatus.TRANSLATED);
+        ItemLangUnitService.add(
+            tx, 
+            spot, 
+            item, 
+            baseLang, 
+            transLang, 
+            TransType.MACHINE, 
+            TransStatus.TRANSLATED);
 
         // ---------------------------------------------------
         // GCSリソースの複製
@@ -563,16 +569,10 @@ public class ItemService {
         List<Lang> langsList = item.getLangs();
         if(invalid) {
             // 言語の削除
+            // スポットの取得時に同様な処理があるため、ここではスポットのアクティビティを更新しない。
             if(langsList.indexOf(lang) >= 0) {
                 langsList.remove(lang);
             }
-            
-            // スポットの取得時に同様な処理があるため、ここではスポットのアクティビティを更新しない。
-//            if(!checkActivityHasOtherItem(spot, lang, item.getActivity())) {
-//                if(activitys.indexOf(item.getActivity()) >= 0) {
-//                    activitys.remove(item.getActivity());
-//                }
-//            }
             
             
         }else {

@@ -37,7 +37,7 @@ public abstract class BaseController extends com.pluspow.controller.AppBaseContr
         requestScope("appProp", appProp);
 
         // スポットの取得
-        Spot spot = getSpot();
+        Spot spot = getSpot(client);
         requestScope("spot", spot);
 
         // オーナーチェック
@@ -68,7 +68,7 @@ public abstract class BaseController extends com.pluspow.controller.AppBaseContr
      * @return
      * @throws Exception
      */
-    public Spot getSpot() throws NoContentsException {
+    public Spot getSpot(Client client) throws NoContentsException {
 
         String spotId = asString("spotId");
         if(StringUtil.isEmpty(spotId)) throw new NoContentsException();
@@ -78,7 +78,7 @@ public abstract class BaseController extends com.pluspow.controller.AppBaseContr
             Spot spot = null;
             
             if(StringUtil.isEmpty(lang)) {
-                spot = SpotService.getSpotBaseLang(spotId);
+                spot = SpotService.getSpot(spotId, client.getLang());
             }else {
                 spot = SpotService.getSpot(spotId, Lang.valueOf(lang));
             }

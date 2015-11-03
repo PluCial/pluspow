@@ -84,7 +84,7 @@ public class ChangeGcsResEntryController extends BaseController {
             
             Item item = null;
             try {
-                item = ItemService.getByKey(itemId, lang);
+                item = ItemService.getItem(itemId, lang);
             }catch(ObjectNotExistException e) {
                 throw new NoContentsException();
             }

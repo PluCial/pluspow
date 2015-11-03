@@ -22,7 +22,7 @@ public abstract class BaseController extends AppBaseController {
         
         try {
             Client client = getLoginClient();
-            Spot spot = getSpot();
+            Spot spot = getSpot(client);
             
             // オーナーチェック
             boolean isOwner = spot.getClientRef().getKey().equals(client.getKey());
@@ -71,13 +71,13 @@ public abstract class BaseController extends AppBaseController {
      * @return
      * @throws Exception
      */
-    public Spot getSpot() throws NoContentsException {
+    public Spot getSpot(Client client) throws NoContentsException {
 
         String spotId = asString("spotId");
         if(StringUtil.isEmpty(spotId)) throw new NoContentsException();
 
         try {
-            Spot spot = SpotService.getSpotBaseLang(spotId);
+            Spot spot = SpotService.getSpot(spotId, client.getLang());
             return spot;
             
         } catch (ObjectNotExistException e) {

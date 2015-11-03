@@ -213,24 +213,12 @@ public class SpotService {
      * @return
      * @throws ObjectNotExistException 
      */
-    public static Spot getSpotModelOnly(String spotId) throws ObjectNotExistException {
+    public static Spot getModelOnly(String spotId) throws ObjectNotExistException {
 
-        Spot spot = dao.getBySpotId(spotId);
-        if(spot == null) throw new ObjectNotExistException();
+        Spot model = dao.getBySpotId(spotId);
+        if(model == null) throw new ObjectNotExistException();
         
-        return spot;
-    }
-    
-    /**
-     * スポットの取得(ベース言語)
-     * @param spotId
-     * @return
-     * @throws ObjectNotExistException 
-     */
-    public static Spot getSpotBaseLang(String spotId) throws ObjectNotExistException {
-        Spot spot = getSpotModelOnly(spotId);
-        
-        return getSpot(spotId, spot.getBaseLang());
+        return model;
     }
     
     /**
@@ -256,7 +244,7 @@ public class SpotService {
             // ---------------------------------------------------
             // キャッシュに存在しない場合は付属情報含めをDBから再取得
             // ---------------------------------------------------
-            model = getSpotModelOnly(spotId);
+            model = getModelOnly(spotId);
             try {
                 setSpotInfo(model, lang);
 
@@ -295,11 +283,7 @@ public class SpotService {
         List<SpotLangUnit> langUnitList = SpotLangUnitService.getList(spot);
         for(SpotLangUnit langUnit: langUnitList) {
             // サーポート言語リストの設定
-            if(!langUnit.isInvalid() 
-                    && langUnit.getTransStatus() == TransStatus.TRANSLATED
-                    ) {
-                spot.getLangs().add(langUnit.getLang());
-            }
+            spot.getLangs().add(langUnit.getLang());
             
             // 言語情報の設定
             if(langUnit.getLang() == lang) {
@@ -444,7 +428,7 @@ public class SpotService {
         // ---------------------------------------------------
         TransCredit credit = TransCreditService.get(spot);
         if(plan.getTransCharMaxCount() > 0 
-                && (credit.getTransCharCount() + transCharCount) >= plan.getTransCharMaxCount()) {
+                && (credit.getTransCharCount() + transCharCount) > plan.getTransCharMaxCount()) {
             throw new PlanLimitException(PlanLimitType.TRANS_CHAR_MAX_COUNT);
         }
         
@@ -454,7 +438,7 @@ public class SpotService {
         String translatedContents;
         try {
             translatedContents = TransService.machineTrans(
-                spot.getBaseLang(),
+                baseLang,
                 transLang,
                 transContentsList);
         } catch (IOException e1) {
@@ -495,7 +479,7 @@ public class SpotService {
             TransHistoryService.addSpotHistory(
                 tx, 
                 spot, 
-                spot.getBaseLang(), 
+                baseLang, 
                 transLang, 
                 TransType.MACHINE, 
                 TransStatus.TRANSLATED, 
@@ -541,7 +525,7 @@ public class SpotService {
      * @throws ArgumentException
      * @throws TooManyException
      */
-    private static SpotLangUnit addLang(
+    private static void addLang(
             Transaction tx,
             Spot spot, 
             Lang baseLang,
@@ -578,7 +562,7 @@ public class SpotService {
         // ---------------------------------------------------
         // 言語情報の追加
         // ---------------------------------------------------
-        SpotLangUnit langUnit = SpotLangUnitService.add(
+        SpotLangUnitService.add(
             tx, 
             spot, 
             baseLang, 
@@ -586,14 +570,13 @@ public class SpotService {
             spot.getPhoneCountry(), 
             spot.getPhoneNumber(),
             TransType.MACHINE, 
-            TransStatus.TRANSLATED, geoModel);
+            TransStatus.TRANSLATED, 
+            geoModel);
 
         // ---------------------------------------------------
         // Gcsリソースの複製
         // ---------------------------------------------------
         SpotGcsResService.replicationOtherLangRes(tx, spot, transLang);
-        
-        return langUnit;
     }
     
     /**
@@ -625,8 +608,6 @@ public class SpotService {
         // 再翻訳対象のリソースMAPを取得
         // ---------------------------------------------------
         for(SpotTextRes textRes: transContentsList) {
-
-            // 翻訳対象の場合
             // 改行が含まれるため、text()ではなくhtml()で取得する
             String tcText = transResult.getElementById(textRes.getKey().getName()).html();
 
@@ -660,10 +641,10 @@ public class SpotService {
         
         if(!invalid) {
             // ---------------------------------------------------
-            // 言語数のプラン制限確認
+            // 言語を復活させる場合、言語数のプラン制限を確認
             // ---------------------------------------------------
             ServicePlan plan = SpotService.getSpotPlan(spot);
-            if(spot.getLangs().size() >= plan.getTransLangMaxCount()) {
+            if(spot.getLangs().size() + 1 >  plan.getTransLangMaxCount()) {
                 throw new PlanLimitException(PlanLimitType.TRANS_LANG_MAX_COUNT);
             }
         }
@@ -776,7 +757,7 @@ public class SpotService {
             
             // 検索APIからの削除
             // (プランによってはspot.getLangs() からすべて取得できない可能性があるため、
-            // SpotLangUnitServiceから言語リストを取得。未登録のものを削除)
+            // SpotLangUnitServiceから言語リストを取得し、削除を行う。)
             List<SpotLangUnit> langUnitList = SpotLangUnitService.getAllList(spot);
             for(SpotLangUnit langUnit: langUnitList) {
                 try {

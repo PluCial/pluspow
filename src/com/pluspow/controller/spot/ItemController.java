@@ -33,7 +33,7 @@ public class ItemController extends BaseController {
         try {
             Item item = null;
             try {
-                item = ItemService.getByKey(itemId, lang);
+                item = ItemService.getItem(itemId, lang);
             }catch(ObjectNotExistException e) {
                 throw new NoContentsException();
             }

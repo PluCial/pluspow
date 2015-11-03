@@ -43,7 +43,7 @@ public class SetLangInvalidController extends BaseController {
 
             Item item = null;
             try {
-                item = ItemService.getByKey(itemId, spot.getBaseLang());
+                item = ItemService.getItem(itemId, spot.getBaseLang());
                 requestScope("item", item);
                 
             } catch (ObjectNotExistException e) {

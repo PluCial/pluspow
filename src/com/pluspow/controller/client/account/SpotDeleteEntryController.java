@@ -20,7 +20,7 @@ public class SpotDeleteEntryController extends BaseController {
         if(StringUtil.isEmpty(spotId)) throw new NoContentsException();
 
         try {
-            Spot spot = SpotService.getSpotModelOnly(spotId);
+            Spot spot = SpotService.getModelOnly(spotId);
             SpotService.delete(spot);
             
             // すべての言語キャッシュをクリア

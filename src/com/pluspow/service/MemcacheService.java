@@ -73,10 +73,10 @@ public class MemcacheService {
      * @throws ObjectNotExistException
      */
     public static Item getItem(String itemKey, Lang lang) throws ObjectNotExistException {
-        Item item =  Memcache.get(ITEM_INFO_MEMCACHE_KEY + "_" + itemKey + "_" + lang.toString());
-        if(item == null) throw new ObjectNotExistException();
+        Item model =  Memcache.get(ITEM_INFO_MEMCACHE_KEY + "_" + itemKey + "_" + lang.toString());
+        if(model == null) throw new ObjectNotExistException();
         
-        return item;
+        return model;
     }
     
     

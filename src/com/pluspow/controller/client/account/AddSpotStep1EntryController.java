@@ -36,7 +36,7 @@ public class AddSpotStep1EntryController extends BaseController {
         // ------------------------------------------
         Spot spot = null;
         try {
-            spot = SpotService.getSpotModelOnly(spotId);
+            spot = SpotService.getModelOnly(spotId);
             
             // Spot Id 重複エラー
             Validators v = new Validators(request);

@@ -33,25 +33,25 @@ public class ItemChangeIndexController extends BaseController {
         }
         
         
-        Item targetItem = ItemService.getByKey(itemId, spot.getBaseLang());
+        Item targetItem = ItemService.getItem(itemId, spot.getBaseLang());
         double order = targetItem.getSortOrder();
         
         // 前後にアイテムが存在する場合 平均値を設定
         if(!StringUtil.isEmpty(prevId) && !StringUtil.isEmpty(nextId)) {
-            Item prevItem = ItemService.getByKey(prevId, spot.getBaseLang());
-            Item nextItem = ItemService.getByKey(nextId, spot.getBaseLang());
+            Item prevItem = ItemService.getItem(prevId, spot.getBaseLang());
+            Item nextItem = ItemService.getItem(nextId, spot.getBaseLang());
             
             order = (prevItem.getSortOrder() + nextItem.getSortOrder()) / 2;
             
         }else if(!StringUtil.isEmpty(prevId)) {
             // 前のアイテムのみ存在する場合(一番最後に移動)
-            Item prevItem = ItemService.getByKey(prevId, spot.getBaseLang());
+            Item prevItem = ItemService.getItem(prevId, spot.getBaseLang());
             order = prevItem.getSortOrder() + 0.00000001;
             
             
         }else if(!StringUtil.isEmpty(nextId)) {
             // 後のアイテムのみ存在する(一番最初に移動)
-            Item nextItem = ItemService.getByKey(nextId, spot.getBaseLang());
+            Item nextItem = ItemService.getItem(nextId, spot.getBaseLang());
             order = nextItem.getSortOrder() - 0.00000001;
         }
         

@@ -52,7 +52,7 @@ public class TransEntryController extends BaseController {
             String itemId = asString("itemId");
             if(StringUtil.isEmpty(itemId)) throw new NoContentsException();
 
-            Item item = ItemService.getByKey(itemId, spot.getBaseLang());
+            Item item = ItemService.getItem(itemId, spot.getBaseLang());
 
             ItemService.machineTrans(spot, item, baseLang, transLang);
             
